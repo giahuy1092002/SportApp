@@ -17,7 +17,7 @@ namespace SportApp_Infrastructure.Repositories
         {
             _unitOfWork = unitOfWork;
         }
-        public async Task<Guid> Create(CreateBookingModel request)
+        public async Task<Booking> Create(CreateBookingModel request)
         {
             try
             {
@@ -29,10 +29,11 @@ namespace SportApp_Infrastructure.Repositories
                     SportFieldId = request.SportFieldId,
                     Note = request.Note,
                     SpecId = request.SpecId,
+                    TimeSlotBookeds = request.TimeSlotBookeds,
                 };
                 Entities.Add(booking);
                 await _unitOfWork.SaveChangesAsync();
-                return booking.Id;
+                return booking;
             }
             catch(Exception ex)
             {

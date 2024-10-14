@@ -12,6 +12,7 @@ namespace SportApp_Infrastructure.Model.SportFieldModel
         public string Name { get; set; }
         public string Sport {  get; set; }
         public string Address { get; set; }
+        public string Description { get; set; }
         public Guid FieldTypeId { get; set; }
         public Guid OwnerId { get; set; }
         public string StartTime { get; set; }

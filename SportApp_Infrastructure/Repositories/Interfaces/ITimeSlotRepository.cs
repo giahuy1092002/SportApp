@@ -1,5 +1,5 @@
 ﻿using SportApp_Domain.Entities;
-using SportApp_Infrastructure.Model.TimeSlot;
+using SportApp_Infrastructure.Model.TimeSlotModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;

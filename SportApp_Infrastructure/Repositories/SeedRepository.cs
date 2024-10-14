@@ -29,15 +29,12 @@ namespace SportApp_Infrastructure.Repositories
             {
                 var user = new User
                 {
-                    UserInfo = new UserInfo
-                    {
-                        Avatar = request.Avatar,
-                        FirstName = request.FirstName,
-                        LastName = request.LastName,
-                        Gender = request.Gender,
-                        DateOfBirth = request.DateOfBirth,
-                        Location = request.Location
-                    },
+                    Avatar = request.Avatar,
+                    FirstName = request.FirstName,
+                    LastName = request.LastName,
+                    Gender = request.Gender,
+                    DateOfBirth = request.DateOfBirth,
+                    Location = request.Location,
                     RegistrationDate = DateTime.Now,
                     Email = request.Email,
                     UserName = request.Email,

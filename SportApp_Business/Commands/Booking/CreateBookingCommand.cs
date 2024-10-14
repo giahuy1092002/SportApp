@@ -19,7 +19,8 @@ namespace SportApp_Business.Commands.Booking
         public Guid CustomerId { get; set; }
         public string? Note {  get; set; }
         public Guid? SpecId { get; set; } = Guid.Empty;
-
+        
+        public List<Guid> TimeBookedIds { get; set; }
         public class CreateBookingHandler : ICommandHandler<CreateBookingCommand, bool>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -41,9 +42,16 @@ namespace SportApp_Business.Commands.Booking
                         Note = request.Note,
                         SpecId = request.SpecId != Guid.Empty ? request.SpecId : Guid.Empty
                     };
-                    var result = await _unitOfWork.Bookings.Create(createBooking);
+                    var booking = await _unitOfWork.Bookings.Create(createBooking);
+                    foreach (var id in request.TimeBookedIds)
+                    {
+                        var timeslot = await _unitOfWork.TimeSlots.GetById(id);
+                        if (timeslot == null) throw new Exception("Time slot is not exist");
+                        createBooking.TimeSlotBookeds.Add(timeslot);
+                    }
+                    await _unitOfWork.SaveChangesAsync();
                     _unitOfWork.CommitTransaction();
-                    return result != null ? true : false;
+                    return await Task.FromResult(true);
                 }
                 catch (Exception ex)
                 {
@@ -52,5 +60,10 @@ namespace SportApp_Business.Commands.Booking
                 }
             }
         }
+    }
+    public class TimeBooked
+    {
+        public string StartTime { get; set; }
+        public string EndTime { get; set; }
     }
 }

@@ -11,20 +11,17 @@ namespace SportApp_Domain.Entities
 {
     public class User : IdentityUser<Guid>
     {
-        [Required]
-        public Guid InfoId { get; set; }
-
-        [Column("RegistrationDate")]
         public DateTime? RegistrationDate { get; set; }
-
-        [Column("ActiveStatus")]
         public bool? ActiveStatus { get; set; }
-
-        [Column("IsDeleted")]
         public bool IsDeleted { get; set; }
-
-        [ForeignKey("InfoId")]
-        public virtual UserInfo? UserInfo { get; set; }
+        public string? FirstName { get; set; }
+        public string? LastName { get; set; }
+        public string? Gender { get; set; }
+        public DateTime? DateOfBirth { get; set; }
+        public string? PhoneNumber { get; set; }
+        public string? Location { get; set; }
+        public string? Avatar { get; set; }
+        public string? PublicId { get; set; }
 
     }
 }

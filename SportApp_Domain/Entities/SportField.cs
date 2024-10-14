@@ -13,7 +13,8 @@ namespace SportApp_Domain.Entities
         public string Name { get; set; }
         public string Sport {  get; set; }
         public string Address { get; set; }
-
+        public string Description { get; set; }
+        public string EndPoint { get; set; }
         [ForeignKey("FieldTypeId")]
         public Guid FieldTypeId { get; set; }
         public FieldType FieldType { get; set; }
@@ -22,5 +23,6 @@ namespace SportApp_Domain.Entities
         public bool IsDeleted { get; set; } = false;
         [ForeignKey("OwnerId")]
         public Guid OwnerId { get; set; }
+        public Owner Owner { get; set; }
     }
 }

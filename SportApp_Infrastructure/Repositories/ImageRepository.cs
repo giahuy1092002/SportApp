@@ -26,7 +26,7 @@ namespace SportApp_Infrastructure.Repositories
                 {
                     SportFieldId = request.SportFieldId,
                     PictureUrl = request.PictureUrl,
-                    Type = request.Type,
+                    PublicId = request.PublicId,
                 };
                 Entities.Add(image);
                 await _unitOfWork.SaveChangesAsync();

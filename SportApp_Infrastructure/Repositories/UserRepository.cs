@@ -1,4 +1,5 @@
 ﻿using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure.Dto.UserDto;
 using SportApp_Infrastructure.Model.UserModel;
@@ -15,9 +16,11 @@ namespace SportApp_Infrastructure.Repositories
     public class UserRepository : Repository<User>,IUserRepository
     {
         private readonly UserManager<User> _userManager;
-        public UserRepository(SportAppDbContext context,UserManager<User> userManager):base(context)
+        private readonly IUnitOfWork _unitOfWork;
+        public UserRepository(SportAppDbContext context,UserManager<User> userManager,IUnitOfWork unitOfWork):base(context)
         {
             _userManager = userManager;
+            _unitOfWork = unitOfWork;
         }
 
         public async Task<User> SignIn(SignInModel request)
@@ -39,21 +42,61 @@ namespace SportApp_Infrastructure.Repositories
             }
             var user = new User
             {
-                UserInfo = new UserInfo
-                {
-                    FirstName = request.FirstName,
-                    LastName = request.LastName
-                },
                 Email = request.Email,
                 UserName = request.Email,
-                //Gender = request.Gender,
-                //BirthDate = DateTime.ParseExact(request.BirthDate, "dd/MM/yyyy", CultureInfo.InvariantCulture)
+                FirstName = request.FirstName,
+                LastName = request.LastName
             };
             await _userManager.CreateAsync(user, request.Password);
             return new SignUpDto
             {
-                Email = request.Email,
+                Email = request.Email
             };
+        }
+
+        public async Task<bool> Update(UpdateUserModel request)
+        {
+            try
+            {
+                var user = await Entities.FirstOrDefaultAsync(u => u.Id == request.UserId);
+                if (user == null)
+                {
+                    throw new Exception("User is not exist");
+                }
+                user.FirstName = request.FirstName;
+                user.LastName = request.LastName;
+                user.Gender = request.Gender;
+                user.DateOfBirth = request.DateOfBirth;
+                user.PhoneNumber = request.PhoneNumber;
+                user.Location = request.Location;
+                Entities.Update(user);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> UpdateAvatar(UpdateAvatarModel request)
+        {
+            try
+            {
+                var user = await Entities.FirstOrDefaultAsync(u => u.Id == request.UserId);
+                if (user == null)
+                {
+                    throw new Exception("User is not exist");
+                }
+                user.Avatar = request.Avatar;
+                Entities.Update(user);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch (Exception ex)
+            {
+                throw new Exception(ex.Message);
+            }
         }
     }
 }

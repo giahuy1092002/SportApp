@@ -16,6 +16,7 @@ namespace SportApp_Domain.Entities
         public Guid SportFieldId { get; set; }
         public long TotelPrice { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public List<TimeSlot> TimeSlotBookeds { get; set; } = new List<TimeSlot>();
         public string? Note { get; set; }
         [ForeignKey("SpecId")]
         public Guid? SpecId { get; set; }

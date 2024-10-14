@@ -10,6 +10,6 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
 {
     public interface IBookingRepository : IRepository<Booking>
     {
-        Task<Guid> Create(CreateBookingModel request);
+        Task<Booking> Create(CreateBookingModel request);
     }
 }

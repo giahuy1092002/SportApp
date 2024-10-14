@@ -39,7 +39,7 @@ namespace SportApp_Business.Commands.UserCommand
                     };
                     var user = await _unitOfWork.Users.SignUp(signUpRequest);
                     _unitOfWork.CommitTransaction();
-                    return true;
+                    return await Task.FromResult(true);
                 }
                 catch (Exception ex)
                 {

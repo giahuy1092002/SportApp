@@ -13,5 +13,7 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
     {
         Task<SignUpDto> SignUp(SignUpRequest request);
         Task<User> SignIn(SignInModel request);
+        Task<bool> Update(UpdateUserModel request);
+        Task<bool> UpdateAvatar(UpdateAvatarModel request);
     }
 }

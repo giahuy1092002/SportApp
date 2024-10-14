@@ -26,4 +26,8 @@
     <ProjectReference Include="..\SportApp_Domain\SportApp_Domain.csproj" />
   </ItemGroup>
 
+  <ItemGroup>
+    <Folder Include="Dto\SportFieldDto\" />
+  </ItemGroup>
+
 </Project>

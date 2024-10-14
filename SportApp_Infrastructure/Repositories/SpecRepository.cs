@@ -28,6 +28,8 @@ namespace SportApp_Infrastructure.Repositories
                 var obj = new Spec
                 {
                     UserId = request.UserId,
+                    Skills = request.Skills,
+                    Note = request.Note
                 };
                 Entities.Add(obj);
                 await _unitOfWork.SaveChangesAsync();

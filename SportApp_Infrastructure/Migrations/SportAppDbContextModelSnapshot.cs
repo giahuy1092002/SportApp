@@ -224,12 +224,12 @@ namespace SportApp_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid>("SportFieldId")
-                        .HasColumnType("uniqueidentifier");
-
-                    b.Property<string>("Type")
+                    b.Property<string>("PublicId")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<Guid>("SportFieldId")
+                        .HasColumnType("uniqueidentifier");
 
                     b.HasKey("Id");
 
@@ -290,28 +290,28 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("5c038ee6-9818-4580-a53b-61c50942deef"),
+                            Id = new Guid("7b6a7e0f-353a-4a71-bb82-bb680b225d25"),
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("7f541e10-6aca-4c77-ad55-264aeea4f5d4"),
+                            Id = new Guid("d25e1dab-a430-4b20-b8e5-78486016935c"),
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("6c8d6fb7-4213-4a32-81d7-9c61782a4980"),
+                            Id = new Guid("1966a576-4920-47dd-83a8-feea504dbda3"),
                             IsDeleted = false,
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("a801f811-9afe-495b-9872-1b0b425837f7"),
+                            Id = new Guid("d1a28158-966a-4716-9b82-9c593bc1e934"),
                             IsDeleted = false,
                             Name = "Spec",
                             NormalizedName = "SPEC"
@@ -353,6 +353,14 @@ namespace SportApp_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("EndPoint")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<Guid>("FieldTypeId")
                         .HasColumnType("uniqueidentifier");
 
@@ -385,6 +393,9 @@ namespace SportApp_Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<Guid?>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
                     b.Property<string>("EndTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -404,6 +415,8 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("BookingId");
+
                     b.HasIndex("SportFieldId");
 
                     b.ToTable("TimeSlot");
@@ -419,12 +432,17 @@ namespace SportApp_Infrastructure.Migrations
                         .HasColumnType("int");
 
                     b.Property<bool?>("ActiveStatus")
-                        .HasColumnType("bit")
-                        .HasColumnName("ActiveStatus");
+                        .HasColumnType("bit");
+
+                    b.Property<string>("Avatar")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("ConcurrencyStamp")
                         .IsConcurrencyToken()
                         .HasColumnType("nvarchar(max)");
+
+                    b.Property<DateTime?>("DateOfBirth")
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("Email")
                         .HasMaxLength(256)
@@ -433,12 +451,20 @@ namespace SportApp_Infrastructure.Migrations
                     b.Property<bool>("EmailConfirmed")
                         .HasColumnType("bit");
 
-                    b.Property<Guid>("InfoId")
-                        .HasColumnType("uniqueidentifier");
+                    b.Property<string>("FirstName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Gender")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit")
-                        .HasColumnName("IsDeleted");
+                        .HasColumnType("bit");
+
+                    b.Property<string>("LastName")
+                        .HasColumnType("nvarchar(max)");
+
+                    b.Property<string>("Location")
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<bool>("LockoutEnabled")
                         .HasColumnType("bit");
@@ -463,9 +489,11 @@ namespace SportApp_Infrastructure.Migrations
                     b.Property<bool>("PhoneNumberConfirmed")
                         .HasColumnType("bit");
 
+                    b.Property<string>("PublicId")
+                        .HasColumnType("nvarchar(max)");
+
                     b.Property<DateTime?>("RegistrationDate")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("RegistrationDate");
+                        .HasColumnType("datetime2");
 
                     b.Property<string>("SecurityStamp")
                         .HasColumnType("nvarchar(max)");
@@ -479,8 +507,6 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
-                    b.HasIndex("InfoId");
-
                     b.HasIndex("NormalizedEmail")
                         .HasDatabaseName("EmailIndex");
 
@@ -490,47 +516,6 @@ namespace SportApp_Infrastructure.Migrations
                         .HasFilter("[NormalizedUserName] IS NOT NULL");
 
                     b.ToTable("AspNetUsers", (string)null);
-                });
-
-            modelBuilder.Entity("SportApp_Domain.Entities.UserInfo", b =>
-                {
-                    b.Property<Guid>("InfoId")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("uniqueidentifier")
-                        .HasColumnName("InfoId");
-
-                    b.Property<string>("Avatar")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<DateTime?>("DateOfBirth")
-                        .HasColumnType("datetime2")
-                        .HasColumnName("DateOfBirth");
-
-                    b.Property<string>("FirstName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("FirstName");
-
-                    b.Property<string>("Gender")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("Gender");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
-
-                    b.Property<string>("LastName")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("LastName");
-
-                    b.Property<string>("Location")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<string>("PhoneNumber")
-                        .HasColumnType("nvarchar(max)")
-                        .HasColumnName("PhoneNumber");
-
-                    b.HasKey("InfoId");
-
-                    b.ToTable("UserInfo");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -651,17 +636,23 @@ namespace SportApp_Infrastructure.Migrations
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
-                    b.HasOne("SportApp_Domain.Entities.Owner", null)
+                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
                         .WithMany("SportFields")
                         .HasForeignKey("OwnerId")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
 
                     b.Navigation("FieldType");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.TimeSlot", b =>
                 {
+                    b.HasOne("SportApp_Domain.Entities.Booking", null)
+                        .WithMany("TimeSlotBookeds")
+                        .HasForeignKey("BookingId");
+
                     b.HasOne("SportApp_Domain.Entities.SportField", null)
                         .WithMany("TimeSlots")
                         .HasForeignKey("SportFieldId")
@@ -669,15 +660,9 @@ namespace SportApp_Infrastructure.Migrations
                         .IsRequired();
                 });
 
-            modelBuilder.Entity("SportApp_Domain.Entities.User", b =>
+            modelBuilder.Entity("SportApp_Domain.Entities.Booking", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.UserInfo", "UserInfo")
-                        .WithMany()
-                        .HasForeignKey("InfoId")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-
-                    b.Navigation("UserInfo");
+                    b.Navigation("TimeSlotBookeds");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Owner", b =>

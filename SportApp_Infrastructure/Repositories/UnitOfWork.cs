@@ -32,7 +32,7 @@ namespace SportApp_Infrastructure.Repositories
             _dbContext = dbContext;
             _userManager = userManager;
             _roleManager = roleManager;
-            _userRepository = new UserRepository(_dbContext,_userManager);
+            _userRepository = new UserRepository(_dbContext,_userManager,this);
             _seedRepository = new SeedRepository(_userManager, _roleManager);
             _ownerRepository = new OwnerRepository(_dbContext,this);
             _fieldTypeRepository = new FieldTypeRepository(_dbContext, this);
@@ -43,7 +43,7 @@ namespace SportApp_Infrastructure.Repositories
             _customerRepository = new CustomerRepository(_dbContext, this);
             _imageRepository = new ImageRepository(_dbContext, this);
         }
-        public IUserRepository Users => new UserRepository(_dbContext, _userManager);
+        public IUserRepository Users => new UserRepository(_dbContext, _userManager, this);
 
         public ISeedRepository Seeds => new SeedRepository(_userManager,_roleManager);
         public IOwnerRepository Owners => new OwnerRepository(_dbContext,this);

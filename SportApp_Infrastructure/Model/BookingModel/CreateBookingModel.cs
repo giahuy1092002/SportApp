@@ -1,10 +1,5 @@
-﻿using SportApp_Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel.DataAnnotations.Schema;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+﻿
+using SportApp_Domain.Entities;
 
 namespace SportApp_Infrastructure.Model.BookingModel
 {
@@ -16,5 +11,8 @@ namespace SportApp_Infrastructure.Model.BookingModel
         public long TotalPrice { get; set; }
         public string? Note { get; set; }
         public Guid? SpecId { get; set; }
+        public string StartTime { get; set; }
+        public string EndTime { get; set; } 
+        public List<TimeSlot> TimeSlotBookeds { get; set; } = new List<TimeSlot>();
     }
 }
