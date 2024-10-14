@@ -74,8 +74,8 @@ namespace SportApp_Business.Commands.SportFieldCommand
                             {
                                 var obj = new CreateTimeSlotModel
                                 {
-                                    StartTime = i.ToString(),
-                                    EndTime = (i + 1).ToString(),
+                                    StartTime = i.ToString()  + ":00",
+                                    EndTime = (i + 1).ToString() + ":00",
                                     SportFieldId = result,
                                     Price = timePrice.Price
                                 };
