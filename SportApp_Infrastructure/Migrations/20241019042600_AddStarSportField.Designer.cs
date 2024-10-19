@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportApp_Infrastructure;
 
@@ -11,9 +12,11 @@ using SportApp_Infrastructure;
 namespace SportApp_Infrastructure.Migrations
 {
     [DbContext(typeof(SportAppDbContext))]
-    partial class SportAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241019042600_AddStarSportField")]
+    partial class AddStarSportField
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,28 +320,28 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("49efa9df-510b-4f27-98a3-9cd31214923f"),
+                            Id = new Guid("38b4c0ea-e38c-4759-975d-a8a3ebabccd5"),
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("cb3d9cf0-cbdb-4fdf-acde-63fede1fe00b"),
+                            Id = new Guid("325580f5-0789-44ba-a151-2e37577d2373"),
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("efc586e7-a969-4f88-9d2b-11865ef0d0e3"),
+                            Id = new Guid("4805d451-9bb6-4270-9068-e6bd3143c7d9"),
                             IsDeleted = false,
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("956db8dc-4b7e-479d-b8c2-7a34da1f185d"),
+                            Id = new Guid("07fcc0fd-c599-4a8c-8f75-fde77d075667"),
                             IsDeleted = false,
                             Name = "Spec",
                             NormalizedName = "SPEC"
@@ -440,7 +443,7 @@ namespace SportApp_Infrastructure.Migrations
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<decimal>("Stars")
+                    b.Property<decimal>("Starts")
                         .HasColumnType("decimal(2,1)");
 
                     b.HasKey("Id");
@@ -593,40 +596,38 @@ namespace SportApp_Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<DateTime>("EndTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("Code")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("MaxSale")
-                        .HasColumnType("bigint");
+                    b.Property<string>("Description")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
-                    b.Property<long>("MinPrice")
-                        .HasColumnType("bigint");
+                    b.Property<string>("EndTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<Guid?>("OwnerId")
+                    b.Property<Guid>("OwnerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PercentSale")
-                        .HasColumnType("int");
-
-                    b.Property<int>("Quantity")
-                        .HasColumnType("int");
 
                     b.Property<string>("Sport")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
-                    b.Property<DateTime>("StartTime")
-                        .HasColumnType("datetime2");
+                    b.Property<string>("StartTime")
+                        .IsRequired()
+                        .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -792,11 +793,11 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.Voucher", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
+                    b.HasOne("SportApp_Domain.Entities.Owner", null)
                         .WithMany("Vouchers")
-                        .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Booking", b =>

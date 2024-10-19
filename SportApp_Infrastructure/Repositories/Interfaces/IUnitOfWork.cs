@@ -18,6 +18,9 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
         IBookingRepository Bookings { get; }
         ICustomerRepository Customers { get; }
         IImageRepository Images { get; }
+        IRatingRepository Ratings { get; }
+        ISportEquipmentRepository SportEquipments { get; }
+        IVoucherRepository Vouchers { get; }
         void CommitTransaction();
         void RollbackTransaction();
         int SaveChanges();

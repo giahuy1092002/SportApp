@@ -11,9 +11,10 @@ namespace SportApp_Domain.Entities
     {
         public Guid Id  { get; set; }
         public string? Comment { get; set; }
-        //public decimal NumberOfStar {  get; set; }
-        [ForeignKey("SportFieldId")] 
-        
+        public int NumberOfStar {  get; set; }
         public Guid SportFieldId { get; set; }
+        public SportField SportField { get; set; }
+        public Guid CustomerId { get; set; }
+        public Customer Customer { get; set; }
     }
 }

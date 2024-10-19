@@ -24,5 +24,13 @@ namespace SportApp_Domain.Entities
         [ForeignKey("OwnerId")]
         public Guid OwnerId { get; set; }
         public Owner Owner { get; set; }
+
+        public List<Rating> Ratings { get; set; } = new List<Rating> { };
+        [NotMapped]
+        public decimal Stars
+        {
+            get => Ratings != null && Ratings.Any() ? (decimal)Ratings.Average(r => r.NumberOfStar) : 0;
+            set { }
+        }
     }
 }

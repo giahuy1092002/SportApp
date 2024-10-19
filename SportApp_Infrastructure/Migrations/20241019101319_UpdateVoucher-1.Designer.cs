@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportApp_Infrastructure;
 
@@ -11,9 +12,11 @@ using SportApp_Infrastructure;
 namespace SportApp_Infrastructure.Migrations
 {
     [DbContext(typeof(SportAppDbContext))]
-    partial class SportAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241019101319_UpdateVoucher-1")]
+    partial class UpdateVoucher1
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,28 +320,28 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("49efa9df-510b-4f27-98a3-9cd31214923f"),
+                            Id = new Guid("29918533-13ed-444f-b3bd-c1d47ea068c4"),
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("cb3d9cf0-cbdb-4fdf-acde-63fede1fe00b"),
+                            Id = new Guid("a7b64d86-c7e3-478a-8df7-c1070048107d"),
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("efc586e7-a969-4f88-9d2b-11865ef0d0e3"),
+                            Id = new Guid("0d916366-58ad-471d-9767-79d3ec27e885"),
                             IsDeleted = false,
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("956db8dc-4b7e-479d-b8c2-7a34da1f185d"),
+                            Id = new Guid("22180d37-939b-422e-b893-dc6648ff9a65"),
                             IsDeleted = false,
                             Name = "Spec",
                             NormalizedName = "SPEC"
@@ -626,7 +629,7 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -792,11 +795,9 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.Voucher", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
+                    b.HasOne("SportApp_Domain.Entities.Owner", null)
                         .WithMany("Vouchers")
                         .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Booking", b =>

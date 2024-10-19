@@ -3,6 +3,7 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using SportApp_Infrastructure;
 
@@ -11,9 +12,11 @@ using SportApp_Infrastructure;
 namespace SportApp_Infrastructure.Migrations
 {
     [DbContext(typeof(SportAppDbContext))]
-    partial class SportAppDbContextModelSnapshot : ModelSnapshot
+    [Migration("20241019100157_UpdateVoucher")]
+    partial class UpdateVoucher
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        /// <inheritdoc />
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -317,28 +320,28 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("49efa9df-510b-4f27-98a3-9cd31214923f"),
+                            Id = new Guid("bd3a2511-895d-4e13-b26f-44516aca0435"),
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("cb3d9cf0-cbdb-4fdf-acde-63fede1fe00b"),
+                            Id = new Guid("cc0a26bd-8f50-48b3-a517-fa762dd17515"),
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("efc586e7-a969-4f88-9d2b-11865ef0d0e3"),
+                            Id = new Guid("e2c78873-b7eb-46e5-845a-31d65aa86ce5"),
                             IsDeleted = false,
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("956db8dc-4b7e-479d-b8c2-7a34da1f185d"),
+                            Id = new Guid("6a7db6f2-d777-44b4-a03a-d6e6abea9f4a"),
                             IsDeleted = false,
                             Name = "Spec",
                             NormalizedName = "SPEC"
@@ -596,21 +599,12 @@ namespace SportApp_Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
-                    b.Property<long>("MaxSale")
-                        .HasColumnType("bigint");
-
-                    b.Property<long>("MinPrice")
-                        .HasColumnType("bigint");
-
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uniqueidentifier");
-
-                    b.Property<int>("PercentSale")
-                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -626,7 +620,7 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Vouchers");
+                    b.ToTable("Voucher");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -792,11 +786,9 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.Voucher", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
+                    b.HasOne("SportApp_Domain.Entities.Owner", null)
                         .WithMany("Vouchers")
                         .HasForeignKey("OwnerId");
-
-                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Booking", b =>

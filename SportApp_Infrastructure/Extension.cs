@@ -38,6 +38,9 @@ namespace SportApp_Infrastructure
             services.AddTransient<IBookingRepository, BookingRepository>();
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IImageRepository, ImageRepository>();
+            services.AddTransient<IRatingRepository, RatingRepository>();
+            services.AddTransient<ISportEquipmentRepository, SportEquipmentRepository>();
+            services.AddTransient<IVoucherRepository, VoucherRepository>();
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)

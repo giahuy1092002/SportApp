@@ -37,5 +37,20 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddRating(AddRatingSportFieldCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command,cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetSportFields([FromQuery]GetSportFieldsQuery query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetSportList([FromQuery]GetSportListQuery query,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
     }
 }

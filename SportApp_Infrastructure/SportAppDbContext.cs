@@ -23,9 +23,24 @@ namespace SportApp_Infrastructure
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Spec> Spec { get; set; }
         public DbSet<Image> Images { get; set; }
+        public DbSet<Rating> Ratings { get; set; }
+        public DbSet<SportEquipment> SportEquipments { get; set; }
+        public DbSet<Voucher> Vouchers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            modelBuilder.Entity<Rating>()
+                .HasOne(r => r.Customer)
+                .WithMany(c => c.Ratings)
+                .HasForeignKey(r => r.CustomerId)
+                .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<SportField>()
+                .HasIndex(s => s.EndPoint)
+                .HasDatabaseName("IX_SportField_Endpoint")
+                .IsUnique();
+            modelBuilder.Entity<SportField>()
+                .Property(s => s.Stars)
+                .HasColumnType("decimal(2,1)");
             modelBuilder.Entity<Role>().HasData(
                 new Role
                 {

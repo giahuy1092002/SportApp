@@ -12,6 +12,8 @@ namespace SportApp_Domain.Entities
         public Guid UserId { get; set; }
         public User User { get; set; }
         public bool IsDeleted { get; set; } = false;
-        public ICollection<SportField> SportFields { get; set; } = new List<SportField>();
+        public List<SportField> SportFields { get; set; } = new List<SportField>();
+        public List<Voucher> Vouchers { get; set; } = new List<Voucher> {};  
+
     }
 }
