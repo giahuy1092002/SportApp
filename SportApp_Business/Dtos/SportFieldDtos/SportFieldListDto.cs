@@ -14,5 +14,6 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public long MaxPrice { get; set; }
         public decimal Stars { get; set; }
         public int NumberOfReviews { get; set; }
+        public string PictureUrl { get; set; }
     }
 }

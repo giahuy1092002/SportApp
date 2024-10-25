@@ -4,6 +4,7 @@ using Microsoft.AspNetCore.Mvc;
 using SportApp_Business.Commands.SportFieldCommand;
 using SportApp_Business.Commands.UserCommand;
 using SportApp_Business.Queries.SportFieldQuery;
+using SportApp_Infrastructure.Services;
 
 namespace SportApp_BE.Controllers
 {
@@ -12,9 +13,11 @@ namespace SportApp_BE.Controllers
     public class SportFieldController : ControllerBase
     {
         private readonly IMediator _mediator;
-        public SportFieldController(IMediator mediator)
+        private readonly DirectionService _directionService;
+        public SportFieldController(IMediator mediator,DirectionService directionService)
         {
             _mediator = mediator;
+            _directionService = directionService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateSportField([FromForm] CreateSportFieldCommand command, CancellationToken cancellationToken)
@@ -51,6 +54,11 @@ namespace SportApp_BE.Controllers
         public async Task<IActionResult> GetSportList([FromQuery]GetSportListQuery query,CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetDistance(string origin, string destination)
+        {
+            return Ok(await _directionService.GetDistanceAsync(origin, destination));
         }
     }
 }

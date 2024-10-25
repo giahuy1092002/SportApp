@@ -15,6 +15,5 @@ namespace SportApp_Domain.Entities
         public long Price { get; set; }
         [ForeignKey("SportFieldId")]
         public Guid SportFieldId { get; set; }
-        public bool IsDeleted { get; set; } = false;
     }
 }

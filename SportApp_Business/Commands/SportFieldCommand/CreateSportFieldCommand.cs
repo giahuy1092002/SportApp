@@ -36,11 +36,13 @@ namespace SportApp_Business.Commands.SportFieldCommand
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly ImageService _imageService;
+            private readonly GeocodingService _geocodingService;
 
-            public CreateSportFieldHandler(IUnitOfWork unitOfWork,ImageService imageService)
+            public CreateSportFieldHandler(IUnitOfWork unitOfWork,ImageService imageService, GeocodingService geocodingService)
             {
                 _unitOfWork = unitOfWork;
                 _imageService = imageService;
+                _geocodingService = geocodingService;
             }
             public async Task<bool> Handle(CreateSportFieldCommand request, CancellationToken cancellationToken)
             {
@@ -60,7 +62,7 @@ namespace SportApp_Business.Commands.SportFieldCommand
                         FieldTypeId = request.FieldTypeId,
                         OwnerId = request.OwnerId,
                         StartTime = request.StartTime,
-                        EndTime = request.EndTime,
+                        EndTime = request.EndTime
                     };
                     var result = await _unitOfWork.SportFields.Create(sportField);
                     if(result!=null)

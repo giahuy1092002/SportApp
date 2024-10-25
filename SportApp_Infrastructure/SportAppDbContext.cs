@@ -26,6 +26,7 @@ namespace SportApp_Infrastructure
         public DbSet<Rating> Ratings { get; set; }
         public DbSet<SportEquipment> SportEquipments { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
+        public DbSet<BookingTimeSlot> BookingTimeSlots { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -34,6 +35,11 @@ namespace SportApp_Infrastructure
                 .WithMany(c => c.Ratings)
                 .HasForeignKey(r => r.CustomerId)
                 .OnDelete(DeleteBehavior.NoAction);
+            modelBuilder.Entity<Booking>()
+                .HasOne(b => b.SportField)
+                .WithMany()
+                .HasForeignKey(b => b.SportFieldId)
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<SportField>()
                 .HasIndex(s => s.EndPoint)
                 .HasDatabaseName("IX_SportField_Endpoint")
@@ -41,6 +47,22 @@ namespace SportApp_Infrastructure
             modelBuilder.Entity<SportField>()
                 .Property(s => s.Stars)
                 .HasColumnType("decimal(2,1)");
+            modelBuilder.Entity<BookingTimeSlot>()
+            .HasKey(e => new { e.BookingId, e.TimeSlotId });
+            modelBuilder.Entity<BookingTimeSlot>()
+                .HasOne(b => b.Booking)
+                .WithMany(b => b.TimeSlotBookeds)
+                .HasForeignKey(b => b.BookingId);
+
+            modelBuilder.Entity<BookingTimeSlot>()
+                .HasOne(b => b.TimeSlot)
+                .WithMany()
+                .HasForeignKey(b => b.TimeSlotId);
+            modelBuilder.Entity<BookingTimeSlot>()
+                .HasOne(b => b.Booking)
+                .WithMany(b => b.TimeSlotBookeds)
+                .HasForeignKey(b => b.BookingId)
+                .OnDelete(DeleteBehavior.NoAction);
             modelBuilder.Entity<Role>().HasData(
                 new Role
                 {

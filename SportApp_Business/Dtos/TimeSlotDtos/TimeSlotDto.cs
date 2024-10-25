@@ -8,6 +8,7 @@ namespace SportApp_Business.Dtos.TimeSlotDtos
 {
     public class TimeSlotDto
     {
+        public Guid Id { get; set; }
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public long Price { get; set; }

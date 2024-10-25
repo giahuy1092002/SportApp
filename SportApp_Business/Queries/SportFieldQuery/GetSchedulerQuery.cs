@@ -32,20 +32,23 @@ namespace SportApp_Business.Queries.SportFieldQuery
             {
                 var sportField = await _context.SportField.Include(s=>s.TimeSlots)
                     .FirstOrDefaultAsync(s => s.Id == request.SportFieldId);
-                var bookings = await _context.Booking.Where(b=>b.CreatedDate.Date == request.BookingDate.Date && b.SportFieldId==request.SportFieldId).ToListAsync();
+                var bookings = await _context.Booking
+                    .Include(b=>b.TimeSlotBookeds)
+                        .ThenInclude(t=>t.TimeSlot)
+                    .Where(b=>b.BookingDate.Date == request.BookingDate.Date && b.SportFieldId==request.SportFieldId).ToListAsync();
                 var timeSlots = _mapper.Map<List<TimeSlotDto>>(sportField.TimeSlots);
                 foreach (var timeSlot in timeSlots)
                 {
-                    foreach(var booking in bookings)
+                    foreach (var booking in bookings)
                     {
-                        foreach(var timeBooked in booking.TimeSlotBookeds)
+                        foreach (var timeBooked in booking.TimeSlotBookeds)
                         {
-                            if (timeBooked.StartTime == timeSlot.StartTime)
+                            if (timeBooked.TimeSlot.StartTime == timeSlot.StartTime)
                             {
                                 timeSlot.Status = true;
-                            }    
-                        }    
-                    }    
+                            }
+                        }
+                    }
                 }
                 return timeSlots;
 

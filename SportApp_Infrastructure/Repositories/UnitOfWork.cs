@@ -27,6 +27,7 @@ namespace SportApp_Infrastructure.Repositories
         private readonly IRatingRepository _ratingRepository;
         private readonly ISportEquipmentRepository _sportEquipmentRepository;
         private readonly IVoucherRepository _voucherRepository;
+        private readonly IBookingTimeSlotRepository _bookingTimeSlotRepository;
         private IDbContextTransaction? _transaction = null;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
@@ -48,6 +49,7 @@ namespace SportApp_Infrastructure.Repositories
             _ratingRepository = new RatingRepository(_dbContext, this);
             _sportEquipmentRepository = new SportEquipmentRepository(_dbContext, this);
             _voucherRepository = new VoucherRepository(dbContext, this);
+            _bookingTimeSlotRepository = new BookingTimeSlotRepository(this,_dbContext);
         }
         public IUserRepository Users => new UserRepository(_dbContext, _userManager, this);
 
@@ -65,6 +67,8 @@ namespace SportApp_Infrastructure.Repositories
 
         public ISportEquipmentRepository SportEquipments => new SportEquipmentRepository(_dbContext,this);
         public IVoucherRepository Vouchers => new VoucherRepository(_dbContext, this);
+
+        public IBookingTimeSlotRepository BookingTimeSlots => new BookingTimeSlotRepository(this,_dbContext);
 
         public int SaveChanges()
         {

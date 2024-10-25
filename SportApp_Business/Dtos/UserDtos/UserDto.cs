@@ -15,5 +15,6 @@ namespace SportApp_Business.Dtos.UserDtos
         public string PhoneNumber { get; set; }
         public string Location { get; set; }
         public string Avatar { get; set; }
+        public string Email { get; set; }
     }
 }

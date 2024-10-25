@@ -1,5 +1,6 @@
 ﻿using Microsoft.Identity.Client;
 using SportApp_Business.Dtos.RatingDtos;
+using SportApp_Business.Dtos.SportEquipmentDtos;
 using SportApp_Business.Dtos.TimeSlotDtos;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure.Dto.VoucherDto;
@@ -17,6 +18,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public string Name { get; set; }
         public string Sport { get; set; }
         public string Address { get; set; }
+        public string Description { get; set; }
         public string Type { get; set; }
         public long MinPrice { get; set; }
         public long MaxPrice { get; set; }
@@ -25,6 +27,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public List<Image> Images { get; set; }
         public List<RatingDto> Ratings { get; set; }
         public List<VoucherDto> Vouchers { get; set; }
+        public List<SportEquipmentDto> SportEquipments { get; set; }
         public int NumberOfReviews {  get; set; }
     }
 }

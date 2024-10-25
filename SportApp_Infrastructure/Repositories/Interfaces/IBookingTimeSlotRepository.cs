@@ -1,5 +1,4 @@
 ﻿using SportApp_Domain.Entities;
-using SportApp_Infrastructure.Model.VoucherModel;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,9 +7,8 @@ using System.Threading.Tasks;
 
 namespace SportApp_Infrastructure.Repositories.Interfaces
 {
-    public interface IVoucherRepository : IRepository<Voucher>
+    public interface IBookingTimeSlotRepository : IRepository<BookingTimeSlot>
     {
-        Task<bool> Create(CreateVoucherModel request);
-        Task<bool> Update(UpdateVoucherModel request);
+
     }
 }

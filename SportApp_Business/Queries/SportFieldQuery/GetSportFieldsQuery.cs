@@ -40,6 +40,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                 IQueryable<SportField> query = _context.SportField
                     .Include(s => s.Ratings)
                     .Include(s => s.TimeSlots)
+                    .Include(s=>s.Images)
                     ;
                 if(!string.IsNullOrEmpty(request.Search))
                 {

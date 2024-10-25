@@ -246,6 +246,30 @@ namespace SportApp_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "SportEquipments",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    RentPrice = table.Column<long>(type: "bigint", nullable: false),
+                    BuyPrice = table.Column<long>(type: "bigint", nullable: false),
+                    QuantityInStock = table.Column<int>(type: "int", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_SportEquipments", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_SportEquipments_Owner_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owner",
+                        principalColumn: "OwnerId",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "SportField",
                 columns: table => new
                 {
@@ -254,9 +278,11 @@ namespace SportApp_Infrastructure.Migrations
                     Sport = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Address = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Description = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    EndPoint = table.Column<string>(type: "nvarchar(450)", nullable: false),
                     FieldTypeId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
                     IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Stars = table.Column<decimal>(type: "decimal(2,1)", nullable: false)
                 },
                 constraints: table =>
                 {
@@ -273,6 +299,31 @@ namespace SportApp_Infrastructure.Migrations
                         principalTable: "Owner",
                         principalColumn: "OwnerId",
                         onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "Vouchers",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Name = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    Sport = table.Column<string>(type: "nvarchar(max)", nullable: false),
+                    StartTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    EndTime = table.Column<DateTime>(type: "datetime2", nullable: false),
+                    Quantity = table.Column<int>(type: "int", nullable: false),
+                    OwnerId = table.Column<Guid>(type: "uniqueidentifier", nullable: true),
+                    MinPrice = table.Column<long>(type: "bigint", nullable: false),
+                    PercentSale = table.Column<int>(type: "int", nullable: false),
+                    MaxSale = table.Column<long>(type: "bigint", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Vouchers", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Vouchers_Owner_OwnerId",
+                        column: x => x.OwnerId,
+                        principalTable: "Owner",
+                        principalColumn: "OwnerId");
                 });
 
             migrationBuilder.CreateTable(
@@ -326,6 +377,32 @@ namespace SportApp_Infrastructure.Migrations
                 });
 
             migrationBuilder.CreateTable(
+                name: "Ratings",
+                columns: table => new
+                {
+                    Id = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    Comment = table.Column<string>(type: "nvarchar(max)", nullable: true),
+                    NumberOfStar = table.Column<int>(type: "int", nullable: false),
+                    SportFieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    CustomerId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_Ratings", x => x.Id);
+                    table.ForeignKey(
+                        name: "FK_Ratings_Customer_CustomerId",
+                        column: x => x.CustomerId,
+                        principalTable: "Customer",
+                        principalColumn: "Id");
+                    table.ForeignKey(
+                        name: "FK_Ratings_SportField_SportFieldId",
+                        column: x => x.SportFieldId,
+                        principalTable: "SportField",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
                 name: "TimeSlot",
                 columns: table => new
                 {
@@ -334,21 +411,38 @@ namespace SportApp_Infrastructure.Migrations
                     EndTime = table.Column<string>(type: "nvarchar(max)", nullable: false),
                     Price = table.Column<long>(type: "bigint", nullable: false),
                     SportFieldId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
-                    IsDeleted = table.Column<bool>(type: "bit", nullable: false),
-                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: true)
+                    IsDeleted = table.Column<bool>(type: "bit", nullable: false)
                 },
                 constraints: table =>
                 {
                     table.PrimaryKey("PK_TimeSlot", x => x.Id);
                     table.ForeignKey(
-                        name: "FK_TimeSlot_Booking_BookingId",
+                        name: "FK_TimeSlot_SportField_SportFieldId",
+                        column: x => x.SportFieldId,
+                        principalTable: "SportField",
+                        principalColumn: "Id",
+                        onDelete: ReferentialAction.Cascade);
+                });
+
+            migrationBuilder.CreateTable(
+                name: "BookingTimeSlot",
+                columns: table => new
+                {
+                    BookingId = table.Column<Guid>(type: "uniqueidentifier", nullable: false),
+                    TimeSlotId = table.Column<Guid>(type: "uniqueidentifier", nullable: false)
+                },
+                constraints: table =>
+                {
+                    table.PrimaryKey("PK_BookingTimeSlot", x => new { x.BookingId, x.TimeSlotId });
+                    table.ForeignKey(
+                        name: "FK_BookingTimeSlot_Booking_BookingId",
                         column: x => x.BookingId,
                         principalTable: "Booking",
                         principalColumn: "Id");
                     table.ForeignKey(
-                        name: "FK_TimeSlot_SportField_SportFieldId",
-                        column: x => x.SportFieldId,
-                        principalTable: "SportField",
+                        name: "FK_BookingTimeSlot_TimeSlot_TimeSlotId",
+                        column: x => x.TimeSlotId,
+                        principalTable: "TimeSlot",
                         principalColumn: "Id",
                         onDelete: ReferentialAction.Cascade);
                 });
@@ -358,10 +452,10 @@ namespace SportApp_Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "IsDeleted", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("188f2717-cfc0-4245-8587-b97b3bc314db"), null, false, "Customer", "CUSTOMER" },
-                    { new Guid("2f0d9e5f-60cf-4f9e-a1b3-27d9a40b3534"), null, false, "Admin", "ADMIN" },
-                    { new Guid("69891d08-3565-4aa9-a7d9-2525bca8e569"), null, false, "Spec", "SPEC" },
-                    { new Guid("a16d380c-bd4b-4d3c-b122-7c615de38c56"), null, false, "Owner", "OWNER" }
+                    { new Guid("12a530b0-20e9-4045-9f78-5f271fc268e8"), null, false, "Owner", "OWNER" },
+                    { new Guid("4fa86ed0-b4a4-4a7e-bd66-e7b67ba2d473"), null, false, "Customer", "CUSTOMER" },
+                    { new Guid("9c0b8f6e-2e4c-46bf-8792-219ce957c687"), null, false, "Spec", "SPEC" },
+                    { new Guid("a9d1c5e9-4ea1-4865-823d-f50fa8a16760"), null, false, "Admin", "ADMIN" }
                 });
 
             migrationBuilder.CreateIndex(
@@ -414,6 +508,11 @@ namespace SportApp_Infrastructure.Migrations
                 column: "SpecId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_BookingTimeSlot_TimeSlotId",
+                table: "BookingTimeSlot",
+                column: "TimeSlotId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Customer_UserId",
                 table: "Customer",
                 column: "UserId");
@@ -429,9 +528,30 @@ namespace SportApp_Infrastructure.Migrations
                 column: "UserId");
 
             migrationBuilder.CreateIndex(
+                name: "IX_Ratings_CustomerId",
+                table: "Ratings",
+                column: "CustomerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Ratings_SportFieldId",
+                table: "Ratings",
+                column: "SportFieldId");
+
+            migrationBuilder.CreateIndex(
                 name: "IX_Spec_UserId",
                 table: "Spec",
                 column: "UserId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SportEquipments_OwnerId",
+                table: "SportEquipments",
+                column: "OwnerId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_SportField_Endpoint",
+                table: "SportField",
+                column: "EndPoint",
+                unique: true);
 
             migrationBuilder.CreateIndex(
                 name: "IX_SportField_FieldTypeId",
@@ -444,14 +564,14 @@ namespace SportApp_Infrastructure.Migrations
                 column: "OwnerId");
 
             migrationBuilder.CreateIndex(
-                name: "IX_TimeSlot_BookingId",
-                table: "TimeSlot",
-                column: "BookingId");
-
-            migrationBuilder.CreateIndex(
                 name: "IX_TimeSlot_SportFieldId",
                 table: "TimeSlot",
                 column: "SportFieldId");
+
+            migrationBuilder.CreateIndex(
+                name: "IX_Vouchers_OwnerId",
+                table: "Vouchers",
+                column: "OwnerId");
         }
 
         /// <inheritdoc />
@@ -473,10 +593,19 @@ namespace SportApp_Infrastructure.Migrations
                 name: "AspNetUserTokens");
 
             migrationBuilder.DropTable(
+                name: "BookingTimeSlot");
+
+            migrationBuilder.DropTable(
                 name: "Images");
 
             migrationBuilder.DropTable(
-                name: "TimeSlot");
+                name: "Ratings");
+
+            migrationBuilder.DropTable(
+                name: "SportEquipments");
+
+            migrationBuilder.DropTable(
+                name: "Vouchers");
 
             migrationBuilder.DropTable(
                 name: "AspNetRoles");
@@ -485,13 +614,16 @@ namespace SportApp_Infrastructure.Migrations
                 name: "Booking");
 
             migrationBuilder.DropTable(
-                name: "SportField");
+                name: "TimeSlot");
 
             migrationBuilder.DropTable(
                 name: "Customer");
 
             migrationBuilder.DropTable(
                 name: "Spec");
+
+            migrationBuilder.DropTable(
+                name: "SportField");
 
             migrationBuilder.DropTable(
                 name: "FieldType");

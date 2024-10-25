@@ -29,7 +29,7 @@ namespace SportApp_Infrastructure.Repositories
                     SportFieldId = request.SportFieldId,
                     Note = request.Note,
                     SpecId = request.SpecId,
-                    TimeSlotBookeds = request.TimeSlotBookeds,
+                    BookingDate = request.BookingDate,
                 };
                 Entities.Add(booking);
                 await _unitOfWork.SaveChangesAsync();

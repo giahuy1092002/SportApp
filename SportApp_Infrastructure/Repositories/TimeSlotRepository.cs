@@ -20,7 +20,7 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<bool> Create(CreateTimeSlotModel request)
         {
-            var timeslot = await Entities.FirstOrDefaultAsync(x => x.StartTime == request.EndTime && x.IsDeleted == false && x.SportFieldId == request.SportFieldId);
+            var timeslot = await Entities.FirstOrDefaultAsync(x => x.StartTime == request.EndTime && x.SportFieldId == request.SportFieldId);
             if (timeslot != null) throw new Exception("Time slot is exist");
             try
             {

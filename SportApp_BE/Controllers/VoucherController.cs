@@ -19,5 +19,15 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command,cancellationToken));
         }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateVoucher(UpdateVoucherCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteVoucher(DeleteVoucherCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }

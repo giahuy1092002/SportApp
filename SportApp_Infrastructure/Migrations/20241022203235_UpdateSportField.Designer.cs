@@ -12,8 +12,8 @@ using SportApp_Infrastructure;
 namespace SportApp_Infrastructure.Migrations
 {
     [DbContext(typeof(SportAppDbContext))]
-    [Migration("20241019100157_UpdateVoucher")]
-    partial class UpdateVoucher
+    [Migration("20241022203235_UpdateSportField")]
+    partial class UpdateSportField
     {
         /// <inheritdoc />
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
@@ -140,6 +140,9 @@ namespace SportApp_Infrastructure.Migrations
                     b.Property<Guid>("CustomerId")
                         .HasColumnType("uniqueidentifier");
 
+                    b.Property<bool>("IsDeleted")
+                        .HasColumnType("bit");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
@@ -163,6 +166,21 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasIndex("SpecId");
 
                     b.ToTable("Booking");
+                });
+
+            modelBuilder.Entity("SportApp_Domain.Entities.BookingTimeSlot", b =>
+                {
+                    b.Property<Guid>("BookingId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.Property<Guid>("TimeSlotId")
+                        .HasColumnType("uniqueidentifier");
+
+                    b.HasKey("BookingId", "TimeSlotId");
+
+                    b.HasIndex("TimeSlotId");
+
+                    b.ToTable("BookingTimeSlot");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Customer", b =>
@@ -320,28 +338,28 @@ namespace SportApp_Infrastructure.Migrations
                     b.HasData(
                         new
                         {
-                            Id = new Guid("bd3a2511-895d-4e13-b26f-44516aca0435"),
+                            Id = new Guid("3f83207f-c8da-4ce0-937b-35a8cbfced6b"),
                             IsDeleted = false,
                             Name = "Customer",
                             NormalizedName = "CUSTOMER"
                         },
                         new
                         {
-                            Id = new Guid("cc0a26bd-8f50-48b3-a517-fa762dd17515"),
+                            Id = new Guid("d60865c8-3e23-40dc-b210-2991552211c0"),
                             IsDeleted = false,
                             Name = "Admin",
                             NormalizedName = "ADMIN"
                         },
                         new
                         {
-                            Id = new Guid("e2c78873-b7eb-46e5-845a-31d65aa86ce5"),
+                            Id = new Guid("a0a42199-7683-4223-917e-583eae933826"),
                             IsDeleted = false,
                             Name = "Owner",
                             NormalizedName = "OWNER"
                         },
                         new
                         {
-                            Id = new Guid("6a7db6f2-d777-44b4-a03a-d6e6abea9f4a"),
+                            Id = new Guid("01b12757-6c9e-4e20-8cd9-f4f4149cbcbc"),
                             IsDeleted = false,
                             Name = "Spec",
                             NormalizedName = "SPEC"
@@ -405,6 +423,8 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasKey("Id");
 
+                    b.HasIndex("OwnerId");
+
                     b.ToTable("SportEquipments");
                 });
 
@@ -431,6 +451,12 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.Property<bool>("IsDeleted")
                         .HasColumnType("bit");
+
+                    b.Property<double?>("Latitude")
+                        .HasColumnType("float");
+
+                    b.Property<double?>("Longitude")
+                        .HasColumnType("float");
 
                     b.Property<string>("Name")
                         .IsRequired()
@@ -465,15 +491,9 @@ namespace SportApp_Infrastructure.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("uniqueidentifier");
 
-                    b.Property<Guid?>("BookingId")
-                        .HasColumnType("uniqueidentifier");
-
                     b.Property<string>("EndTime")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
-
-                    b.Property<bool>("IsDeleted")
-                        .HasColumnType("bit");
 
                     b.Property<long>("Price")
                         .HasColumnType("bigint");
@@ -486,8 +506,6 @@ namespace SportApp_Infrastructure.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.HasKey("Id");
-
-                    b.HasIndex("BookingId");
 
                     b.HasIndex("SportFieldId");
 
@@ -599,12 +617,21 @@ namespace SportApp_Infrastructure.Migrations
                     b.Property<DateTime>("EndTime")
                         .HasColumnType("datetime2");
 
+                    b.Property<long>("MaxSale")
+                        .HasColumnType("bigint");
+
+                    b.Property<long>("MinPrice")
+                        .HasColumnType("bigint");
+
                     b.Property<string>("Name")
                         .IsRequired()
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<Guid?>("OwnerId")
                         .HasColumnType("uniqueidentifier");
+
+                    b.Property<int>("PercentSale")
+                        .HasColumnType("int");
 
                     b.Property<int>("Quantity")
                         .HasColumnType("int");
@@ -620,7 +647,7 @@ namespace SportApp_Infrastructure.Migrations
 
                     b.HasIndex("OwnerId");
 
-                    b.ToTable("Voucher");
+                    b.ToTable("Vouchers");
                 });
 
             modelBuilder.Entity("Microsoft.AspNetCore.Identity.IdentityRoleClaim<System.Guid>", b =>
@@ -691,6 +718,25 @@ namespace SportApp_Infrastructure.Migrations
                     b.Navigation("Spec");
                 });
 
+            modelBuilder.Entity("SportApp_Domain.Entities.BookingTimeSlot", b =>
+                {
+                    b.HasOne("SportApp_Domain.Entities.Booking", "Booking")
+                        .WithMany("TimeSlotBookeds")
+                        .HasForeignKey("BookingId")
+                        .OnDelete(DeleteBehavior.NoAction)
+                        .IsRequired();
+
+                    b.HasOne("SportApp_Domain.Entities.TimeSlot", "TimeSlot")
+                        .WithMany()
+                        .HasForeignKey("TimeSlotId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Booking");
+
+                    b.Navigation("TimeSlot");
+                });
+
             modelBuilder.Entity("SportApp_Domain.Entities.Customer", b =>
                 {
                     b.HasOne("SportApp_Domain.Entities.User", "User")
@@ -752,6 +798,17 @@ namespace SportApp_Infrastructure.Migrations
                     b.Navigation("User");
                 });
 
+            modelBuilder.Entity("SportApp_Domain.Entities.SportEquipment", b =>
+                {
+                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
+                        .WithMany("SportEquipment")
+                        .HasForeignKey("OwnerId")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+
+                    b.Navigation("Owner");
+                });
+
             modelBuilder.Entity("SportApp_Domain.Entities.SportField", b =>
                 {
                     b.HasOne("SportApp_Domain.Entities.FieldType", "FieldType")
@@ -773,10 +830,6 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.TimeSlot", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.Booking", null)
-                        .WithMany("TimeSlotBookeds")
-                        .HasForeignKey("BookingId");
-
                     b.HasOne("SportApp_Domain.Entities.SportField", null)
                         .WithMany("TimeSlots")
                         .HasForeignKey("SportFieldId")
@@ -786,9 +839,11 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.Voucher", b =>
                 {
-                    b.HasOne("SportApp_Domain.Entities.Owner", null)
+                    b.HasOne("SportApp_Domain.Entities.Owner", "Owner")
                         .WithMany("Vouchers")
                         .HasForeignKey("OwnerId");
+
+                    b.Navigation("Owner");
                 });
 
             modelBuilder.Entity("SportApp_Domain.Entities.Booking", b =>
@@ -803,6 +858,8 @@ namespace SportApp_Infrastructure.Migrations
 
             modelBuilder.Entity("SportApp_Domain.Entities.Owner", b =>
                 {
+                    b.Navigation("SportEquipment");
+
                     b.Navigation("SportFields");
 
                     b.Navigation("Vouchers");

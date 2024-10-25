@@ -11,6 +11,7 @@ using SportApp_Business.Commands.UserCommand;
 using SportApp_Business.Automapper;
 using Org.BouncyCastle.Asn1.X509.Qualified;
 using SportApp_Infrastructure.Services;
+using SportApp_Business.Hubs;
 
 namespace SportApp_Business
 {

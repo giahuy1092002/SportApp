@@ -5,6 +5,7 @@ using SportApp_Domain.Entities;
 using Microsoft.AspNetCore.Identity;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Repositories;
+using SportApp_Infrastructure.Services;
 
 
 namespace SportApp_Infrastructure
@@ -41,6 +42,9 @@ namespace SportApp_Infrastructure
             services.AddTransient<IRatingRepository, RatingRepository>();
             services.AddTransient<ISportEquipmentRepository, SportEquipmentRepository>();
             services.AddTransient<IVoucherRepository, VoucherRepository>();
+            services.AddTransient<IBookingTimeSlotRepository, BookingTimeSlotRepository>();
+            services.AddTransient<DirectionService>();
+            services.AddTransient<GeocodingService>();
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)

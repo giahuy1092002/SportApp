@@ -12,7 +12,7 @@ namespace SportApp_Infrastructure.Model.BookingModel
         public string? Note { get; set; }
         public Guid? SpecId { get; set; }
         public string StartTime { get; set; }
-        public string EndTime { get; set; } 
-        public List<TimeSlot> TimeSlotBookeds { get; set; } = new List<TimeSlot>();
+        public string EndTime { get; set; }
+        public DateTime BookingDate { get; set; }
     }
 }

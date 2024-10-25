@@ -16,39 +16,44 @@ namespace SportApp_Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("65087d6d-5d77-4530-80e7-360dcab39562"));
+                keyValue: new Guid("087673f0-1769-4688-9baf-2afbf4c1e04f"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("7aaf5675-e36e-4629-8075-13c26a54542e"));
+                keyValue: new Guid("16319d83-5002-43c7-a65a-bb6eba69c9c2"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("822e1fe7-9a83-4a53-b76c-d39fe7cb059c"));
+                keyValue: new Guid("a117ed3c-67ea-4a58-ab4c-28accfd5392d"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("a34e4f14-b59b-4d70-9c68-017ff9be5264"));
+                keyValue: new Guid("d4544582-eeed-48a8-99de-5a2ac95c9216"));
 
-            migrationBuilder.AddColumn<string>(
-                name: "EndPoint",
+            migrationBuilder.AddColumn<double>(
+                name: "Latitude",
                 table: "SportField",
-                type: "nvarchar(max)",
-                nullable: false,
-                defaultValue: "");
+                type: "float",
+                nullable: true);
+
+            migrationBuilder.AddColumn<double>(
+                name: "Longitude",
+                table: "SportField",
+                type: "float",
+                nullable: true);
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "IsDeleted", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("1966a576-4920-47dd-83a8-feea504dbda3"), null, false, "Owner", "OWNER" },
-                    { new Guid("7b6a7e0f-353a-4a71-bb82-bb680b225d25"), null, false, "Customer", "CUSTOMER" },
-                    { new Guid("d1a28158-966a-4716-9b82-9c593bc1e934"), null, false, "Spec", "SPEC" },
-                    { new Guid("d25e1dab-a430-4b20-b8e5-78486016935c"), null, false, "Admin", "ADMIN" }
+                    { new Guid("01b12757-6c9e-4e20-8cd9-f4f4149cbcbc"), null, false, "Spec", "SPEC" },
+                    { new Guid("3f83207f-c8da-4ce0-937b-35a8cbfced6b"), null, false, "Customer", "CUSTOMER" },
+                    { new Guid("a0a42199-7683-4223-917e-583eae933826"), null, false, "Owner", "OWNER" },
+                    { new Guid("d60865c8-3e23-40dc-b210-2991552211c0"), null, false, "Admin", "ADMIN" }
                 });
         }
 
@@ -58,25 +63,29 @@ namespace SportApp_Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("1966a576-4920-47dd-83a8-feea504dbda3"));
+                keyValue: new Guid("01b12757-6c9e-4e20-8cd9-f4f4149cbcbc"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("7b6a7e0f-353a-4a71-bb82-bb680b225d25"));
+                keyValue: new Guid("3f83207f-c8da-4ce0-937b-35a8cbfced6b"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("d1a28158-966a-4716-9b82-9c593bc1e934"));
+                keyValue: new Guid("a0a42199-7683-4223-917e-583eae933826"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("d25e1dab-a430-4b20-b8e5-78486016935c"));
+                keyValue: new Guid("d60865c8-3e23-40dc-b210-2991552211c0"));
 
             migrationBuilder.DropColumn(
-                name: "EndPoint",
+                name: "Latitude",
+                table: "SportField");
+
+            migrationBuilder.DropColumn(
+                name: "Longitude",
                 table: "SportField");
 
             migrationBuilder.InsertData(
@@ -84,10 +93,10 @@ namespace SportApp_Infrastructure.Migrations
                 columns: new[] { "Id", "ConcurrencyStamp", "IsDeleted", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("65087d6d-5d77-4530-80e7-360dcab39562"), null, false, "Spec", "SPEC" },
-                    { new Guid("7aaf5675-e36e-4629-8075-13c26a54542e"), null, false, "Customer", "CUSTOMER" },
-                    { new Guid("822e1fe7-9a83-4a53-b76c-d39fe7cb059c"), null, false, "Admin", "ADMIN" },
-                    { new Guid("a34e4f14-b59b-4d70-9c68-017ff9be5264"), null, false, "Owner", "OWNER" }
+                    { new Guid("087673f0-1769-4688-9baf-2afbf4c1e04f"), null, false, "Admin", "ADMIN" },
+                    { new Guid("16319d83-5002-43c7-a65a-bb6eba69c9c2"), null, false, "Owner", "OWNER" },
+                    { new Guid("a117ed3c-67ea-4a58-ab4c-28accfd5392d"), null, false, "Spec", "SPEC" },
+                    { new Guid("d4544582-eeed-48a8-99de-5a2ac95c9216"), null, false, "Customer", "CUSTOMER" }
                 });
         }
     }

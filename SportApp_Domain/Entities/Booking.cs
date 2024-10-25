@@ -13,13 +13,17 @@ namespace SportApp_Domain.Entities
         public string Name { get; set; }
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; }
+        [ForeignKey("SportFieldId")]
         public Guid SportFieldId { get; set; }
+        public SportField SportField { get; set; }
         public long TotelPrice { get; set; }
         public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public List<TimeSlot> TimeSlotBookeds { get; set; } = new List<TimeSlot>();
+        public DateTime BookingDate { get; set; }
+        public List<BookingTimeSlot> TimeSlotBookeds { get; set; } = new List<BookingTimeSlot>();
         public string? Note { get; set; }
         [ForeignKey("SpecId")]
         public Guid? SpecId { get; set; }
         public Spec Spec { get; set; }
+        public bool IsDeleted { get; set; } = false;
     }
 }

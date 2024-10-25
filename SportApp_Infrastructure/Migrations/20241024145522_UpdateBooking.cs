@@ -16,32 +16,39 @@ namespace SportApp_Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("188f2717-cfc0-4245-8587-b97b3bc314db"));
+                keyValue: new Guid("40ad8448-e6b1-4944-a9f2-882c8acf1a88"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("2f0d9e5f-60cf-4f9e-a1b3-27d9a40b3534"));
+                keyValue: new Guid("befd05ce-0a56-4193-ac2d-8808455372bf"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("69891d08-3565-4aa9-a7d9-2525bca8e569"));
+                keyValue: new Guid("c9226b7d-6cf0-4675-bae9-ce1022dd2a83"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("a16d380c-bd4b-4d3c-b122-7c615de38c56"));
+                keyValue: new Guid("dd4b1969-58b2-440d-bb8d-ee288e938b17"));
+
+            migrationBuilder.AddColumn<DateTime>(
+                name: "BookingDate",
+                table: "Booking",
+                type: "datetime2",
+                nullable: false,
+                defaultValue: new DateTime(1, 1, 1, 0, 0, 0, 0, DateTimeKind.Unspecified));
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "IsDeleted", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("65087d6d-5d77-4530-80e7-360dcab39562"), null, false, "Spec", "SPEC" },
-                    { new Guid("7aaf5675-e36e-4629-8075-13c26a54542e"), null, false, "Customer", "CUSTOMER" },
-                    { new Guid("822e1fe7-9a83-4a53-b76c-d39fe7cb059c"), null, false, "Admin", "ADMIN" },
-                    { new Guid("a34e4f14-b59b-4d70-9c68-017ff9be5264"), null, false, "Owner", "OWNER" }
+                    { new Guid("41c5d0f9-87cb-43c2-9cdd-98d54d8d6d1e"), null, false, "Spec", "SPEC" },
+                    { new Guid("5cf841b8-baae-4a83-8327-aaa8803c8c51"), null, false, "Admin", "ADMIN" },
+                    { new Guid("6a063072-cb47-45f8-8772-6c2f39ab5e52"), null, false, "Customer", "CUSTOMER" },
+                    { new Guid("6a48976b-c459-4e63-8480-1501569ebd6f"), null, false, "Owner", "OWNER" }
                 });
         }
 
@@ -51,32 +58,36 @@ namespace SportApp_Infrastructure.Migrations
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("65087d6d-5d77-4530-80e7-360dcab39562"));
+                keyValue: new Guid("41c5d0f9-87cb-43c2-9cdd-98d54d8d6d1e"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("7aaf5675-e36e-4629-8075-13c26a54542e"));
+                keyValue: new Guid("5cf841b8-baae-4a83-8327-aaa8803c8c51"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("822e1fe7-9a83-4a53-b76c-d39fe7cb059c"));
+                keyValue: new Guid("6a063072-cb47-45f8-8772-6c2f39ab5e52"));
 
             migrationBuilder.DeleteData(
                 table: "AspNetRoles",
                 keyColumn: "Id",
-                keyValue: new Guid("a34e4f14-b59b-4d70-9c68-017ff9be5264"));
+                keyValue: new Guid("6a48976b-c459-4e63-8480-1501569ebd6f"));
+
+            migrationBuilder.DropColumn(
+                name: "BookingDate",
+                table: "Booking");
 
             migrationBuilder.InsertData(
                 table: "AspNetRoles",
                 columns: new[] { "Id", "ConcurrencyStamp", "IsDeleted", "Name", "NormalizedName" },
                 values: new object[,]
                 {
-                    { new Guid("188f2717-cfc0-4245-8587-b97b3bc314db"), null, false, "Customer", "CUSTOMER" },
-                    { new Guid("2f0d9e5f-60cf-4f9e-a1b3-27d9a40b3534"), null, false, "Admin", "ADMIN" },
-                    { new Guid("69891d08-3565-4aa9-a7d9-2525bca8e569"), null, false, "Spec", "SPEC" },
-                    { new Guid("a16d380c-bd4b-4d3c-b122-7c615de38c56"), null, false, "Owner", "OWNER" }
+                    { new Guid("40ad8448-e6b1-4944-a9f2-882c8acf1a88"), null, false, "Customer", "CUSTOMER" },
+                    { new Guid("befd05ce-0a56-4193-ac2d-8808455372bf"), null, false, "Owner", "OWNER" },
+                    { new Guid("c9226b7d-6cf0-4675-bae9-ce1022dd2a83"), null, false, "Admin", "ADMIN" },
+                    { new Guid("dd4b1969-58b2-440d-bb8d-ee288e938b17"), null, false, "Spec", "SPEC" }
                 });
         }
     }
