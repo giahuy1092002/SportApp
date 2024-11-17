@@ -2,6 +2,7 @@
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportApp_Business.Commands.VoucherCommand;
+using SportApp_Business.Queries.VoucherQuery;
 
 namespace SportApp_BE.Controllers
 {
@@ -28,6 +29,11 @@ namespace SportApp_BE.Controllers
         public async Task<IActionResult> DeleteVoucher(DeleteVoucherCommand command,CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetByOwner([FromQuery]GetByOwner query,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
         }
     }
 }

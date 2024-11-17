@@ -11,11 +11,11 @@ namespace SportApp_Domain.Entities
         public Guid Id { get; set; }
         public Guid UserId { get; set; }
         public User User { get; set; }
-        public bool IsDeleted { get; set; } = false;
         public string? Interest {  get; set; }
         public long? Height { get; set; }
         public long? Weight { get; set; }
         public string? Skills { get; set; }
         public List<Rating> Ratings { get; set; }
+        public List<UserSportTeam> Teams { get; set; }
     }
 }

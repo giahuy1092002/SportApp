@@ -16,7 +16,6 @@ namespace SportApp_Business.Commands.VoucherCommand
     public class CreateVoucherCommand : ICommand<bool>
     {
         public string Name { get; set; }
-        public string Sport { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Quantity { get; set; }

@@ -13,9 +13,11 @@ namespace SportApp_Infrastructure.Repositories
     public class CustomerRepository : Repository<Customer>,ICustomerRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly SportAppDbContext _context;
         public CustomerRepository(SportAppDbContext context,IUnitOfWork unitOfWork):base(context)
         {
             _unitOfWork = unitOfWork;   
+            _context = context;
         }
 
         public async Task<bool> CreateCustomer(CreateCustomerModel request)
@@ -43,6 +45,43 @@ namespace SportApp_Infrastructure.Repositories
             catch (Exception ex)
             {
                 throw new Exception(ex.Message);
+            }
+        }
+
+        public async Task<bool> DeleteCustomer(Guid customerId)
+        {
+            try
+            {
+                var customer = await Entities.FirstOrDefaultAsync(c => c.Id == customerId);
+                var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id==customer.UserId);
+                Entities.Remove(customer);
+                _context.Users.Remove(user);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch
+            {
+                throw;
+            }
+        }
+
+        public async Task<bool> UpdateCustomer(UpdateCustomerModel request)
+        {
+            try
+            {
+                var customer = await Entities.FirstOrDefaultAsync(c=>c.Id==request.CustomerId);
+                if (customer == null) throw new AppException("Người chơi không tồn tại");
+                customer.Interest = request.Interest;
+                customer.Weight = request.Weight;
+                customer.Height = request.Height;
+                customer.Skills = request.Skills;
+                Entities.Update(customer);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch
+            {
+                throw;
             }
         }
     }

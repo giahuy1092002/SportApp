@@ -40,5 +40,31 @@ namespace SportApp_Infrastructure.Services
             return await Task.FromResult(true);
 
         }
+        public async Task<bool> SendEmailWithHtmlTemplate(MailRequest request, string templatePath, Dictionary<string, string> placeholders)
+        {
+            var htmlBody = File.ReadAllText(templatePath);
+            foreach (var placeholder in placeholders)
+            {
+                htmlBody = htmlBody.Replace($"{{{{{placeholder.Key}}}}}", placeholder.Value);
+            }
+            var email = new MimeMessage();
+            email.From.Add(MailboxAddress.Parse(_configuration["EmailSetting:Email"]));
+            email.To.Add(MailboxAddress.Parse(request.ToEmail));
+            email.Subject = request.Subject;
+
+            var builder = new BodyBuilder
+            {
+                HtmlBody = htmlBody
+            };
+
+            email.Body = builder.ToMessageBody();
+            using var smtp = new SmtpClient();
+            smtp.Connect(_configuration["EmailSetting:Host"], 587, SecureSocketOptions.StartTls);
+            smtp.Authenticate(_configuration["EmailSetting:Email"], _configuration["EmailSetting:Password"]);
+            smtp.Send(email);
+            smtp.Disconnect(true);
+
+            return await Task.FromResult(true);
+        }
     }
 }

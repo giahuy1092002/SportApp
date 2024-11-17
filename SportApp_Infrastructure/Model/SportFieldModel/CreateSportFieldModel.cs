@@ -18,5 +18,7 @@ namespace SportApp_Infrastructure.Model.SportFieldModel
         public string StartTime { get; set; }
         public string EndTime { get; set; }
         public List<TimeFramePrice> Prices { get; set; } = new List<TimeFramePrice>();
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
     }
 }

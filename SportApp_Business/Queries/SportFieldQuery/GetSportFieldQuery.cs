@@ -41,17 +41,12 @@ namespace SportApp_Business.Queries.SportFieldQuery
                             .ThenInclude(r=>r.Customer.User)
                         .Include(s => s.Owner)
                             .ThenInclude(o => o.Vouchers)
-                        .Include(s => s.Owner)
-                            .ThenInclude(o => o.SportEquipment)
-                        .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
+                        .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint && s.IsDeleted==false);
                     if (sportField == null) throw new Exception("Sport field isn't exist");
-                    sportField.Owner.Vouchers = sportField.Owner.Vouchers.Where(v => v.Sport == sportField.Sport).ToList();
                     var minPrice = sportField.TimeSlots.Min(t=>t.Price);
                     var maxPrice = sportField.TimeSlots.Max(t => t.Price);
                     var sportFieldDto = _mapper.Map<SportFieldDto>(sportField);
                     sportFieldDto.NumberOfReviews = sportField.Ratings.Count;
-                    sportFieldDto.MinPrice = minPrice;
-                    sportFieldDto.MaxPrice = maxPrice;
                     return sportFieldDto;
                 }
                 catch (Exception ex)

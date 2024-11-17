@@ -1,4 +1,6 @@
-﻿using SportApp_Business.Common;
+﻿using Microsoft.AspNetCore.SignalR;
+using SportApp_Business.Common;
+using SportApp_Business.Hubs;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Services;
 using System;
@@ -16,10 +18,12 @@ namespace SportApp_Business.Commands.ImageCommand
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly ImageService _imageService;
-            public DeleteImageHandler(IUnitOfWork unitOfWork,ImageService imageService)
+            private readonly IHubContext<ImageHub> _hubContext;
+            public DeleteImageHandler(IUnitOfWork unitOfWork,ImageService imageService,IHubContext<ImageHub> hubContext)
             {
                 _unitOfWork = unitOfWork;
                 _imageService = imageService;
+                _hubContext = hubContext;
             }
 
             public async Task<bool> Handle(DeleteImageCommand request, CancellationToken cancellationToken)
@@ -33,6 +37,7 @@ namespace SportApp_Business.Commands.ImageCommand
                     if (result.Result != "ok") throw new Exception("Delete image failed");
                     await _unitOfWork.Images.Delete(image);
                     _unitOfWork.CommitTransaction();
+                    await _hubContext.Clients.All.SendAsync("DeleteSportFieldImage", request.ImageId);
                     return await Task.FromResult(true);
                 }
                 catch (Exception ex)

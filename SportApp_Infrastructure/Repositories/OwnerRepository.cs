@@ -14,9 +14,11 @@ namespace SportApp_Infrastructure.Repositories
     public class OwnerRepository : Repository<Owner>,IOwnerRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly SportAppDbContext _context;
         public OwnerRepository(SportAppDbContext context, IUnitOfWork unitOfWork) : base(context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
         public async Task<bool> Create(CreateOwnerModel request)
@@ -38,6 +40,23 @@ namespace SportApp_Infrastructure.Repositories
                 throw new Exception(ex.Message);
             }
 
+        }
+
+        public async Task<bool> Delete(Guid ownerId)
+        {
+            try
+            {
+                var owner = await Entities.FirstOrDefaultAsync(c => c.OwnerId == ownerId);
+                var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id==owner.UserId);
+                Entities.Remove(owner);
+                _context.Users.Remove(user);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

@@ -5,6 +5,7 @@ using SportApp_Business.Dtos.SportFieldDtos;
 using SportApp_Business.Helper;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
+using SportApp_Infrastructure.Services;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,7 +15,7 @@ using static Microsoft.EntityFrameworkCore.DbLoggerCategory;
 
 namespace SportApp_Business.Queries.SportFieldQuery
 {
-    public class GetSportFieldsQuery : IQuery<PaginatedList<SportFieldListDto>>
+    public class GetSportFieldsQuery : IQuery<ListField>
     {
         public string? Search { get; set; }
         public string? Sort { get; set; }
@@ -22,18 +23,22 @@ namespace SportApp_Business.Queries.SportFieldQuery
         public string? StarRatings { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public double? UserLat { get; set; }
+        public double? UserLong { get; set; }
         //public long? MinPrice { get; set; }
         //public long? MaxPrice { get; set; }
-        public class GetSportFieldsHandler : IQueryHandler<GetSportFieldsQuery, PaginatedList<SportFieldListDto>>
+        public class GetSportFieldsHandler : IQueryHandler<GetSportFieldsQuery, ListField>
         {
             private readonly SportAppDbContext _context;
             private readonly IMapper _mapper;
-            public GetSportFieldsHandler(SportAppDbContext context,IMapper mapper)
+            private readonly DistanceService _distanceService;
+            public GetSportFieldsHandler(SportAppDbContext context,IMapper mapper,DistanceService distanceService)
             {
                 _context = context;
                 _mapper = mapper;
+                _distanceService = distanceService;
             }
-            public async Task<PaginatedList<SportFieldListDto>> Handle(GetSportFieldsQuery request, CancellationToken cancellationToken)
+            public async Task<ListField> Handle(GetSportFieldsQuery request, CancellationToken cancellationToken)
             {
                 var sportList = new List<string>();
                 var stars = new List<decimal>();
@@ -41,6 +46,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     .Include(s => s.Ratings)
                     .Include(s => s.TimeSlots)
                     .Include(s=>s.Images)
+                    .Where(s=>s.IsDeleted==false)
                     ;
                 if(!string.IsNullOrEmpty(request.Search))
                 {
@@ -83,6 +89,8 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     minStar = stars.Min();
                 }
                 var sportFieldList =  await PaginatedList<SportField>.CreateAsync(query, request.PageNumber, request.PageSize);
+                var result = new ListField();
+                result.Count = await query.CountAsync();
                 var sportFieldListDtoItems = _mapper.Map<List<SportFieldListDto>>(sportFieldList).Where(s=>s.Stars>=minStar).ToList();
                 var sportFieldListDto = new PaginatedList<SportFieldListDto>(
                     sportFieldListDtoItems,
@@ -90,8 +98,18 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     sportFieldList.PageIndex,
                     sportFieldList.TotalPages
                 );
-
-                return sportFieldListDto;
+                if(request.UserLat!=null && request.UserLong!= null)
+                {
+                    foreach (var field in sportFieldListDto)
+                    {
+                        var result_distance = await _distanceService.GetDistance(request.UserLat, request.UserLong, field.Latitude, field.Longitude);
+                        await Task.Delay(200);
+                        field.Distance = result_distance.Distance;
+                        field.Duration = result_distance.Duration;
+                    }
+                }    
+                result.Fields = sportFieldListDto;
+                return result;
             }
             
         }

@@ -19,7 +19,7 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
-        [HttpPost("[action]")]
+        [HttpDelete("[action]")]
         public async Task<IActionResult> DeleteImage(DeleteImageCommand command,CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(command, cancellationToken));

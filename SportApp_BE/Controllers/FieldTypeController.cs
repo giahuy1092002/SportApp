@@ -1,7 +1,9 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
-using SportApp_Business.Commands.FieldType;
+using SportApp_Business.Commands.FieldTypeCommand;
+using SportApp_Business.Queries.FieldTypeQuery;
+using SportApp_Business.Queries.OwnerQuery;
 
 namespace SportApp_BE.Controllers
 {
@@ -18,6 +20,11 @@ namespace SportApp_BE.Controllers
         public async Task<IActionResult> Create(CreateFieldTypeCommand request,CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(request,cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetFieldTypes([FromQuery]GetFieldTypesQuery query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
         }
     }
 }

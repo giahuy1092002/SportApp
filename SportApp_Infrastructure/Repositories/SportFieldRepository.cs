@@ -3,6 +3,7 @@ using SportApp_Domain.Entities;
 using SportApp_Infrastructure.Dto.TimeSlotDto;
 using SportApp_Infrastructure.Model.SportFieldModel;
 using SportApp_Infrastructure.Repositories.Interfaces;
+using SportApp_Infrastructure.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,15 +15,17 @@ namespace SportApp_Infrastructure.Repositories
     public class SportFieldRepository : Repository<SportField>,ISportFieldRepository
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly SportAppDbContext _context;
         public SportFieldRepository(SportAppDbContext context,IUnitOfWork unitOfWork):base(context)
         {
             _unitOfWork = unitOfWork;
+            _context = context;
         }
 
-        public async Task<Guid> Create(CreateSportFieldModel request)
+        public async Task<SportField> Create(CreateSportFieldModel request)
         {
             var sportField = await Entities.FirstOrDefaultAsync(x => x.Name == request.Name && x.IsDeleted == false && x.OwnerId==request.OwnerId);
-            if (sportField != null) throw new Exception("Sport Field is exist");
+            if (sportField != null) throw new AppException(ErrorMessage.SportFieldExist);
             try
             {
                 var obj = new SportField
@@ -33,15 +36,17 @@ namespace SportApp_Infrastructure.Repositories
                     Description = request.Description,
                     FieldTypeId = request.FieldTypeId,
                     OwnerId = request.OwnerId,
-                    EndPoint = CreateEndpoint(request.Name)
+                    EndPoint = CreateEndpoint.AddEndpoint(request.Name),
+                    Latitude = request.Latitude,
+                    Longitude = request.Longitude,
                 };
                 Entities.Add(obj);
                 await _unitOfWork.SaveChangesAsync();
-                return obj.Id;
+                return obj;
             }
-            catch (Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
 
@@ -55,25 +60,39 @@ namespace SportApp_Infrastructure.Repositories
         {
             try
             {
+                var sportFieldTest = await Entities.FirstOrDefaultAsync(s=>s.Name==request.Name);
+                if (sportFieldTest != null) throw new AppException(ErrorMessage.SportFieldNameExist);
                 var sportField = await _unitOfWork.SportFields.GetById(request.SportFieldId);
-                if (sportField == null) throw new Exception("Sport field is not exist");
+                if (sportField == null) throw new AppException(ErrorMessage.SportFieldNotExist);
                 sportField.Sport = request.Sport;
                 sportField.Address = request.Address;
                 sportField.Description = request.Description;
                 sportField.Name = request.Name;
+                sportField.EndPoint = CreateEndpoint.AddEndpoint(request.Name);
                 Entities.Update(sportField);
                 await _unitOfWork.SaveChangesAsync();
                 return await Task.FromResult(true);
             }
-            catch(Exception ex) 
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             }
         }
-        private string CreateEndpoint(string name)
+        public async Task<bool> Delete(Guid sportFieldId)
         {
-            var array = name.ToLower().Split(" ");
-            return string.Join("-", array);
+            try
+            {
+                var sportField = await _unitOfWork.SportFields.GetById(sportFieldId);
+                if (sportField == null) throw new AppException(ErrorMessage.SportFieldNotExist);
+                sportField.IsDeleted = true;
+                Entities.Update(sportField);
+                await _unitOfWork.SaveChangesAsync();
+                return await Task.FromResult(true);
+            }
+            catch
+            {
+                throw;
+            }
         }
     }
 }

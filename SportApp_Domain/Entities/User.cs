@@ -22,6 +22,9 @@ namespace SportApp_Domain.Entities
         public string? Location { get; set; }
         public string? Avatar { get; set; }
         public string? PublicId { get; set; }
+        // Geocode
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
 
     }
 }

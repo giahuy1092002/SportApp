@@ -18,7 +18,7 @@ namespace SportApp_Domain.Entities
         [ForeignKey("FieldTypeId")]
         public Guid FieldTypeId { get; set; }
         public FieldType FieldType { get; set; }
-        public List<TimeSlot> TimeSlots { get; set; } = new List<TimeSlot>();
+        public List<TimeSlot> TimeSlots { get; set; }
         public List<Image> Images { get; set; }
         public bool IsDeleted { get; set; } = false;
         [ForeignKey("OwnerId")]
@@ -32,5 +32,22 @@ namespace SportApp_Domain.Entities
             get => Ratings != null && Ratings.Any() ? (decimal)Ratings.Average(r => r.NumberOfStar) : 0;
             set { }
         }
+        public double? Latitude { get; set; }
+        public double? Longitude { get; set; }
+        public string? StartTime
+        {
+            get => TimeSlots != null && TimeSlots.Any()
+           ? TimeSlots.Min(t => t.StartTime)
+           : null;
+            set { }
+        }
+        public string? EndTime
+        {
+            get => TimeSlots != null && TimeSlots.Any()
+           ? TimeSlots.Max(t => t.EndTime)
+           : null;
+            set { }
+        }
     }
+
 }

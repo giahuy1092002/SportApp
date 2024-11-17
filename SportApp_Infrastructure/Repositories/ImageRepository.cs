@@ -18,7 +18,7 @@ namespace SportApp_Infrastructure.Repositories
             _unitOfWork = unitOfWork;
         }
 
-        public async Task<bool> Add(CreateImageModel request)
+        public async Task<Image> Add(CreateImageModel request)
         {
             try
             {
@@ -30,7 +30,7 @@ namespace SportApp_Infrastructure.Repositories
                 };
                 Entities.Add(image);
                 await _unitOfWork.SaveChangesAsync();
-                return true;
+                return image;
             }
             catch (Exception ex)
             {

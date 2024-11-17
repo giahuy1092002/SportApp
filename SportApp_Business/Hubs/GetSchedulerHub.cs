@@ -6,7 +6,6 @@ namespace SportApp_Business.Hubs
 {
     public class GetSchedulerHub : Hub
     {
-        // Hub context for sending messages
         private readonly IHubContext<GetSchedulerHub> _hubContext;
 
         public GetSchedulerHub(IHubContext<GetSchedulerHub> hubContext)

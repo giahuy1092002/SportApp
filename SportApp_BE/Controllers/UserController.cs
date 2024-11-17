@@ -1,9 +1,12 @@
 ﻿using MediatR;
 using Microsoft.AspNetCore.Http;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
+using Microsoft.AspNetCore.WebUtilities;
 using SportApp_Business.Commands.UserCommand;
 using SportApp_Business.Dtos.UserDtos;
 using SportApp_Business.Queries.UserQuery;
+using System.Text;
 
 namespace SportApp_BE.Controllers
 {
@@ -37,6 +40,11 @@ namespace SportApp_BE.Controllers
             return BadRequest(result);
         }
         [HttpPost("[action]")]
+        public async Task<IActionResult> AddRole(AddRoleCommand command, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command,cancellationToken));
+        }
+        [HttpPost("[action]")]
         public async Task<IActionResult> SignIn(SignInCommand command,CancellationToken cancellationToken)
         {
             var user = await _mediator.Send(command, cancellationToken);
@@ -63,6 +71,34 @@ namespace SportApp_BE.Controllers
         public async Task<IActionResult> GetUser([FromQuery] GetUserQuery query, CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateGeo(UpdateGeoCommand command, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> ConfirmEmail([FromQuery]GetEmailConfirmQuery query, CancellationToken cancellationToken)
+        {
+            var decodedToken = Encoding.UTF8.GetString(WebEncoders.Base64UrlDecode(query.EndcodedToken));
+            query.EndcodedToken = decodedToken;
+            await _mediator.Send(query, cancellationToken);
+            return Redirect("http://localhost:3000");
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ForgetPassword(ForgetPassWordCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command,cancellationToken));
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> ResetPassword(ResetPasswordCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> SendEmail(SendEmail command, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
         }
     }
 }

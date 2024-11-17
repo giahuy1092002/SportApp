@@ -14,7 +14,6 @@ namespace SportApp_Domain.Entities
         public bool IsDeleted { get; set; } = false;
         public List<SportField> SportFields { get; set; } = new List<SportField>();
         public List<Voucher> Vouchers { get; set; } = new List<Voucher> {};  
-        public List<SportEquipment> SportEquipment { get; set; } = new List<SportEquipment> {};
 
     }
 }

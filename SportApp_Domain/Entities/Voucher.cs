@@ -11,7 +11,6 @@ namespace SportApp_Domain.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Sport {  get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Quantity { get; set; }

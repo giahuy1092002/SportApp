@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using System.Windows.Input;
 using SportApp_Business.Common;
 using SportApp_Domain.Entities;
+using SportApp_Infrastructure.Model.AdminModel;
 using SportApp_Infrastructure.Model.CustomerModel;
 using SportApp_Infrastructure.Model.Owner;
 using SportApp_Infrastructure.Model.SpecModel;
@@ -56,6 +57,14 @@ namespace SportApp_Business.Commands.UserCommand
                             UserId = userId
                         };
                         result = await _unitOfWork.Customers.CreateCustomer(customer);
+                    }    
+                    else
+                    {
+                        var admin = new CreateAdminModel
+                        {
+                            UserId = userId
+                        };
+                        result = await _unitOfWork.Admins.CreateAdmin(admin); 
                     }    
                     _unitOfWork.CommitTransaction();
                     return result;
