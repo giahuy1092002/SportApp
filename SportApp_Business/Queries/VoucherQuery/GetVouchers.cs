@@ -11,32 +11,32 @@ using System.Threading.Tasks;
 
 namespace SportApp_Business.Queries.VoucherQuery
 {
-    public class GetByOwner : IQuery<VoucherListDto>
+    public class GetVouchers : IQuery<VoucherListDto>
     {
-        public Guid OwnerId { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
-        public class GetByOwnerHandler : IQueryHandler<GetByOwner, VoucherListDto>
+        public class GetVouchersHandler : IQueryHandler<GetVouchers, VoucherListDto>
         {
             private readonly SportAppDbContext _context;
             private readonly IMapper _mapper;
-            public GetByOwnerHandler(SportAppDbContext context,IMapper mapper)
+            public GetVouchersHandler(SportAppDbContext context,IMapper mapper)
             {
-                _context = context;          
+                _context = context;
                 _mapper = mapper;
             }
-            public async Task<VoucherListDto> Handle(GetByOwner request, CancellationToken cancellationToken)
+            public async Task<VoucherListDto> Handle(GetVouchers request,CancellationToken cancellationToken)
             {
-                var list = await _context.Vouchers.Where(v => v.OwnerId == request.OwnerId).ToListAsync();
+                var list = await _context.Vouchers.ToListAsync();
                 int count = list.Count;
                 list = list.Skip((request.PageNumber-1)*request.PageSize).Take(request.PageSize).ToList();
-                var result = _mapper.Map<List<VoucherDtoList>>(list);
+                var listDto = _mapper.Map<List<VoucherDto>>(list);
                 return new VoucherListDto
                 {
-                    VoucherList = result,
-                    Count = count
+                    Count = count,
+                    VoucherList = listDto
                 };
             }
+
         }
     }
 }

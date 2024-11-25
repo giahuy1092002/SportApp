@@ -21,13 +21,19 @@ namespace SportApp_BE.Controllers
             var result = await _mediator.Send(command, cancellationToken);
             return Ok(result);
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddColor([FromForm] AddColorForSportProduct command, CancellationToken cancellationToken)
+        {
+            var result = await _mediator.Send(command, cancellationToken);
+            return Ok(result);
+        }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetSportProducts([FromQuery]GetSportProducts query, CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(query,cancellationToken));
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetSportProductDetail([FromQuery]GetSportProductDetail query, CancellationToken cancellationToken)
+        public async Task<IActionResult> GetSportProductDetail([FromQuery] GetSportProductDetail query, CancellationToken cancellationToken)
         {
             return Ok(await _mediator.Send(query, cancellationToken));
         }

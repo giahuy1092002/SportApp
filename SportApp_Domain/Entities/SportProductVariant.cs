@@ -14,11 +14,13 @@ namespace SportApp_Domain.Entities
         [ForeignKey("SportProductId")]
         public Guid SportProductId { get; set; }
         public string EndPoint { get; set; }
+        public int QuantityInStock { get; set; }
         public SportProduct SportProduct { get; set; }
         [ForeignKey("ColorId")]
         public Guid ColorId { get; set; }
         public Color Color { get; set; }
-        public List<Size> Sizes { get; set; }
-        public List<ImageProduct> ImageProducts { get; set; }
+        public Guid SizeId { get; set; }
+        public Size Size { get; set; }
+        
     }
 }

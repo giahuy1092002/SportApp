@@ -28,9 +28,6 @@ namespace SportApp_Business.Commands.SportFieldCommand
         public string Description { get; set; }
         public Guid FieldTypeId { get; set; }
         public Guid OwnerId { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
-
         public List<IFormFile> Images { get; set; }
         public string Prices { get; set; }
         public class CreateSportFieldHandler : ICommandHandler<CreateSportFieldCommand, bool>
@@ -53,7 +50,7 @@ namespace SportApp_Business.Commands.SportFieldCommand
                     var owner = await _unitOfWork.Owners.GetById(request.OwnerId);
                     if (owner == null) throw new AppException(ErrorMessage.OwnerNotExist);
                     var fieldType = await _unitOfWork.FieldTypes.GetById(request.FieldTypeId);
-                    if (fieldType == null) throw new Exception("Field type is not exist");
+                    if (fieldType == null) throw new AppException("Loại sân không tồn tại");
                     var geocode = await _geoCodeServie.ConvertAddress(request.Address);
                     var sportField = new CreateSportFieldModel
                     {
@@ -63,8 +60,6 @@ namespace SportApp_Business.Commands.SportFieldCommand
                         Description = request.Description,
                         FieldTypeId = request.FieldTypeId,
                         OwnerId = request.OwnerId,
-                        StartTime = request.StartTime,
-                        EndTime = request.EndTime,
                         Latitude = geocode.Latitude,
                         Longitude = geocode.Longitude
                     };

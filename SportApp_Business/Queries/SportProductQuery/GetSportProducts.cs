@@ -17,6 +17,9 @@ namespace SportApp_Business.Queries.SportProductQuery
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
         public string? OrderBy { get; set; }
+        public string? Colors { get; set; }
+        public string? Sizes { get; set; }
+        public string? Sports { get; set; }
         public class GetSportProductsHandler : IQueryHandler<GetSportProducts, SportProductListDto>
         {
             private readonly SportAppDbContext _context;
@@ -27,29 +30,38 @@ namespace SportApp_Business.Queries.SportProductQuery
             public async Task<SportProductListDto> Handle(GetSportProducts query, CancellationToken cancellationToken)
             {
                 var list = await _context.SportProduct
-                    .Include(s=>s.Variants)
-                        .ThenInclude(sv=>sv.ImageProducts)
+                    .OrderBy(s=>s.Name)
                     .Include(s=>s.Variants)
                         .ThenInclude(sv=>sv.Color)
+                    .Include(s=>s.ImageProducts)
                     .ToListAsync();
-
-                var productListDto = list.SelectMany(
-                    s=>s.Variants
-                    .Select(sv=> new SportProductDto
+                var productListDto = list
+                    .SelectMany(s => s.Variants
+                    .GroupBy(s => s.Color)
+                    .Select(g => new SportProductDto
                     {
-                        Name = s.Name + " " + sv.Color.Name,
-                        PictureUrl = sv.ImageProducts.FirstOrDefault(i=>i.SportProductVariantId==sv.Id&&i.Type=="List").PictureUrl,
-                        Price = sv.Price,
-                        ColorEndpoints = s.Variants.Select(
-                            sv=> new ColorEndpoint
-                            {
-                                EndPoint = CreateEndpoint.AddEndpoint(s.Name + " " + sv.Color.Name),
-                                ColorCode = sv.Color.Value
-                            }
-                            ).ToList()
-                    })
-                    ).ToList();
-
+                        EndPoint = CreateEndpoint.AddEndpoint(s.Name + " " + g.Key.Name),
+                        PictureUrl = s.ImageProducts.FirstOrDefault(i => i.Color == g.Key && i.Type == "List")?.PictureUrl,
+                        Price = s.Variants.FirstOrDefault(sku => sku.Color == g.Key).Price,
+                        Name = s.Name + " " + g.Key.Name,
+                        ColorEndpoints = s.Variants
+            .GroupBy(v => v.Color)
+            .Select(cg => new ColorEndpoint
+            {
+                EndPoint = CreateEndpoint.AddEndpoint(s.Name + " " + cg.Key.Name),
+                ColorCode = cg.Key.Value
+            })
+            .DistinctBy(ce => new { ce.EndPoint, ce.ColorCode })
+            .ToList()
+                    })).ToList();
+                productListDto = query.OrderBy switch
+                {
+                    "$-$$$" => productListDto.OrderBy(p => p.Price).ToList(),
+                    "$$$-$" => productListDto.OrderByDescending(p => p.Price).ToList(),
+                    "A-Z" => productListDto.OrderBy(p => p.Name).ToList(),
+                    "Z-A" => productListDto.OrderByDescending(p => p.Name).ToList(),
+                    _ => productListDto.OrderBy(p => p.Name).ToList(),
+                };
                 return new SportProductListDto
                 {
                     Products = productListDto,

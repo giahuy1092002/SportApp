@@ -18,12 +18,12 @@ namespace SportApp_Business.Dtos.SportProductDtos
     {
         public string PictureUrl { get; set; }
         public string EndPoint { get; set; }
+        public bool IsSelected { get; set; }
     }
     public class SizeDto
     {
         public Guid Id { get; set; }
         public string Value { get; set; }
         public int QuantityInStock { get; set; }
-        public Guid SportProductVariantId { get; set; }
     }
 }

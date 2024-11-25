@@ -10,6 +10,7 @@ namespace SportApp_Business.Dtos.SportProductDtos
     public class SportProductDto
     {
         public string PictureUrl { get; set; }
+        public string EndPoint {  get; set; }
         public List<ColorEndpoint> ColorEndpoints { get; set; }
         public long Price { get; set; }
         public string Name { get; set; }

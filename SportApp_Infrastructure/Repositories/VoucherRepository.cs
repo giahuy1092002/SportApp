@@ -20,17 +20,11 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<bool> Create(CreateVoucherModel request)
         {
-            if (request.OwnerId != Guid.Empty)
-            {
-                var voucher = await Entities.FirstOrDefaultAsync(v => v.Name == request.Name && v.OwnerId == request.OwnerId);
-                if (voucher != null) throw new Exception("Voucher is exist");
-            }
             try
             { 
                 var obj = new Voucher
                 {
                     Name = request.Name,
-                    OwnerId = request.OwnerId,
                     StartTime = request.StartTime,
                     EndTime = request.EndTime,
                     PercentSale = request.PercentSale,

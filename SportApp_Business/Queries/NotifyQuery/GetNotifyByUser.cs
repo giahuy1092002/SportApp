@@ -32,6 +32,7 @@ namespace SportApp_Business.Queries.NotifyQuery
             {
                 var list = await _context.UserNotifications
                     .Include(u => u.Notification)
+                    .OrderByDescending(s=>s.Notification.CreateAt)
                     .Where(n => n.UserId == request.UserId)
                     .ToListAsync();
                 var listNotRead = await _context.UserNotifications

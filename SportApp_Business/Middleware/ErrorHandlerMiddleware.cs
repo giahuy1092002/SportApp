@@ -3,6 +3,7 @@ using Org.BouncyCastle.Security;
 using SportApp_Infrastructure;
 using System.Net;
 using System.Text.Json;
+
 namespace SportApp_Business.Middleware
 {
     public class ErrorHandlerMiddleware

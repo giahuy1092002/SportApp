@@ -1,6 +1,7 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SportApp_Domain.Entities;
+using SportApp_Domain.Entities.OrderAggregate;
 using SportApp_Infrastructure.Seeding;
 
 namespace SportApp_Infrastructure
@@ -36,6 +37,7 @@ namespace SportApp_Infrastructure
         public DbSet<SportTeam> SportTeam { get; set; }
         public DbSet<UserSportTeam> UserSportTeam { get;set; }
         public DbSet<Color> Color { get; set; }
+        public DbSet<Order> Order { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

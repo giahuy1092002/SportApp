@@ -16,5 +16,6 @@ namespace SportApp_Domain.Entities
         public Guid CategoryId { get; set; }
         public Category Category { get; set; } 
         public List<SportProductVariant> Variants { get; set; }
+        public List<ImageProduct> ImageProducts { get; set; }
     }
 }

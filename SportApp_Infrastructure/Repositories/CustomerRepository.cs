@@ -53,6 +53,7 @@ namespace SportApp_Infrastructure.Repositories
             try
             {
                 var customer = await Entities.FirstOrDefaultAsync(c => c.Id == customerId);
+                if (customer == null) throw new AppException("Customer không tồn tại");
                 var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id==customer.UserId);
                 Entities.Remove(customer);
                 _context.Users.Remove(user);
@@ -75,6 +76,8 @@ namespace SportApp_Infrastructure.Repositories
                 customer.Weight = request.Weight;
                 customer.Height = request.Height;
                 customer.Skills = request.Skills;
+                customer.Address = request.Address;
+                customer.Time = request.Time;
                 Entities.Update(customer);
                 await _unitOfWork.SaveChangesAsync();
                 return await Task.FromResult(true);

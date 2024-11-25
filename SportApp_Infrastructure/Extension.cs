@@ -51,6 +51,7 @@ namespace SportApp_Infrastructure
             services.AddTransient<ISportProductRepository, SportProductRepository>();
             services.AddTransient<ISportProductVariantRepository,SportProductVariantRepository>();
             services.AddTransient<IColorRepository, ColorRepository>();
+            services.AddTransient<ICartRepository, CartRepository>();
             services.AddTransient<MailService>();
             services.AddTransient<IVnPayService,VnPayService>();
             //services.AddHostedService<NotifyRatingService>();

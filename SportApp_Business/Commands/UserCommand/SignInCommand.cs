@@ -60,7 +60,7 @@ namespace SportApp_Business.Commands.UserCommand
                     else if (userDto.Role.ToUpper() == "OWNER")
                     {
                         var owner = await _context.Owner.FirstOrDefaultAsync(c => c.UserId == user.Id);
-                        userDto.UserRoleId = owner.OwnerId;
+                        userDto.UserRoleId = owner.Id;
                     }
                     else if (userDto.Role.ToUpper() == "ADMIN")
                     {

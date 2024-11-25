@@ -12,7 +12,6 @@ namespace SportApp_Infrastructure.Model.VoucherModel
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Quantity { get; set; }
-        public Guid? OwnerId { get; set; } = Guid.Empty;
         public long MinPrice { get; set; }
         public int PercentSale { get; set; }
         public long MaxSale { get; set; }

@@ -17,4 +17,9 @@ namespace SportApp_Business.Dtos.OwnerDtos
         public string Gender { get; set; }
         public DateTime? RegistrationDate { get; set; }
     }
+    public class OwnerListDto
+    {
+        public List<OwnerDto> Owners { get; set; }
+        public int Count { get; set; }
+    }
 }

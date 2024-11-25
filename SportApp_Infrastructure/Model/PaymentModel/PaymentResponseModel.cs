@@ -9,6 +9,7 @@ namespace SportApp_Infrastructure.Model.PaymentModel
     public class PaymentResponseModel
     {
         public string BookingDescription { get; set; }
+        public string BookingType { get; set; }
         public string TransactionId { get; set; }
         public string BookingId { get; set; }
         public string PaymentMethod { get; set; }

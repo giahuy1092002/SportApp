@@ -17,5 +17,7 @@ namespace SportApp_Business.Dtos.SportTeamDtos
         public string Sport {  get; set; }
         public string Endpoint { get; set; }
         public string Avatar { get; set; }
+        public string Description { get; set; }
+        public string? Note { get; set; }
     }
 }

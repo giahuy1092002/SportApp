@@ -8,7 +8,7 @@ namespace SportApp_Business.Dtos.VoucherDtos
 {
     public class VoucherListDto
     {
-        public List<VoucherDtoList> VoucherList { get; set; }
+        public List<VoucherDto> VoucherList { get; set; }
         public int Count { get; set; }
     }
 }

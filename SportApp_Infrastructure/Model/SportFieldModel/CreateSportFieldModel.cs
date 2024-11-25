@@ -15,8 +15,6 @@ namespace SportApp_Infrastructure.Model.SportFieldModel
         public string Description { get; set; }
         public Guid FieldTypeId { get; set; }
         public Guid OwnerId { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
         public List<TimeFramePrice> Prices { get; set; } = new List<TimeFramePrice>();
         public double? Latitude { get; set; }
         public double? Longitude { get; set; }

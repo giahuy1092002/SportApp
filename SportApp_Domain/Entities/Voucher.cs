@@ -14,9 +14,6 @@ namespace SportApp_Domain.Entities
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
         public int Quantity { get; set; }
-        [ForeignKey("OwnerId")]
-        public Guid? OwnerId { get; set; }
-        public Owner Owner { get; set; }
         public long MinPrice { get; set; }
         public int PercentSale {  get; set; }
         public long MaxSale { get; set; }

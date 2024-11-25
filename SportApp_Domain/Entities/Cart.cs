@@ -28,5 +28,23 @@ namespace SportApp_Domain.Entities
             existItem.Quantity -= quantity;
             if (existItem.Quantity == 0) Items.Remove(existItem);
         }
+        public int TotalQuantity()
+        {
+            int totalQuantity = 0;
+            foreach (var item in Items)
+            {
+                totalQuantity += item.Quantity;
+            }
+            return totalQuantity;
+        }
+        public long TotalPrice()
+        {
+            long totalPrice = 0;
+            foreach(var item in Items)
+            {
+                totalPrice += item.SportProductVariant.Price * item.Quantity;
+            } 
+            return totalPrice;        
+        }
     }
 }

@@ -29,6 +29,7 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
         ISportProductRepository Products { get; }
         ISportProductVariantRepository ProductVariants { get; }
         IColorRepository Colors { get; }
+        ICartRepository Carts { get; }
         void CommitTransaction();
         void RollbackTransaction();
         int SaveChanges();

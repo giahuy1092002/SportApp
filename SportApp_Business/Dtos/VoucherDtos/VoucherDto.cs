@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace SportApp_Business.Dtos.VoucherDtos
 {
-    public class VoucherDtoList
+    public class VoucherDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

@@ -15,6 +15,8 @@ namespace SportApp_Domain.Entities
         public long? Height { get; set; }
         public long? Weight { get; set; }
         public string? Skills { get; set; }
+        public string? Address { get; set; }
+        public string? Time { get; set; }
         public List<Rating> Ratings { get; set; }
         public List<UserSportTeam> Teams { get; set; }
     }

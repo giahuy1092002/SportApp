@@ -25,8 +25,9 @@ namespace SportApp_Business.Commands.SportProductCommand
         public Guid CategoryId { get; set; }
         public long Price { get; set; }
         public Guid ColorId { get; set; }
+        public int QuantityInStock { get; set; }
         public List<IFormFile> Images { get; set; }
-        public string Sizes { get; set; }
+        public List<Guid> SizeIds { get; set; }
         public class CreateSportProductHandler : ICommandHandler<CreateSportProductCommand, bool>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -45,6 +46,7 @@ namespace SportApp_Business.Commands.SportProductCommand
                 try
                 {
                     _unitOfWork.BeginTransaction();
+                    // Add product
                     var model = new CreateSportProductModel
                     {
                         Name = request.Name,
@@ -53,14 +55,7 @@ namespace SportApp_Business.Commands.SportProductCommand
                     };
                     var productId = await _unitOfWork.Products.Create(model);
                     var color = await _context.Color.FirstOrDefaultAsync(c=>c.Id==request.ColorId);
-                    var variant = new SportProductVariant
-                    {
-                        ColorId = request.ColorId,
-                        Price = request.Price,
-                        SportProductId = productId,
-                        EndPoint = CreateEndpoint.AddEndpoint(request.Name + " " + color.Name)
-                    };
-                    await _unitOfWork.ProductVariants.Add(variant);
+                    // Add image product
                     for (int i = 0; i < request.Images.Count; i++)
                     {
                         var result = await _imageService.AddImageAsync(request.Images[i]);
@@ -68,7 +63,8 @@ namespace SportApp_Business.Commands.SportProductCommand
                         {
                             var image = new ImageProduct
                             {
-                                SportProductVariantId = variant.Id,
+                                SportProductId = productId,
+                                ColorId = request.ColorId,
                                 PictureUrl = result.SecureUrl.ToString(),
                                 PublicId = result.PublicId,
                                 Type = "List"
@@ -79,7 +75,8 @@ namespace SportApp_Business.Commands.SportProductCommand
                         {
                             var image = new ImageProduct
                             {
-                                SportProductVariantId = variant.Id,
+                                SportProductId = productId,
+                                ColorId = request.ColorId,
                                 PictureUrl = result.SecureUrl.ToString(),
                                 PublicId = result.PublicId,
                                 Type = "Detail"
@@ -87,16 +84,18 @@ namespace SportApp_Business.Commands.SportProductCommand
                             _context.ImageProduct.Add(image);
                         }
                     }
-                    var sizes = JsonConvert.DeserializeObject<List<SizeQuantity>>(request.Sizes);
-                    foreach (var sizeDto in sizes)
+                    // Add variant
+                    foreach (var sizeId in request.SizeIds)
                     {
-                        var size = new Size
+                        var variant = new SportProductVariant
                         {
-                            Value = sizeDto.Value,
-                            QuantityInStock = sizeDto.QuantityInStock,
-                            SportProductVariantId = variant.Id
+                            Price = request.Price,
+                            SportProductId = productId,
+                            SizeId = sizeId,
+                            ColorId = request.ColorId,
+                            EndPoint = CreateEndpoint.AddEndpoint(request.Name + " " + color.Name)
                         };
-                        _context.Size.Add(size);
+                        _context.SportProductVariant.Add(variant);
                     }
                     await _unitOfWork.SaveChangesAsync();
                     _unitOfWork.CommitTransaction();

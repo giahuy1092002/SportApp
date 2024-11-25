@@ -36,6 +36,7 @@ namespace SportApp_Infrastructure.Repositories
         private readonly ISportProductRepository _sportProductRepository;
         private readonly ISportProductVariantRepository _sportProductVariantRepository;
         private readonly IColorRepository _colorRepository;
+        private readonly ICartRepository _cartRepository;
         private IDbContextTransaction? _transaction = null;
         private readonly UserManager<User> _userManager;
         private readonly RoleManager<Role> _roleManager;
@@ -67,6 +68,7 @@ namespace SportApp_Infrastructure.Repositories
             _sportProductRepository = new SportProductRepository(_dbContext, this);
             _sportProductVariantRepository = new SportProductVariantRepository(_dbContext, this);
             _colorRepository = new ColorRepository(_dbContext, this);
+            _cartRepository = new CartRepository(_dbContext, this);
         }
         public IUserRepository Users => new UserRepository(_dbContext, _userManager, this,_urlHelper);
 
@@ -92,7 +94,7 @@ namespace SportApp_Infrastructure.Repositories
         public ISportProductRepository Products => new SportProductRepository(_dbContext, this);
         public ISportProductVariantRepository ProductVariants => new SportProductVariantRepository(_dbContext, this);
         public IColorRepository Colors => new ColorRepository(_dbContext, this);
-
+        public ICartRepository Carts => new CartRepository(_dbContext, this);
         public int SaveChanges()
         {
             return _dbContext.SaveChanges();

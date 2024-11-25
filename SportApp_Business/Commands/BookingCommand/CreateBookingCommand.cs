@@ -49,6 +49,7 @@ namespace SportApp_Business.Commands.BookingCommand
             {
                 try
                 {
+                    var sportField = await _context.SportField.FirstOrDefaultAsync(s => s.Id == request.SportFieldId);
                     foreach (var id in request.TimeBookedIds)
                     {
                         var existingBooking = await _context.BookingTimeSlots
@@ -91,11 +92,11 @@ namespace SportApp_Business.Commands.BookingCommand
                     }
                     var model = new PaymentInformationModel
                     {
-                        BookingType = "Booking SportField",
-                        BookingDescription = "Thanh toán đặt sân",
+                        BookingType = "Thanh toán đặt sân",
+                        BookingDescription = $"Thanh toán đặt sân {sportField.Name}",
                         Amount = request.TotalPrice,
                         BookingId = booking.Id.ToString(),
-                        Name = "Thanh toán đặt sân"
+                        Name = $"Thanh toán đặt sân {sportField.Name}"
                     };
                     var url = _vnPayService.CreatePaymentUrl(model, _httpContextAccessor.HttpContext);
                     return booking.Id;

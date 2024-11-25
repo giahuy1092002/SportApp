@@ -13,5 +13,7 @@ namespace SportApp_Infrastructure.Model.CustomerModel
         public long? Height { get; set; }
         public long? Weight { get; set; }
         public string? Skills { get; set; }
+        public string? Address { get; set; }
+        public string? Time {  get; set; }
     }
 }

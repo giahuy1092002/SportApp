@@ -46,7 +46,7 @@ namespace SportApp_Infrastructure.Repositories
         {
             try
             {
-                var owner = await Entities.FirstOrDefaultAsync(c => c.OwnerId == ownerId);
+                var owner = await Entities.FirstOrDefaultAsync(c => c.Id == ownerId);
                 var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id==owner.UserId);
                 Entities.Remove(owner);
                 _context.Users.Remove(user);

@@ -4,6 +4,7 @@ using SportApp_Business.Common;
 using SportApp_Business.Dtos.BookingDtos;
 using SportApp_Business.Dtos.SportProductDtos;
 using SportApp_Infrastructure;
+using SportApp_Infrastructure.Helper;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -15,11 +16,11 @@ namespace SportApp_Business.Queries.SportProductQuery
     public class GetSportProductDetail : IQuery<SportProductDetailDto>
     {
         public string EndPoint { get; set; }
-        public class GetSportProductDetailHandler : IQueryHandler<GetSportProductDetail,SportProductDetailDto>
+        public class GetSportProductDetailHandler : IQueryHandler<GetSportProductDetail, SportProductDetailDto>
         {
             private readonly SportAppDbContext _context;
             private readonly IMapper _mapper;
-            public GetSportProductDetailHandler(SportAppDbContext context,IMapper mapper)
+            public GetSportProductDetailHandler(SportAppDbContext context, IMapper mapper)
             {
                 _context = context;
                 _mapper = mapper;
@@ -28,24 +29,39 @@ namespace SportApp_Business.Queries.SportProductQuery
             public async Task<SportProductDetailDto> Handle(GetSportProductDetail request, CancellationToken cancellationToken)
             {
                 var sportSproductVariant = await _context.SportProductVariant
-                    .Include(sv=>sv.SportProduct)
-                    .Include(sv=>sv.Color)
-                    .Include(sv=>sv.Sizes)
-                    .Include(sv=>sv.ImageProducts)
-                    .FirstOrDefaultAsync(sv=>sv.EndPoint==request.EndPoint);
-                var sizes = sportSproductVariant.Sizes;
-                var product = sportSproductVariant.SportProduct;
+                    .Include(sv => sv.SportProduct)
+                        .ThenInclude(s=>s.ImageProducts)
+                    .Include(sv => sv.Color)
+                    .Include(s=>s.Size)
+                    .Where(sv => sv.EndPoint == request.EndPoint).ToListAsync();
+                var productId = sportSproductVariant.FirstOrDefault().SportProductId;
+                var product = await _context.SportProduct
+                    .Include(s => s.Variants)
+                        .ThenInclude(sv=>sv.Color)
+                    .Include(s=>s.ImageProducts)
+                    .FirstOrDefaultAsync(s => s.Id == productId);
+                    ;
                 var imageEndPoint = product.Variants
-                    .Select(sv => new ImageEndPoint
+                    .GroupBy(s => s.Color)
+                    .Select(g => new ImageEndPoint
                     {
-                        PictureUrl = sv.ImageProducts.FirstOrDefault(i => i.SportProductVariantId == sv.Id && i.Type == "List").PictureUrl,
-                        EndPoint = sv.EndPoint
+                        EndPoint = CreateEndpoint.AddEndpoint(product.Name + " " + g.Key.Name),
+                        PictureUrl = product.ImageProducts.FirstOrDefault(i => i.SportProductId == product.Id && i.ColorId == g.Key.Id && i.Type == "List").PictureUrl,
+                        IsSelected = g.Key.Name == sportSproductVariant.FirstOrDefault().Color.Name ? true : false
                     }).ToList();
+                var sizes = sportSproductVariant.Select(
+                    s=> new SizeDto
+                    {
+                        Id = s.Id,
+                        Value = s.Size.Value,
+                        QuantityInStock = s.QuantityInStock
+                    }
+                    ).ToList();
                 var result = new SportProductDetailDto
                 {
-                    Name = sportSproductVariant.SportProduct.Name + " " + sportSproductVariant.Color.Name,
-                    Price = sportSproductVariant.Price,
-                    Sizes = _mapper.Map<List<SizeDto>>(sizes),
+                    Name = product.Name + " " + sportSproductVariant.FirstOrDefault().Color.Name,
+                    Price = sportSproductVariant.FirstOrDefault().Price,
+                    Sizes = sizes,
                     ImageEndPoints = imageEndPoint
                 };
                 return result;

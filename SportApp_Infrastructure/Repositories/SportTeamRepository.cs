@@ -51,8 +51,7 @@ namespace SportApp_Infrastructure.Repositories
             {
                 var sportTeam = await Entities.FirstOrDefaultAsync(s => s.Id == sportTeamId);
                 if (sportTeam == null) throw new AppException(ErrorMessage.SportTeamNotExist);
-                sportTeam.IsDelete = true;
-                Entities.Update(sportTeam);
+                Entities.Remove(sportTeam);
                 await _unitOfWork.SaveChangesAsync();
                 return await Task.FromResult(true);
             }

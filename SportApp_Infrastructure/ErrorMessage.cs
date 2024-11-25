@@ -32,6 +32,8 @@ namespace SportApp_Infrastructure
         public static string SportTeamNotExist = "Câu lạc bộ thể thao không tồn tại";
         // SportProduct
         public static string SportProductExist = "Trang thiết bị đã tồn tại";
+        // User
+        public static string UserNotExist = "Người dùng không tồn tại";
 
     }
 }

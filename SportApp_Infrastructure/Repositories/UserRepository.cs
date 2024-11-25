@@ -189,7 +189,7 @@ namespace SportApp_Infrastructure.Repositories
                 var user = await Entities.FirstOrDefaultAsync(u => u.Id == request.UserId);
                 if (user == null)
                 {
-                    throw new Exception("User is not exist");
+                    throw new AppException("User is not exist");
                 }
                 user.Avatar = request.Avatar;
                 Entities.Update(user);
@@ -200,23 +200,6 @@ namespace SportApp_Infrastructure.Repositories
             {
                 throw new Exception(ex.Message);
             }
-        }
-
-        public async Task<bool> UpdateGeo(UpdateGeoModel request)
-        {
-            try
-            {
-                var user = await Entities.FirstOrDefaultAsync(u => u.Id == request.UserId);
-                user.Latitude = request.Latitude;
-                user.Longitude = request.Longitude;
-                await _unitOfWork.SaveChangesAsync();
-                return await Task.FromResult(true);
-            }
-            catch(Exception ex)
-            {
-                throw new Exception(ex.Message);
-            } 
-            
         }
     }
 }

@@ -8,9 +8,11 @@ using SportApp_Business.Commands.TimeSlotCommand;
 using SportApp_Business.Commands.UserCommand;
 using SportApp_Business.Commands.VoucherCommand;
 using SportApp_Business.Dtos.BookingDtos;
+using SportApp_Business.Dtos.CartDtos;
 using SportApp_Business.Dtos.CategoryDtos;
 using SportApp_Business.Dtos.CustomerDtos;
 using SportApp_Business.Dtos.NotificationDtos;
+using SportApp_Business.Dtos.OrderDtos;
 using SportApp_Business.Dtos.OwnerDtos;
 using SportApp_Business.Dtos.RatingDtos;
 using SportApp_Business.Dtos.SpecDtos;
@@ -23,7 +25,8 @@ using SportApp_Business.Dtos.TimeSlotDtos;
 using SportApp_Business.Dtos.UserDtos;
 using SportApp_Business.Dtos.VoucherDtos;
 using SportApp_Domain.Entities;
-using SportApp_Infrastructure.Dto.VoucherDto;
+using SportApp_Domain.Entities.OrderAggregate;
+using SportApp_Infrastructure.Helper;
 using SportApp_Infrastructure.Model.CustomerModel;
 using SportApp_Infrastructure.Model.ImageModel;
 using SportApp_Infrastructure.Model.NotificationModel;
@@ -49,11 +52,9 @@ namespace SportApp_Business.Automapper
             CreateMap<User, UserDto>();
             CreateMap<TimeSlot, TimeSlotDto>();
             CreateMap<UpdateUserCommand, UpdateUserModel>();
-            CreateMap<UpdateGeoCommand, UpdateGeoModel>();
             // SportField
             CreateMap<SportField, SportFieldDto>()
                 .ForMember(dst => dst.Type, src => src.MapFrom(src => src.FieldType.Name))
-                .ForMember(dst => dst.Vouchers, src => src.MapFrom(src => src.Owner.Vouchers))
                 .ForMember(dst => dst.Ratings, src => src.MapFrom(src => src.Ratings))
                 .ForMember(dst => dst.PriceRange, src => src.MapFrom(src =>
                 src.TimeSlots.Min(t => t.Price).ToString() + "đ" + "-" +
@@ -86,9 +87,8 @@ namespace SportApp_Business.Automapper
             ;
             #region Voucher
             CreateMap<CreateVoucherCommand, CreateVoucherModel>();
-            CreateMap<Voucher, VoucherDto>();
+            CreateMap<Voucher,VoucherDto>();
             CreateMap<UpdateVoucherCommand, UpdateVoucherModel>();
-            CreateMap<Voucher, VoucherDtoList>();
             #endregion
 
             #region Notification
@@ -146,7 +146,10 @@ namespace SportApp_Business.Automapper
                 .ForMember(dst => dst.Sport, src => src.MapFrom(src => src.SportTeam.Sport))
                 .ForMember(dst => dst.Endpoint, src => src.MapFrom(src => src.SportTeam.Endpoint))
                 .ForMember(dst => dst.Avatar, src => src.MapFrom(src => src.SportTeam.Avatar))
-                .ForMember(dst => dst.Id, src => src.MapFrom(src => src.SportTeam.Id));
+                .ForMember(dst => dst.Id, src => src.MapFrom(src => src.SportTeam.Id))
+                .ForMember(dst => dst.Note, src => src.MapFrom(src => src.SportTeam.Note))
+                .ForMember(dst => dst.Description, src => src.MapFrom(src => src.SportTeam.Description))
+                ;
                 ;
             CreateMap<SportTeam, SportTeamDetail>();
             CreateMap<UserSportTeam, MemberDto>()
@@ -182,6 +185,30 @@ namespace SportApp_Business.Automapper
             #endregion
             #region Size
             CreateMap<Size, SizeDto>();
+            #endregion
+            #region Cart, CartItem
+            CreateMap<Cart, CartDto>();
+            CreateMap<CartItem, CartItemDto>()
+                .ForMember(dst => dst.Name, src => src.MapFrom(src => src.SportProductVariant.SportProduct.Name +" " + src.SportProductVariant.Color.Name))
+                .ForMember(dst => dst.EndPoint, src => src.MapFrom(src => CreateEndpoint.AddEndpoint(src.SportProductVariant.SportProduct.Name + " " + src.SportProductVariant.Color.Name)))
+                .ForMember(dst => dst.SizeValue, src => src.MapFrom(src => src.SportProductVariant.Size.Value))
+                .ForMember(dst => dst.ColorName, src => src.MapFrom(src => src.SportProductVariant.Color.Name))
+                .ForMember(dst => dst.PictureUrl, src => src.MapFrom(src => src.SportProductVariant.SportProduct.ImageProducts.FirstOrDefault(i => i.Type == "List").PictureUrl))
+                .ForMember(dst => dst.Price, src => src.MapFrom(src => src.SportProductVariant.Price))
+                .ForMember(dst => dst.Id, src => src.MapFrom(src => src.SportProductVariant.Id));
+            #endregion
+            #region Order, OrderItem
+            CreateMap<Order, OrderDto>()
+                .ForMember(dst => dst.OrderStatus, src => src.MapFrom(src => src.OrderStatus.ToString()));
+            CreateMap<OrderItem, OrderItemDto>()
+                .ForMember(dst => dst.ColorName, src => src.MapFrom(src => src.SportProductVariant.Color.Name))
+                .ForMember(dst => dst.SizeName, src => src.MapFrom(src => src.SportProductVariant.Size.Value))
+                .ForMember(dst => dst.Price, src => src.MapFrom(src => src.SportProductVariant.Price))
+                .ForMember(dst => dst.Quantity, src => src.MapFrom(src => src.Quantity))
+                .ForMember(dst => dst.EndPoint, src => src.MapFrom(src => CreateEndpoint.AddEndpoint(src.SportProductVariant.SportProduct.Name + " " + src.SportProductVariant.Color.Name)))
+                .ForMember(dst => dst.Name, src => src.MapFrom(src => src.SportProductVariant.SportProduct.Name + " " + src.SportProductVariant.Color.Name))
+                .ForMember(dst => dst.PictureUrl, src => src.MapFrom(src => src.SportProductVariant.SportProduct.ImageProducts.FirstOrDefault(i=>i.Type=="List").PictureUrl))
+                ;
             #endregion
 
         }

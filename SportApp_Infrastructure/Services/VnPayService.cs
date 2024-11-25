@@ -34,11 +34,10 @@ namespace Service
             pay.AddRequestData("vnp_CurrCode", _configuration["Vnpay:CurrCode"]);
             pay.AddRequestData("vnp_IpAddr", pay.GetIpAddress(context));
             pay.AddRequestData("vnp_Locale", _configuration["Vnpay:Locale"]);
-            pay.AddRequestData("vnp_OrderInfo", $"{model.Name} {model.BookingDescription} {model.Amount}");
+            pay.AddRequestData("vnp_OrderInfo", $"{model.Name}-{model.Amount}");
             pay.AddRequestData("vnp_OrderType", model.BookingType);
             pay.AddRequestData("vnp_ReturnUrl", urlCallBack);
             pay.AddRequestData("vnp_TxnRef", model.BookingId.ToString());
-            //pay.AddRequestData("type_payment", "Thanh toán đặt sân");
 
             var paymentUrl =
                 pay.CreateRequestUrl(_configuration["Vnpay:BaseUrl"], _configuration["Vnpay:HashSecret"]);

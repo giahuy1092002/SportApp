@@ -40,7 +40,6 @@ namespace SportApp_Business.Queries.SportFieldQuery
                         .Include(s => s.Ratings)
                             .ThenInclude(r=>r.Customer.User)
                         .Include(s => s.Owner)
-                            .ThenInclude(o => o.Vouchers)
                         .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint && s.IsDeleted==false);
                     if (sportField == null) throw new Exception("Sport field isn't exist");
                     var minPrice = sportField.TimeSlots.Min(t=>t.Price);

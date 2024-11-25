@@ -17,7 +17,6 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
         Task<User> SignIn(SignInModel request);
         Task<bool> Update(UpdateUserModel request);
         Task<bool> UpdateAvatar(UpdateAvatarModel request);
-        Task<bool> UpdateGeo(UpdateGeoModel request);
         Task<ConfirmLinkModel> GetConfirmEmail(string email);
         Task<bool> ConfirmEmail(string token,string email);
         Task<bool> ResetPassword(ResetPasswordModel request);

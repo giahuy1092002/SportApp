@@ -15,7 +15,8 @@ namespace SportApp_Domain.Entities
         [ForeignKey("SportProductVariantId")]
         public Guid SportProductVariantId { get; set; }
         public SportProductVariant SportProductVariant { get; set; }
-
+        public Guid CartId { get; set; }
+        public Cart Cart { get; set; }
 
     }
 }
