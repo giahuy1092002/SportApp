@@ -22,7 +22,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
 
             public async Task<int> Handle(GetSportFieldsByOwner request, CancellationToken cancellationToken)
             {
-                var list = await _context.SportField.Where(s => s.OwnerId == request.OwnerId).ToListAsync();
+                var list = await _context.SportField.Where(s => s.OwnerId == request.OwnerId && s.IsDeleted==false).ToListAsync();
                 return list.Count;
             }
         }

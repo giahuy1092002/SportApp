@@ -35,6 +35,7 @@ namespace SportApp_BE.Controllers
                 await _mediator.Send(command, cancellationToken);
                 Response.Cookies.Append("PaymentStatus", response.Success ? "success" : "failure", new CookieOptions
                 {
+                    Domain = "https://localhost:7274",
                     HttpOnly = false,
                     SameSite = SameSiteMode.None,
                     Secure = true,
@@ -51,6 +52,7 @@ namespace SportApp_BE.Controllers
                 await _mediator.Send(command, cancellationToken);
                 Response.Cookies.Append("PaymentStatus", response.Success ? "success" : "failure", new CookieOptions
                 {
+                    Domain = "https://localhost:7274",
                     HttpOnly = false,
                     SameSite = SameSiteMode.None,
                     Secure = true,
@@ -58,7 +60,7 @@ namespace SportApp_BE.Controllers
                     IsEssential = true
                 });
             }    
-            return Redirect($"http://localhost:3000/user/order");
+            return Redirect($"http://localhost:3000/payment");
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetStatusPayment(CancellationToken cancellationToken)

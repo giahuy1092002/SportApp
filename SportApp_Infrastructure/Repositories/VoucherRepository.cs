@@ -29,7 +29,8 @@ namespace SportApp_Infrastructure.Repositories
                     EndTime = request.EndTime,
                     PercentSale = request.PercentSale,
                     MaxSale = request.MaxSale,
-                    MinPrice = request.MinPrice
+                    MinPrice = request.MinPrice,
+                    Quantity = request.Quantity
                 };
                 Entities.Add(obj);
                 await _unitOfWork.SaveChangesAsync();

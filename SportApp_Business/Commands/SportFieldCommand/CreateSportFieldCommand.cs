@@ -72,15 +72,15 @@ namespace SportApp_Business.Commands.SportFieldCommand
                         foreach (var timePrice in prices)
                         {
                             var start = int.Parse(timePrice.StartTime.Split(':')[0]);
-                            var end = int.Parse(timePrice.EndTime.Split(':')[0]);
+                            var end = int.Parse(timePrice.EndTime.Split(':')[0]);   
                             string minute = timePrice.StartTime.Split(':')[1];
 
                             for (var i = start; i < end; i++)
                             {
                                 var obj = new CreateTimeSlotModel
                                 {
-                                    StartTime = i.ToString()  + ":" + minute,
-                                    EndTime = (i + 1).ToString() + ":" + minute,
+                                    StartTime = i > 9 ? i.ToString()  + ":" + minute : "0" + i.ToString() + ":" + minute,
+                                    EndTime = (i + 1) > 9 ? (i + 1).ToString() + ":" + minute : "0" + (i + 1).ToString() + ":" + minute,
                                     SportFieldId = result.Id,
                                     Price = timePrice.Price
                                 };

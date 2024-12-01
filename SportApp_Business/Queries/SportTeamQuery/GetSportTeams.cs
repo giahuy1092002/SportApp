@@ -31,7 +31,9 @@ namespace SportApp_Business.Queries.SportTeamQuery
             public async Task<SportTeamListDto> Handle(GetSportTeams request, CancellationToken cancellationToken)
             {
                 var list = await _context.SportTeam
-                    .Where(s=>s.IsDelete == false)
+                    .Include(s=>s.Members) 
+                        .ThenInclude(m=>m.Customer)
+                            .ThenInclude(c=>c.User)
                     .ToListAsync();
                 var count = list.Count;
                 if(request.Search!=null)

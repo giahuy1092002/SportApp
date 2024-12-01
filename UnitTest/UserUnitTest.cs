@@ -24,6 +24,10 @@ namespace UnitTest
     using SportApp_Infrastructure.Dto.UserDto;
     using System.Linq.Expressions;
     using Microsoft.Identity.Client;
+    using Microsoft.AspNetCore.WebUtilities;
+    using System.Text;
+    using Microsoft.AspNetCore.Mvc.Routing;
+    using System.Diagnostics;
 
     namespace SportApp.Tests
     {
@@ -157,7 +161,7 @@ namespace UnitTest
                     LastName = "Test"
                 };
                 var mockIdentityResult = IdentityResult.Success;
-                _mockUserManager.Setup(x => x.CreateAsync(It.IsAny<User>(),signUpModel.Password))
+                _mockUserManager.Setup(x => x.CreateAsync(It.IsAny<User>(), signUpModel.Password))
                     .ReturnsAsync(mockIdentityResult);
                 var result = await _userRepository.SignUp(signUpModel);
                 ClassicAssert.NotNull(result);
@@ -173,7 +177,7 @@ namespace UnitTest
                 var options = new DbContextOptionsBuilder<SportAppDbContext>()
                     .UseInMemoryDatabase(databaseName: "TestDatabase")
                     .Options;
-                var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id==updateAvatarModel.UserId);
+                var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == updateAvatarModel.UserId);
                 if (user == null)
                 {
                     throw new AppException("User is not exist");
@@ -181,6 +185,111 @@ namespace UnitTest
                 var result = await _userRepository.UpdateAvatar(updateAvatarModel);
                 ClassicAssert.AreEqual(true, result);
 
+            }
+            [Test]
+            public async Task ConfirmEmail_Fail()
+            {
+                var token = "token";
+                var email = "test@gmail.com";
+                _mockUserManager.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+                    .ReturnsAsync((User)null);
+                var result = await _userRepository.ConfirmEmail(token, email);
+                ClassicAssert.AreEqual(false, result);
+            }
+            [Test]
+            public async Task ConfirmEmail_Success()
+            {
+                var token = "token";
+                var email = "test@gmail.com";
+                var mockUser = new User
+                {
+                    Email = email,
+                };
+                _mockUserManager.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+                    .ReturnsAsync(mockUser);
+                var mockIdentityResult = IdentityResult.Success;
+                _mockUserManager.Setup(x => x.ConfirmEmailAsync(mockUser, token)).ReturnsAsync(mockIdentityResult);
+                var result = await _userRepository.ConfirmEmail(token, email);
+                ClassicAssert.AreEqual(true, result);
+            }
+            [Test]
+            public async Task ConfirmEmail_ConfirmFail()
+            {
+                var token = "token";
+                var email = "test@gmail.com";
+                var mockUser = new User
+                {
+                    Email = email,
+                };
+                _mockUserManager.Setup(x => x.FindByNameAsync(It.IsAny<string>()))
+                    .ReturnsAsync(mockUser);
+                _mockUserManager.Setup(x => x.ConfirmEmailAsync(mockUser, token)).ReturnsAsync(IdentityResult.Failed());
+                var result = await _userRepository.ConfirmEmail(token, email);
+                ClassicAssert.AreEqual(false, result);
+            }
+            [Test]
+            public async Task ForgetPassword_EmailNotExist_ReturnFail()
+            {
+                var email = "test@gmail.com";
+                _mockUserManager.Setup(x => x.FindByEmailAsync(email)).ReturnsAsync((User)null);
+                var ex = Assert.ThrowsAsync<AppException>(async () => await _userRepository.ForgetPassword(email));
+                Assert.That(ex.Message, Is.EqualTo(ErrorMessage.EmailNotExist));
+            }
+            [Test]
+            public async Task ForgetPassword_Success()
+            {
+                var email = "test@example.com";
+                var user = new User { Email = email };
+                var token = "reset_token";
+                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+                var expectedLink = "http://example.com/ResetPassword?decodedToken=" + encodedToken;
+
+                _mockUserManager.Setup(x => x.FindByEmailAsync(email))
+                                .ReturnsAsync(user);
+
+                _mockUserManager.Setup(x => x.GeneratePasswordResetTokenAsync(user))
+                                .ReturnsAsync(token);
+
+                _mockUrlHelper.Setup(x => x.Action(It.IsAny<UrlActionContext>()))
+                  .Returns(expectedLink);
+                var result = await _userRepository.ForgetPassword(email);
+                ClassicAssert.IsNotNull(result);
+                ClassicAssert.AreEqual(email, result.Email);
+                ClassicAssert.AreEqual(expectedLink, result.Link);
+            }
+            [Test]
+            public async Task GetConfirmEmail_EmailNotFound()
+            {
+                var email = "test@gmail.com";
+                _mockUserManager.Setup(x => x.FindByEmailAsync(email)).ReturnsAsync((User)null);
+                var ex = Assert.ThrowsAsync<AppException>(async () => await _userRepository.GetConfirmEmail(email));
+                Assert.That(ex.Message, Is.EqualTo(ErrorMessage.EmailNotExist));
+            }
+            [Test]
+            public async Task GetConfirmEmail_EmailNotConfirmed()
+            {
+                var email = "test@example.com";
+                var user = new User { UserName = email, EmailConfirmed = true };
+                _mockUserManager.Setup(x => x.FindByNameAsync(email)).ReturnsAsync(user);
+                var ex = Assert.ThrowsAsync<AppException>(() => _userRepository.GetConfirmEmail(email));
+                Assert.That(ex.Message, Is.EqualTo(ErrorMessage.AccountConfirmed));
+            }
+            [Test]
+            public async Task GetConfirmEmail_Success()
+            {
+                var email = "test@example.com";
+                var user = new User { UserName = email, EmailConfirmed = false };
+                var token = "test_token";
+                var encodedToken = WebEncoders.Base64UrlEncode(Encoding.UTF8.GetBytes(token));
+                var expectedLink = $"http://example.com/ConfirmEmail?endcodedToken={encodedToken}&email={email}";
+
+                _mockUserManager.Setup(x => x.FindByNameAsync(email)).ReturnsAsync(user);
+                _mockUserManager.Setup(x => x.GenerateEmailConfirmationTokenAsync(user)).ReturnsAsync(token);
+                _mockUrlHelper.Setup(x => x.Action(It.IsAny<UrlActionContext>())).Returns(expectedLink);
+                var result = await _userRepository.GetConfirmEmail(email);
+                ClassicAssert.IsNotNull(result);
+                ClassicAssert.AreEqual(email, result.Email);
+                ClassicAssert.AreEqual(expectedLink, result.Link);
             }
         }
     }

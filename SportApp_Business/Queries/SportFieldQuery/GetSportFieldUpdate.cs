@@ -27,7 +27,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
 
                 var sportField = await _context.SportField
                     .Include(s=>s.Images)
-                    .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint && s.IsDeleted==false);
+                    .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
                 var timeslots = await _context.TimeSlot
                     .Include(t => t.SportField)
                     .OrderBy(t=>t.Price)

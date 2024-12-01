@@ -20,7 +20,6 @@ namespace SportApp_Domain.Entities
         public int LimitMember { get; set; }
         public string? Avatar { get; set; }
         public string? PublicId { get; set; }
-        public bool IsDelete { get; set; } = false;
         public List<UserSportTeam> Members { get; set; }
     }
 }

@@ -20,7 +20,7 @@ namespace SportApp_Domain.Entities
         public FieldType FieldType { get; set; }
         public List<TimeSlot> TimeSlots { get; set; }
         public List<Image> Images { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsDeleted {  get; set; } = false;
         [ForeignKey("OwnerId")]
         public Guid OwnerId { get; set; }
         public Owner Owner { get; set; }

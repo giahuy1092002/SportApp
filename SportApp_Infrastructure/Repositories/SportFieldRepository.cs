@@ -24,7 +24,7 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<SportField> Create(CreateSportFieldModel request)
         {
-            var sportField = await Entities.FirstOrDefaultAsync(x => x.Name == request.Name && x.IsDeleted == false && x.OwnerId==request.OwnerId);
+            var sportField = await Entities.FirstOrDefaultAsync(x => x.Name == request.Name && x.OwnerId==request.OwnerId);
             if (sportField != null) throw new AppException(ErrorMessage.SportFieldExist);
             try
             {

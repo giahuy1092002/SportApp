@@ -38,6 +38,8 @@ namespace SportApp_Business.Queries.SportProductQuery
                 var product = await _context.SportProduct
                     .Include(s => s.Variants)
                         .ThenInclude(sv=>sv.Color)
+                    .Include(s=>s.Category)
+                        .ThenInclude(c=>c.Sport)
                     .Include(s=>s.ImageProducts)
                     .FirstOrDefaultAsync(s => s.Id == productId);
                     ;
@@ -59,6 +61,9 @@ namespace SportApp_Business.Queries.SportProductQuery
                     ).ToList();
                 var result = new SportProductDetailDto
                 {
+                    SportProductId = productId,
+                    CategoryName = product.Category.Name,
+                    Sport = product.Category.Sport.Name,
                     Name = product.Name + " " + sportSproductVariant.FirstOrDefault().Color.Name,
                     Price = sportSproductVariant.FirstOrDefault().Price,
                     Sizes = sizes,

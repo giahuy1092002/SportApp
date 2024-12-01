@@ -58,15 +58,16 @@ namespace SportApp_Infrastructure.Repositories
                 };
                 return await Task.FromResult(result);
             }
-            throw new Exception("Email is not exist");
+            throw new AppException(ErrorMessage.EmailNotExist);
         }
 
         public async Task<ConfirmLinkModel> GetConfirmEmail(string email)
         {
             var user = await _userManager.FindByNameAsync(email);
+            if(user==null) throw new AppException(ErrorMessage.EmailNotExist);
             if (user.EmailConfirmed == true)
             {
-                throw new Exception("Account is confirmed");
+                throw new AppException(ErrorMessage.AccountConfirmed);
             }
             try
             {
@@ -75,9 +76,9 @@ namespace SportApp_Infrastructure.Repositories
                 var confirmLink = _urlHelper.Action("ConfirmEmail", new { endcodedToken, email });
                 return await Task.FromResult(new ConfirmLinkModel { Email = email, Link = confirmLink });
             }
-            catch(Exception ex)
+            catch
             {
-                throw new Exception(ex.Message);
+                throw;
             } 
             
         }

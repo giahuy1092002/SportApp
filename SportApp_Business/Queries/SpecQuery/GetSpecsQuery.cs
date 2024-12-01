@@ -28,7 +28,6 @@ namespace SportApp_Business.Queries.SpecQuery
                 {
                     var listSpec = await _context.Spec
                         .Include(s=>s.User)
-                        .Where(s=>s.IsDeleted==false)
                         .ToListAsync();
                     return _mapper.Map<List<SpecDto>>(listSpec);    
                 }

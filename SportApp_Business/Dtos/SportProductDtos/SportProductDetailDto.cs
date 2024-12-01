@@ -9,6 +9,9 @@ namespace SportApp_Business.Dtos.SportProductDtos
 {
     public class SportProductDetailDto
     {
+        public Guid SportProductId { get; set; }
+        public string CategoryName { get; set; }
+        public string Sport {  get; set; }
         public string Name { get; set; }
         public long Price { get; set; }
         public List<ImageEndPoint> ImageEndPoints { get; set; }

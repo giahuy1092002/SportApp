@@ -34,12 +34,17 @@ namespace SportApp_Business.Queries.SportProductQuery
                     .Include(s=>s.Variants)
                         .ThenInclude(sv=>sv.Color)
                     .Include(s=>s.ImageProducts)
+                    .Include(s=>s.Category)
+                        .ThenInclude(c=>c.Sport)
                     .ToListAsync();
                 var productListDto = list
                     .SelectMany(s => s.Variants
                     .GroupBy(s => s.Color)
                     .Select(g => new SportProductDto
                     {
+                        SportProductId = s.Id,
+                        CategoryName = s.Category.Name,
+                        Sport = s.Category.Sport.Name,
                         EndPoint = CreateEndpoint.AddEndpoint(s.Name + " " + g.Key.Name),
                         PictureUrl = s.ImageProducts.FirstOrDefault(i => i.Color == g.Key && i.Type == "List")?.PictureUrl,
                         Price = s.Variants.FirstOrDefault(sku => sku.Color == g.Key).Price,

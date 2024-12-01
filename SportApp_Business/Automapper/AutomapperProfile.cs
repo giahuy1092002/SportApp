@@ -137,7 +137,9 @@ namespace SportApp_Business.Automapper
             #region SportTeam
             CreateMap<CreateSportTeamCommand, CreateSportTeamModel>();
             CreateMap<UpdateSportTeamCommand,UpdateSportTeamModel>();
-            CreateMap<SportTeam, SportTeamDto>();
+            CreateMap<SportTeam, SportTeamDto>()
+                .ForMember(dst => dst.LeaderName, src => src.MapFrom(src => src.Members.Find(m=>m.Role==RoleType.Leader).Customer.User.FirstName+" "+ src.Members.Find(m => m.Role == RoleType.Leader).Customer.User.LastName))
+                .ForMember(dst => dst.LeaderId, src => src.MapFrom(src => src.Members.Find(m => m.Role == RoleType.Leader).CustomerId));
             CreateMap<UserSportTeam, SportTeamDto>()
                 .ForMember(dst => dst.Name, src => src.MapFrom(src => src.SportTeam.Name))
                 .ForMember(dst => dst.Address, src => src.MapFrom(src => src.SportTeam.Address))

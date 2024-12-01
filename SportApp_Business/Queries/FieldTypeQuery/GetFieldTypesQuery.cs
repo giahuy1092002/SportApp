@@ -24,7 +24,6 @@ namespace SportApp_Business.Queries.FieldTypeQuery
                 try
                 {
                     var fieldtypeList = await _context.FieldType
-                        .Where(f=>f.IsDeleted==false)
                         .ToListAsync();
                     return fieldtypeList;
                 }

@@ -10,6 +10,7 @@ namespace SportApp_Business.Dtos.SportTeamDtos
     {
         public Guid Id { get; set; }
         public Guid LeaderId { get; set; }
+        public string LeaderName { get; set; }
         public string Name { get; set; }
         public string Address { get; set; }
         public int CurrentMember { get; set; }

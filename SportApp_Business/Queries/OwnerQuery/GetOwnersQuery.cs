@@ -28,7 +28,6 @@ namespace SportApp_Business.Queries.OwnerQuery
                 {
                     var listOwner = await _context.Owner
                         .Include(o=>o.User)
-                        .Where(o=>o.IsDeleted==false)
                         .ToListAsync();
                     var result =  _mapper.Map<List<OwnerDto>>(listOwner);
                     return result;

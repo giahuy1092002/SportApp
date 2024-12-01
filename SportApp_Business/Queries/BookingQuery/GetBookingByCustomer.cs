@@ -30,7 +30,7 @@ namespace SportApp_Business.Queries.BookingQuery
             {
                 var list = await _context.Booking
                     .Include(b=>b.SportField)
-                    .Where(b => b.CustomerId == request.CustomerId && b.IsDeleted==false).ToListAsync();
+                    .Where(b => b.CustomerId == request.CustomerId).ToListAsync();
                 int count = list.Count;
                 list = list.Skip((request.PageNumber - 1) * request.PageSize).Take(request.PageSize).ToList();
                 var result = _mapper.Map<List<BookingDto>>(list);

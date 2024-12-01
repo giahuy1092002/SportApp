@@ -23,7 +23,7 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<bool> Create(CreateOwnerModel request)
         {
-            var owner = await Entities.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.IsDeleted == false);
+            var owner = await Entities.FirstOrDefaultAsync(x => x.UserId == request.UserId);
             if (owner != null) throw new Exception("Owner is exist");
             try
             {

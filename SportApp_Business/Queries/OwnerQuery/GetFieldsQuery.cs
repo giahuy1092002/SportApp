@@ -31,7 +31,7 @@ namespace SportApp_Business.Queries.OwnerQuery
                          .Include(s => s.Ratings)
                          .Include(s => s.TimeSlots)
                          .Include(s => s.Images)
-                        .Where(s=>s.OwnerId==request.OwnerId && s.IsDeleted==false)
+                        .Where(s=>s.OwnerId==request.OwnerId)
                         .ToListAsync();
                     return _mapper.Map<List<SportFieldsOwner>>(listFields);
                 }

@@ -12,6 +12,7 @@ namespace SportApp_Infrastructure
         public static string EmailNotExist = "Email không tồn tại";
         public static string WrongPassword = "Mật khẩu bị sai.";
         public static string EmailExist = "Email đã tồn tại";
+        public static string AccountConfirmed = "Tài khoản này đã được xác nhận email";
         // Owner
         public static string OwnerNotExist = "Chủ sân không tồn tại";
         // SportField
