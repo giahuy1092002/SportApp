@@ -21,4 +21,4 @@ jobs:
       - name: Build
         run: dotnet build ./SportApp_BE/SportApp_BE.csproj --configuration Release --no-restore
       - name: Test
-        run: dotnet test ./UnitTest/UnitTest.csproj --no-build --verbosity normal
+        run: dotnet test
