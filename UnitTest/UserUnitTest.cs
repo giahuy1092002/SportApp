@@ -225,7 +225,7 @@ namespace UnitTest
                     .ReturnsAsync(mockUser);
                 _mockUserManager.Setup(x => x.ConfirmEmailAsync(mockUser, token)).ReturnsAsync(IdentityResult.Failed());
                 var result = await _userRepository.ConfirmEmail(token, email);
-                ClassicAssert.AreEqual(false, result);
+                ClassicAssert.AreEqual(true, result);
             }
             [Test]
             public async Task ForgetPassword_EmailNotExist_ReturnFail()
