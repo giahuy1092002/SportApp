@@ -21,4 +21,4 @@ jobs:
       - name: Build
         run: dotnet build ./SportApp.sln --configuration Release --no-restore
       - name: Test
-        run: dotnet test ./UnitTest/UnitTest.csproj --no-build
+        run: dotnet test ./UnitTest/UnitTest.csproj
