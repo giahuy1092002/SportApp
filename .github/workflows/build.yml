@@ -17,7 +17,7 @@ jobs:
         with:
           dotnet-version: 8.0.x
       - name: Restore dependencies
-        run: dotnet restore ./SportApp_BE/SportApp_BE.csproj
+        run: dotnet restore ./SportApp.sln
       - name: Build
         run: dotnet build ./SportApp_BE/SportApp_BE.csproj --configuration Release --no-restore
       - name: Test
