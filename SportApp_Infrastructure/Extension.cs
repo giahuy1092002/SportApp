@@ -6,6 +6,8 @@ using Microsoft.AspNetCore.Identity;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Repositories;
 using SportApp_Infrastructure.Services;
+using SportApp_Infrastructure.Services.Interfaces;
+using Service;
 
 
 namespace SportApp_Infrastructure
@@ -40,11 +42,20 @@ namespace SportApp_Infrastructure
             services.AddTransient<ICustomerRepository, CustomerRepository>();
             services.AddTransient<IImageRepository, ImageRepository>();
             services.AddTransient<IRatingRepository, RatingRepository>();
-            services.AddTransient<ISportEquipmentRepository, SportEquipmentRepository>();
             services.AddTransient<IVoucherRepository, VoucherRepository>();
             services.AddTransient<IBookingTimeSlotRepository, BookingTimeSlotRepository>();
-            services.AddTransient<DirectionService>();
-            services.AddTransient<GeocodingService>();
+            services.AddTransient<INotificationRepository,NotificationRepository>();
+            services.AddTransient<IAdminRepository, AdminRepository>();
+            services.AddTransient<ISportRepository,SportRepository>();
+            services.AddTransient<ICategoryRepository, CategoryRepository>();
+            services.AddTransient<ISportProductRepository, SportProductRepository>();
+            services.AddTransient<ISportProductVariantRepository,SportProductVariantRepository>();
+            services.AddTransient<IColorRepository, ColorRepository>();
+            services.AddTransient<ICartRepository, CartRepository>();
+            services.AddTransient<MailService>();
+            services.AddTransient<IVnPayService,VnPayService>();
+            //services.AddHostedService<NotifyRatingService>();
+            //services.AddHostedService<NotifyReminderService>();
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)

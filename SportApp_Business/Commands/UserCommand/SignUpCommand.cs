@@ -7,6 +7,8 @@ using System.Threading.Tasks;
 using MediatR;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Dto.UserDto;
+using SportApp_Infrastructure.Services;
+using SportApp_Infrastructure.Model.Mail;
 
 namespace SportApp_Business.Commands.UserCommand
 {
@@ -20,9 +22,11 @@ namespace SportApp_Business.Commands.UserCommand
         public class SignUpHandler : ICommandHandler<SignUpCommand, bool>
         {
             private readonly IUnitOfWork _unitOfWork;
-            public SignUpHandler(IUnitOfWork unitOfWork)
+            private readonly MailService _mailService;
+            public SignUpHandler(IUnitOfWork unitOfWork,MailService mailService)
             {
                 _unitOfWork = unitOfWork;
+                _mailService = mailService;
             }
             public async Task<bool> Handle(SignUpCommand request, CancellationToken cancellationToken)
             {
@@ -38,6 +42,8 @@ namespace SportApp_Business.Commands.UserCommand
                         ConfirmPassword = request.ConfirmPassword,
                     };
                     var user = await _unitOfWork.Users.SignUp(signUpRequest);
+                    var mail = await _unitOfWork.Users.GetConfirmEmail(request.Email);
+                    await SendEmailSignUp(mail.Email, mail.Link);
                     _unitOfWork.CommitTransaction();
                     return await Task.FromResult(true);
                 }
@@ -47,6 +53,22 @@ namespace SportApp_Business.Commands.UserCommand
                     throw new Exception("Sign up failed");
                 }
             }
+            public async Task<bool> SendEmailSignUp(string email, string token)
+            {
+                var verifLink = "https://sportappdemo.azurewebsites.net" + token;
+                //var body = await _getHtmlBodyRepository.GetBody("verify.html");
+
+                //body = body.Replace("[[verilink]]", verifLink);
+                var body = verifLink;
+                var confirmationMail = new MailRequest
+                {
+                    ToEmail = email,
+                    Subject = "Verified your email",
+                    Body = body
+                };
+                return await _mailService.SendEmail(confirmationMail);
+            }
+
         }
     }
 }

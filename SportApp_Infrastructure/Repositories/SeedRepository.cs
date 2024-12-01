@@ -40,7 +40,6 @@ namespace SportApp_Infrastructure.Repositories
                     UserName = request.Email,
                     EmailConfirmed = true
                 };
-
                 return await _userManager.CreateAsync(user, request.Password);
             }
             catch (Exception ex)

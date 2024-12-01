@@ -1,11 +1,8 @@
 ﻿using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
 using SportApp_Domain.Entities;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
+using SportApp_Domain.Entities.OrderAggregate;
+using SportApp_Infrastructure.Seeding;
 
 namespace SportApp_Infrastructure
 {
@@ -22,24 +19,43 @@ namespace SportApp_Infrastructure
         public DbSet<TimeSlot> TimeSlot { get; set; } 
         public DbSet<Booking> Booking { get; set; }
         public DbSet<Spec> Spec { get; set; }
+        public DbSet<Admin> Admin { get; set; }
         public DbSet<Image> Images { get; set; }
         public DbSet<Rating> Ratings { get; set; }
-        public DbSet<SportEquipment> SportEquipments { get; set; }
         public DbSet<Voucher> Vouchers { get; set; }
         public DbSet<BookingTimeSlot> BookingTimeSlots { get; set; }
+        public DbSet<Notification> Notifications { get; set; }
+        public DbSet<UserNotification> UserNotifications { get; set; }
+        public DbSet<SportProduct> SportProduct { get; set; }
+        public DbSet<SportProductVariant> SportProductVariant { get; set; }
+        public DbSet<ImageProduct> ImageProduct { get; set; }  
+        public DbSet<Size> Size {  get; set; }
+        public DbSet<Cart> Cart {  get; set; }
+        public DbSet<CartItem> CartItem { get; set; }
+        public DbSet<Sport> Sport { get; set; }
+        public DbSet<Category> Category { get; set; }
+        public DbSet<SportTeam> SportTeam { get; set; }
+        public DbSet<UserSportTeam> UserSportTeam { get;set; }
+        public DbSet<Color> Color { get; set; }
+        public DbSet<Order> Order { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
+            #region Rating
             modelBuilder.Entity<Rating>()
                 .HasOne(r => r.Customer)
                 .WithMany(c => c.Ratings)
                 .HasForeignKey(r => r.CustomerId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+            #region Booking
             modelBuilder.Entity<Booking>()
                 .HasOne(b => b.SportField)
                 .WithMany()
                 .HasForeignKey(b => b.SportFieldId)
                 .OnDelete(DeleteBehavior.NoAction);
+            #endregion
+            #region SportField
             modelBuilder.Entity<SportField>()
                 .HasIndex(s => s.EndPoint)
                 .HasDatabaseName("IX_SportField_Endpoint")
@@ -47,6 +63,8 @@ namespace SportApp_Infrastructure
             modelBuilder.Entity<SportField>()
                 .Property(s => s.Stars)
                 .HasColumnType("decimal(2,1)");
+            #endregion
+            #region BookingTimeSlot
             modelBuilder.Entity<BookingTimeSlot>()
             .HasKey(e => new { e.BookingId, e.TimeSlotId });
             modelBuilder.Entity<BookingTimeSlot>()
@@ -63,32 +81,36 @@ namespace SportApp_Infrastructure
                 .WithMany(b => b.TimeSlotBookeds)
                 .HasForeignKey(b => b.BookingId)
                 .OnDelete(DeleteBehavior.NoAction);
-            modelBuilder.Entity<Role>().HasData(
-                new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Customer",
-                    NormalizedName = "CUSTOMER"
-                },
-                new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Admin",
-                    NormalizedName = "ADMIN"
-                },
-                new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Owner",
-                    NormalizedName = "OWNER"
-                },
-                new Role
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Spec",
-                    NormalizedName = "SPEC"
-                }
-                );
+            #endregion
+            #region UserNotificaiton
+            modelBuilder.Entity<UserNotification>()
+                .HasKey(u => new { u.NotificationId, u.UserId });
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(b => b.User)
+                .WithMany()
+                .HasForeignKey(b => b.UserId);
+
+            modelBuilder.Entity<UserNotification>()
+                .HasOne(b => b.Notification)
+                .WithMany()
+                .HasForeignKey(b => b.NotificationId);
+            #endregion
+            #region UserSportTeam
+            modelBuilder.Entity<UserSportTeam>()
+            .HasKey(e => new { e.SportTeamId, e.CustomerId });
+            modelBuilder.Entity<UserSportTeam>()
+                .HasOne(b => b.SportTeam)
+                .WithMany(c=>c.Members)
+                .HasForeignKey(b => b.SportTeamId);
+
+            modelBuilder.Entity<UserSportTeam>()
+                .HasOne(b => b.Customer)
+                .WithMany(c=>c.Teams)
+                .HasForeignKey(b => b.CustomerId);
+            #endregion
+            #region ImageProduct
+            
+            #endregion
         }
     }
 }

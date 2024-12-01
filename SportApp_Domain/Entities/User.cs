@@ -13,7 +13,6 @@ namespace SportApp_Domain.Entities
     {
         public DateTime? RegistrationDate { get; set; }
         public bool? ActiveStatus { get; set; }
-        public bool IsDeleted { get; set; }
         public string? FirstName { get; set; }
         public string? LastName { get; set; }
         public string? Gender { get; set; }

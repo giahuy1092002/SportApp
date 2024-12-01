@@ -14,7 +14,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
 {
     public class GetSchedulerQuery : IQuery<List<TimeSlotDto>>
     {
-        public Guid SportFieldId {  get; set; }
+        public string EndPoint {  get; set; }
         public DateTime BookingDate { get; set; }
         public class GetSchedulerHandler : IQueryHandler<GetSchedulerQuery,List<TimeSlotDto>>
         {
@@ -31,11 +31,12 @@ namespace SportApp_Business.Queries.SportFieldQuery
             public async Task<List<TimeSlotDto>> Handle(GetSchedulerQuery request, CancellationToken cancellationToken)
             {
                 var sportField = await _context.SportField.Include(s=>s.TimeSlots)
-                    .FirstOrDefaultAsync(s => s.Id == request.SportFieldId);
+                    .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
                 var bookings = await _context.Booking
+                    .Include(b=>b.SportField)
                     .Include(b=>b.TimeSlotBookeds)
                         .ThenInclude(t=>t.TimeSlot)
-                    .Where(b=>b.BookingDate.Date == request.BookingDate.Date && b.SportFieldId==request.SportFieldId).ToListAsync();
+                    .Where(b=>b.BookingDate.Date == request.BookingDate.Date && b.SportField.EndPoint==request.EndPoint).ToListAsync();
                 var timeSlots = _mapper.Map<List<TimeSlotDto>>(sportField.TimeSlots);
                 foreach (var timeSlot in timeSlots)
                 {

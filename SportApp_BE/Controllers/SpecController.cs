@@ -3,6 +3,7 @@ using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportApp_Business.Commands.SpecCommand;
 using SportApp_Business.Commands.UserCommand;
+using SportApp_Business.Queries.SpecQuery;
 
 namespace SportApp_BE.Controllers
 {
@@ -37,6 +38,11 @@ namespace SportApp_BE.Controllers
                 return Ok(await _mediator.Send(request, cancellationToken));
             }
             return BadRequest();
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetAllSpec([FromQuery]GetSpecsQuery query,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));  
         }
     }
 }

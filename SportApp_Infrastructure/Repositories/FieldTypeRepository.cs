@@ -20,7 +20,7 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<bool> Create(CreateFieldTypeModel request)
         {
-            var owner = await Entities.FirstOrDefaultAsync(x => x.Name == request.Name && x.IsDeleted == false);
+            var owner = await Entities.FirstOrDefaultAsync(x => x.Name == request.Name);
             if (owner != null) throw new Exception("FieldType is exist");
             try
             {

@@ -56,14 +56,24 @@ namespace SportApp_Business.Commands.UserCommand
                     {
                         var spec = await _context.Spec.FirstOrDefaultAsync(c => c.UserId == user.Id);
                         userDto.UserRoleId = spec.Id;
-                    }    
+                    }
+                    else if (userDto.Role.ToUpper() == "OWNER")
+                    {
+                        var owner = await _context.Owner.FirstOrDefaultAsync(c => c.UserId == user.Id);
+                        userDto.UserRoleId = owner.Id;
+                    }
+                    else if (userDto.Role.ToUpper() == "ADMIN")
+                    {
+                        var admin = await _context.Admin.FirstOrDefaultAsync(c => c.UserId == user.Id);
+                        userDto.UserRoleId = admin.Id;
+                    }
                     _unitOfWork.CommitTransaction();
                     return userDto;
                 }
-                catch (Exception ex)
+                catch
                 {
                     _unitOfWork.RollbackTransaction();
-                    throw new Exception("Sign in failed");
+                    throw;
                 }
             }
         }

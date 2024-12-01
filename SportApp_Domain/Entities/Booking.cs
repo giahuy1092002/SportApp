@@ -11,19 +11,26 @@ namespace SportApp_Domain.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
+        public long TotalPrice { get; set; }
+        public DateTime CreatedDate { get; set; } = DateTime.Now;
+        public DateTime BookingDate { get; set; }
+        public BookingStatus Status { get; set; } = BookingStatus.Pending;
+        public string? Note { get; set; }
+        public List<BookingTimeSlot> TimeSlotBookeds { get; set; } = new List<BookingTimeSlot>();
+        [ForeignKey("CustomerId")]
         public Guid CustomerId { get; set; }
         public Customer Customer { get; set; }
         [ForeignKey("SportFieldId")]
         public Guid SportFieldId { get; set; }
         public SportField SportField { get; set; }
-        public long TotelPrice { get; set; }
-        public DateTime CreatedDate { get; set; } = DateTime.Now;
-        public DateTime BookingDate { get; set; }
-        public List<BookingTimeSlot> TimeSlotBookeds { get; set; } = new List<BookingTimeSlot>();
-        public string? Note { get; set; }
-        [ForeignKey("SpecId")]
-        public Guid? SpecId { get; set; }
-        public Spec Spec { get; set; }
-        public bool IsDeleted { get; set; } = false;
+        public bool IsRemind { get; set; }
+        public string TimeFrameBooked { get; set; }
+    }
+    public enum BookingStatus
+    {
+        Pending,
+        PaymentReceived,
+        PaymentFailed,
+        Reject
     }
 }

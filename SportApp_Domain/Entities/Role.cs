@@ -9,6 +9,6 @@ namespace SportApp_Domain.Entities
 {
     public class Role : IdentityRole<Guid>
     {
-        public bool IsDeleted { get; set; } = false;
+
     }
 }

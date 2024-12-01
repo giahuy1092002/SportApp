@@ -11,7 +11,14 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportApp_Infrastructure", "
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "UnitTest", "UnitTest\UnitTest.csproj", "{7D92336A-DF90-4191-B9B3-8FCDEAE5472A}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "SportApp_BE", "SportApp_BE\SportApp_BE.csproj", "{8B039E81-8E07-4780-B7CE-6ACED9FEC5A9}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "SportApp_BE", "SportApp_BE\SportApp_BE.csproj", "{8B039E81-8E07-4780-B7CE-6ACED9FEC5A9}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = ".github", ".github", "{4D6441B7-DD4B-4985-901D-E8CB230B6E71}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "workflows", "workflows", "{46714872-1714-41BB-B760-DE18621E7C5B}"
+	ProjectSection(SolutionItems) = preProject
+		build.yml = build.yml
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -42,6 +49,9 @@ Global
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(NestedProjects) = preSolution
+		{46714872-1714-41BB-B760-DE18621E7C5B} = {4D6441B7-DD4B-4985-901D-E8CB230B6E71}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {E81EA463-FFCC-4FC8-B9A7-CB5800FA2D47}

@@ -23,6 +23,7 @@ namespace SportApp_Business.Commands.UserCommand
             public async Task<bool> Handle(DeleteUserCommand request, CancellationToken cancellationToken)
             {
                 var user = await _context.Users.FirstOrDefaultAsync(u=>u.Id== request.UserId);
+                if (user == null) throw new AppException("Account không tồn tại");
                 _context.Users.Remove(user);
                 _context.SaveChanges();
                 return true;

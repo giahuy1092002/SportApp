@@ -11,8 +11,9 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
 {
     public interface ISportFieldRepository : IRepository<SportField>    
     {
-        Task<Guid> Create(CreateSportFieldModel request);
+        Task<SportField> Create(CreateSportFieldModel request);
         Task<bool> Update(UpdateSportFieldModel request);
         Task<List<TimeSlot>> GetScheduler(Guid sportFieldId);
+        Task<bool> Delete(Guid sportFieldId);
     }
 }

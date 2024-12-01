@@ -10,6 +10,6 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
 {
     public interface IImageRepository : IRepository<Image>
     {
-        Task<bool> Add(CreateImageModel request);
+        Task<Image> Add(CreateImageModel request);
     }
 }

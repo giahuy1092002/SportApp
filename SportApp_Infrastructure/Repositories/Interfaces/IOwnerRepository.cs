@@ -11,5 +11,6 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
     public interface IOwnerRepository : IRepository<Owner>
     {
         Task<bool> Create(CreateOwnerModel request);
+        Task<bool> Delete(Guid ownerId);
     }
 }

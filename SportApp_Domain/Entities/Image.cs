@@ -12,6 +12,5 @@ namespace SportApp_Domain.Entities
         public string PictureUrl { get; set; }
         public string PublicId { get; set; }
         public Guid SportFieldId { get; set; }
-        public bool IsDeleted { get; set; } = false;
     }
 }

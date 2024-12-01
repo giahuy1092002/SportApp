@@ -13,11 +13,11 @@ namespace SportApp_BE.Controllers
     public class SportFieldController : ControllerBase
     {
         private readonly IMediator _mediator;
-        private readonly DirectionService _directionService;
-        public SportFieldController(IMediator mediator,DirectionService directionService)
+        private readonly GeoCodeService _geoCodeService;
+        public SportFieldController(IMediator mediator, GeoCodeService geoCodeService)
         {
             _mediator = mediator;
-            _directionService = directionService;
+            _geoCodeService = geoCodeService;
         }
         [HttpPost("[action]")]
         public async Task<IActionResult> CreateSportField([FromForm] CreateSportFieldCommand command, CancellationToken cancellationToken)
@@ -56,9 +56,19 @@ namespace SportApp_BE.Controllers
             return Ok(await _mediator.Send(query, cancellationToken));
         }
         [HttpGet("[action]")]
-        public async Task<IActionResult> GetDistance(string origin, string destination)
+        public async Task<IActionResult> GetGeocode([FromQuery]GetGeoCodeQuery query, CancellationToken cancellationToken)
         {
-            return Ok(await _directionService.GetDistanceAsync(origin, destination));
+            return Ok(await _mediator.Send(query,cancellationToken));
+        }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateSportField([FromBody]UpdateSportFieldCommand command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetSportFieldUpdate([FromQuery]GetSportFieldUpdate query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
         }
     }
 }

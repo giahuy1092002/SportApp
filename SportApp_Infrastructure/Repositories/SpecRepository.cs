@@ -21,7 +21,7 @@ namespace SportApp_Infrastructure.Repositories
 
         public async Task<bool> Create(CreateSpecModel request)
         {
-            var spec = await Entities.FirstOrDefaultAsync(x => x.UserId == request.UserId && x.IsDeleted == false);
+            var spec = await Entities.FirstOrDefaultAsync(x => x.UserId == request.UserId);
             if (spec != null) throw new Exception("Spec is exist");
             try
             {

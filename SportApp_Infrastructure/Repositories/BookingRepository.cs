@@ -25,11 +25,11 @@ namespace SportApp_Infrastructure.Repositories
                 {
                     Name = request.Name,
                     CustomerId = request.CustomerId,
-                    TotelPrice = request.TotalPrice,
+                    TotalPrice = request.TotalPrice,
                     SportFieldId = request.SportFieldId,
                     Note = request.Note,
-                    SpecId = request.SpecId,
                     BookingDate = request.BookingDate,
+                    TimeFrameBooked =""
                 };
                 Entities.Add(booking);
                 await _unitOfWork.SaveChangesAsync();

@@ -19,9 +19,17 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
         ICustomerRepository Customers { get; }
         IImageRepository Images { get; }
         IRatingRepository Ratings { get; }
-        ISportEquipmentRepository SportEquipments { get; }
         IVoucherRepository Vouchers { get; }
         IBookingTimeSlotRepository BookingTimeSlots { get; }
+        INotificationRepository Notifications { get; }
+        IAdminRepository Admins { get; }
+        ISportRepository Sports { get; }
+        ICategoryRepository Categorys { get; }
+        ISportTeamRepository SportTeams { get; }
+        ISportProductRepository Products { get; }
+        ISportProductVariantRepository ProductVariants { get; }
+        IColorRepository Colors { get; }
+        ICartRepository Carts { get; }
         void CommitTransaction();
         void RollbackTransaction();
         int SaveChanges();
