@@ -19,6 +19,6 @@ jobs:
       - name: Restore dependencies
         run: dotnet restore ./SportApp.sln
       - name: Build
-        run: dotnet build ./SportApp_BE/SportApp_BE.csproj --configuration Release --no-restore
+        run: dotnet build ./SportApp.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test ./UnitTest/UnitTest.csproj --no-build
