@@ -93,7 +93,8 @@ namespace SportApp_Business.Commands.SportProductCommand
                             SportProductId = productId,
                             SizeId = sizeId,
                             ColorId = request.ColorId,
-                            EndPoint = CreateEndpoint.AddEndpoint(request.Name + " " + color.Name)
+                            EndPoint = CreateEndpoint.AddEndpoint(request.Name + " " + color.Name),
+                            QuantityInStock = request.QuantityInStock,
                         };
                         _context.SportProductVariant.Add(variant);
                     }

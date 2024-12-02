@@ -5,6 +5,8 @@ on:
     branches: ["master"]
   pull_request:
     branches: ["master"]
+env:
+  AZURE_WEBAPP_NAME: "SportAppDemo"
 
 jobs:
   build:
@@ -22,3 +24,11 @@ jobs:
         run: dotnet build ./SportApp.sln --configuration Release --no-restore
       - name: Test
         run: dotnet test ./UnitTest/UnitTest.csproj
+      - name: Publish
+        run: dotnet publish ./SportApp_BE/SportApp_BE.csproj --configuration Release --no-build --output ./publish
+      - name: Deploy to Azure
+        uses: azure/webapps-deploy@v4
+        with:
+          app-name: ${{ env.AZURE_WEBAPP_NAME }}
+          publish-profile: ${{ secrets.API_PUBLISH_SECRET }}
+          package: ./publish

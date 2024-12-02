@@ -30,6 +30,9 @@ namespace SportApp_Business.Commands.SportTeamCommand
                     var userTeam = await _context.UserSportTeam.FirstOrDefaultAsync(u=>u.CustomerId==request.CustomerId&&u.SportTeamId==request.SportTeamId);
                     userTeam.IsAccept = true;
                     _context.UserSportTeam.Update(userTeam);
+                    var sportTeam = await _context.SportTeam.FirstOrDefaultAsync(s=>s.Id==request.SportTeamId);
+                    sportTeam.CurrentMember += 1;
+                    _context.SportTeam.Update(sportTeam);
                     await _context.SaveChangesAsync();
                    
                 }

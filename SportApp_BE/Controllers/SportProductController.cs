@@ -37,10 +37,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(query, cancellationToken));
         }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetSportProductCount([FromQuery] GetSportProductCount query, CancellationToken cancellationToken)
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteSportProduct(DeleteSportProduct command,CancellationToken cancellationToken)
         {
-            return Ok(await _mediator.Send(query, cancellationToken));
+            return Ok(await _mediator.Send(command,cancellationToken));
         }
     }
 }

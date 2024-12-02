@@ -26,6 +26,7 @@ namespace SportApp_BE.Controllers
         {
             var response = _vnPayService.PaymentExecute(Request.Query);
             string id = Request.Query["vnp_TxnRef"];
+            var paymentStatus = "failure";
             if(response.BookingDescription.Contains("Thanh toán đặt sân"))
             {
                 var command = new UpdateBookingCommnad
@@ -33,14 +34,7 @@ namespace SportApp_BE.Controllers
                     BookingId = Guid.Parse(id)
                 };
                 await _mediator.Send(command, cancellationToken);
-                Response.Cookies.Append("PaymentStatus", response.Success ? "success" : "failure", new CookieOptions
-                {
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    Expires = DateTimeOffset.UtcNow.AddMinutes(5),
-                    IsEssential = true
-                });
+                paymentStatus = response.Success ? "success" : "failure";
             }    
             else if(response.BookingDescription.Contains("Thanh toán đơn hàng"))
             {
@@ -49,16 +43,9 @@ namespace SportApp_BE.Controllers
                     OrderId = Guid.Parse(id)
                 };
                 await _mediator.Send(command, cancellationToken);
-                Response.Cookies.Append("PaymentStatus", response.Success ? "success" : "failure", new CookieOptions
-                {
-                    HttpOnly = false,
-                    SameSite = SameSiteMode.None,
-                    Secure = true,
-                    Expires = DateTimeOffset.UtcNow.AddMinutes(5),
-                    IsEssential = true
-                });
+                paymentStatus = response.Success ? "success" : "failure";
             }    
-            return Redirect($"http://localhost:3000/payment");
+            return Redirect($"http://localhost:3000/payment?status={paymentStatus}");
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetStatusPayment(CancellationToken cancellationToken)

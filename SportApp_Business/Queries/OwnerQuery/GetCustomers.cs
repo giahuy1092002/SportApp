@@ -22,7 +22,9 @@ namespace SportApp_Business.Queries.OwnerQuery
 
             public async Task<int> Handle(GetCustomers request, CancellationToken cancellationToken)
             {
-                var list = await _context.Booking.Where(b => b.SportField.OwnerId == request.OwnerId).ToListAsync();
+                var list = await _context.Booking
+                    .Include(b=>b.SportField)
+                    .Where(b => b.SportField.OwnerId == request.OwnerId).ToListAsync();
                 var listCustomer = list
                 .GroupBy(c => c.CustomerId)
                 .Select(group => group.First()) 

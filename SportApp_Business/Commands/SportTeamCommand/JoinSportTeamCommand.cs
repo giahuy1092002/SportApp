@@ -36,6 +36,10 @@ namespace SportApp_Business.Commands.SportTeamCommand
                     {
                         throw new AppException("Bạn đã là thành viên của câu lạc bộ này");
                     }
+                    if(sportTeam.CurrentMember==sportTeam.LimitMember)
+                    {
+                        throw new AppException("Câu lạc bộ đã đủ thành viên");
+                    }    
                     var customer = await _context.Customer
                         .Include(c => c.User)
                         .FirstOrDefaultAsync(c => c.Id == request.CustomerId);

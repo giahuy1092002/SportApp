@@ -11,6 +11,7 @@ namespace SportApp_Business.Dtos.CartDtos
     public class CartDto
     {
         public Guid Id { get; set; }
+        public string BuyerId { get; set; }
         public List<CartItemDto> Items { get; set; }
         public long TotalPrice { get; set; }
         public int TotalQuantity { get; set; }

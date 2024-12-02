@@ -39,9 +39,11 @@ namespace SportApp_Business.Queries.CartQuery
                         .ThenInclude(i => i.SportProductVariant)
                             .ThenInclude(sv => sv.Size)
                     .FirstOrDefaultAsync(c => c.BuyerId == request.BuyerId);
+                if (cart == null) return null;
                 var cartDto = new CartDto
                 {
                     Id = cart.Id,
+                    BuyerId = cart.BuyerId,
                     TotalPrice = cart.TotalPrice(),
                     TotalQuantity = cart.TotalQuantity(),
                     Items = _mapper.Map<List<CartItemDto>>(cart.Items)

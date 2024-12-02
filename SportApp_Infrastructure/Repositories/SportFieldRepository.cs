@@ -60,9 +60,9 @@ namespace SportApp_Infrastructure.Repositories
         {
             try
             {
-                var sportFieldTest = await Entities.FirstOrDefaultAsync(s=>s.Name==request.Name);
+                var sportFieldTest = await Entities.FirstOrDefaultAsync(s=>s.Name==request.Name && s.Id != request.SportFieldId);
                 if (sportFieldTest != null) throw new AppException(ErrorMessage.SportFieldNameExist);
-                var sportField = await _unitOfWork.SportFields.GetById(request.SportFieldId);
+                var sportField = await _context.SportField.FirstOrDefaultAsync(s=>s.Id==request.SportFieldId);
                 if (sportField == null) throw new AppException(ErrorMessage.SportFieldNotExist);
                 sportField.Sport = request.Sport;
                 sportField.Address = request.Address;
@@ -82,7 +82,7 @@ namespace SportApp_Infrastructure.Repositories
         {
             try
             {
-                var sportField = await _unitOfWork.SportFields.GetById(sportFieldId);
+                var sportField = await _context.SportField.FirstOrDefaultAsync(s=>s.Id==sportFieldId);
                 if (sportField == null) throw new AppException(ErrorMessage.SportFieldNotExist);
                 sportField.IsDeleted = true;
                 Entities.Update(sportField);

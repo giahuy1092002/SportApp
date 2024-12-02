@@ -10,8 +10,6 @@ namespace SportApp_Infrastructure.Model.BookingModel
         public Guid SportFieldId { get; set; }
         public long TotalPrice { get; set; }
         public string? Note { get; set; }
-        public string StartTime { get; set; }
-        public string EndTime { get; set; }
         public DateTime BookingDate { get; set; }
     }
 }

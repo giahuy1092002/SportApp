@@ -41,7 +41,7 @@ namespace SportApp_BE.Controllers
         [HttpGet("[action]")]
         public async Task<IActionResult> GetCartDetail(CancellationToken cancellationToken)
         {
-            var cart = await _mediator.Send(new GetCartDto { BuyerId=GetBuyerId() }, cancellationToken);
+            var cart = await _mediator.Send(new GetCartDto { BuyerId = GetBuyerId() }, cancellationToken);
             return Ok(cart);
         }
         private async Task<Cart> CreateCart(CancellationToken cancellationToken)

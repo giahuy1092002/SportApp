@@ -31,15 +31,5 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetCustomers([FromQuery]GetCustomers query,CancellationToken cancellationToken)
-        {
-            return Ok(await _mediator.Send(query, cancellationToken));
-        }
-        [HttpGet("[action]")]
-        public async Task<IActionResult> GetSportFields([FromQuery] GetSportFieldsByOwner query, CancellationToken cancellationToken)
-        {
-            return Ok(await _mediator.Send(query, cancellationToken));
-        }
     }
 }

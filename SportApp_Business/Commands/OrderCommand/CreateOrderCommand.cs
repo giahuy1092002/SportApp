@@ -19,6 +19,7 @@ namespace SportApp_Business.Commands.OrderCommand
     {
         public ShippingAddress ShippingAddress { get; set; }
         public string BuyerId { get; set; }
+        public bool IsPaymentOnline { get; set; }
         public class CreateOrderHandler : ICommandHandler<CreateOrderCommand,string>
         {
             private readonly SportAppDbContext _context;
@@ -62,16 +63,20 @@ namespace SportApp_Business.Commands.OrderCommand
                     _context.Order.Add(order);
                     _context.Cart.Remove(cart);
                     _context.SaveChanges();
-                    var model = new PaymentInformationModel
+                    if(request.IsPaymentOnline)
                     {
-                        BookingType = "Thanh toán đơn hàng",
-                        BookingDescription = $"Thanh toán đơn hàng {order.Id.ToString()}",
-                        Amount = subtotal,
-                        BookingId = order.Id.ToString(),
-                        Name = $"Thanh toán đơn hàng {order.Id.ToString()}"
-                    };
-                    var url = _vnPayService.CreatePaymentUrl(model, _httpContextAccessor.HttpContext);
-                    return url;
+                        var model = new PaymentInformationModel
+                        {
+                            BookingType = "Thanh toán đơn hàng",
+                            BookingDescription = $"Thanh toán đơn hàng {order.Id.ToString()}",
+                            Amount = subtotal,
+                            BookingId = order.Id.ToString(),
+                            Name = $"Thanh toán đơn hàng {order.Id.ToString()}"
+                        };
+                        var url = _vnPayService.CreatePaymentUrl(model, _httpContextAccessor.HttpContext);
+                        return url;
+                    }
+                    return "Tạo đơn hàng thành công";
                 }
                 catch
                 {

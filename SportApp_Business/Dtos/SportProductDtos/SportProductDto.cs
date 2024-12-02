@@ -22,6 +22,8 @@ namespace SportApp_Business.Dtos.SportProductDtos
     {
         public string EndPoint { get; set; }
         public string ColorCode { get; set; }
+        public bool IsSelected { get; set; }
+        public List<string> Sizes { get; set; }
     }
        
 }

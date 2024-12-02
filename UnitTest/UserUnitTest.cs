@@ -174,9 +174,6 @@ namespace UnitTest
                     UserId = _context.Users.First().Id,
                     Avatar = "image.png"
                 };
-                var options = new DbContextOptionsBuilder<SportAppDbContext>()
-                    .UseInMemoryDatabase(databaseName: "TestDatabase")
-                    .Options;
                 var user = await _context.Users.FirstOrDefaultAsync(u => u.Id == updateAvatarModel.UserId);
                 if (user == null)
                 {
@@ -296,7 +293,3 @@ namespace UnitTest
 
 
 }
-
-
-
-
