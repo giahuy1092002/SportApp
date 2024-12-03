@@ -11,6 +11,5 @@ namespace SportApp_Business.Dtos.SportDtos
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public List<CategoryDto> Categories { get; set; }
     }
 }

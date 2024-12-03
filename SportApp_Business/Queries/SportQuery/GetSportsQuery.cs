@@ -26,7 +26,6 @@ namespace SportApp_Business.Queries.SportQuery
             public async Task<List<SportDto>> Handle(GetSportsQuery request, CancellationToken cancellationToken)
             {
                 var sports = await _context.Sport
-                    .Include(s=>s.Categories)
                         .ToListAsync(); 
                 var result = _mapper.Map<List<SportDto>>(sports);
                 return result;
