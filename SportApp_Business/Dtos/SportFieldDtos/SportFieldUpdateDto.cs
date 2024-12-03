@@ -1,4 +1,5 @@
-﻿using SportApp_Business.Queries.SportFieldQuery;
+﻿using SportApp_Business.Dtos.VoucherDtos;
+using SportApp_Business.Queries.SportFieldQuery;
 using SportApp_Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -15,6 +16,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public string Sport { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
+        public List<VoucherDto> Vouchers { get; set; }
         public List<TimeFrame> TimeFrames { get; set; }
         public List<Image> Images { get; set; }
     }

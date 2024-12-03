@@ -1,7 +1,9 @@
-﻿using MediatR;
+﻿using AutoMapper;
+using MediatR;
 using Microsoft.EntityFrameworkCore;
 using SportApp_Business.Common;
 using SportApp_Business.Dtos.SportFieldDtos;
+using SportApp_Business.Dtos.VoucherDtos;
 using SportApp_Infrastructure;
 using System;
 using System.Collections.Generic;
@@ -17,9 +19,11 @@ namespace SportApp_Business.Queries.SportFieldQuery
         public class GetSportFieldUpdateHanlder : IQueryHandler<GetSportFieldUpdate, SportFieldUpdateDto>
         {
             private readonly SportAppDbContext _context;
-            public GetSportFieldUpdateHanlder(SportAppDbContext context)
+            private readonly IMapper _mapper;
+            public GetSportFieldUpdateHanlder(SportAppDbContext context,IMapper mapper)
             {
                 _context = context;
+                _mapper = mapper;
             }
 
             public async Task<SportFieldUpdateDto> Handle(GetSportFieldUpdate request, CancellationToken cancellationToken)
@@ -27,6 +31,8 @@ namespace SportApp_Business.Queries.SportFieldQuery
 
                 var sportField = await _context.SportField
                     .Include(s=>s.Images)
+                    .Include(s=>s.Vouchers)
+                        .ThenInclude(sv=>sv.Voucher)
                     .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
                 var timeslots = await _context.TimeSlot
                     .Include(t => t.SportField)
@@ -41,6 +47,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                         EndTime = group.ToList()[group.ToList().Count()-1].EndTime,
                         Price = group.Key
                     }).ToList();
+                var vouchers = _mapper.Map<List<VoucherDto>>(sportField.Vouchers);
                 var result = new SportFieldUpdateDto
                 {
                     Id = sportField.Id,
@@ -49,7 +56,8 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     Description = sportField.Description,
                     Sport = sportField.Sport,
                     Images = sportField.Images,
-                    TimeFrames = groupTimeSlot
+                    TimeFrames = groupTimeSlot,
+                    Vouchers = vouchers
                 };
                 return result;
             }

@@ -75,5 +75,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
+        [HttpDelete("[action]")]
+        public async Task<IActionResult> DeleteSportFieldVoucher([FromBody]DeleteSportFieldVoucher command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command,cancellationToken));
+        }
     }
 }
