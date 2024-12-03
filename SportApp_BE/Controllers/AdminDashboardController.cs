@@ -25,5 +25,25 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(query, cancellationToken));
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetTotalRevenue([FromQuery]GetTotalOrderRevenue query,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRevenueByYear([FromQuery] GetRevenueByYear query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRevenueToday([FromQuery] GetRevenueToday query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRevenueCurrentMonth([FromQuery] GetRevenueCurrontMonth query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
     }
 }
