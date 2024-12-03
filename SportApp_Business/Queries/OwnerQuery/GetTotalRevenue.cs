@@ -21,7 +21,9 @@ namespace SportApp_Business.Queries.OwnerQuery
             }
             public async Task<long> Handle(GetTotalRevenue request, CancellationToken cancellationToken)
             {
-                var listBooking = await _context.Booking.Where(s => s.SportField.OwnerId == request.OwnerId).ToListAsync();
+                var listBooking = await _context.Booking
+                    .Include(b=>b.SportField)
+                    .Where(s => s.SportField.OwnerId == request.OwnerId).ToListAsync();
                 var revenue = listBooking.Sum(s => s.TotalPrice);
                 return revenue;
             }

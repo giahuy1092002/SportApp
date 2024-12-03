@@ -210,6 +210,8 @@ namespace SportApp_Business.Automapper
             #region Order, OrderItem
             CreateMap<Order, OrderDto>()
                 .ForMember(dst => dst.OrderStatus, src => src.MapFrom(src => src.OrderStatus.ToString()));
+            CreateMap<Order, OrderAdminDto>()
+                .ForMember(dst => dst.OrderStatus, src => src.MapFrom(src => src.OrderStatus.ToString()));
             CreateMap<OrderItem, OrderItemDto>()
                 .ForMember(dst => dst.ColorName, src => src.MapFrom(src => src.SportProductVariant.Color.Name))
                 .ForMember(dst => dst.SizeName, src => src.MapFrom(src => src.SportProductVariant.Size.Value))

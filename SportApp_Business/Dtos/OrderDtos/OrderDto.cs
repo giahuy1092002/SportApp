@@ -16,9 +16,22 @@ namespace SportApp_Business.Dtos.OrderDtos
         public ShippingAddress ShippingAddress { get; set; }
         public List<OrderItemDto> Items { get; set; }
     }
+    public class OrderAdminDto
+    {
+        public string OrderStatus { get; set; }
+        public long SubTotal { get; set; }
+        public long DeliveryFee { get; set; }
+        public DateTime OrderDate { get; set; }
+        public ShippingAddress ShippingAddress { get; set; }
+    }
     public class ListOrderDto
     {
         public List<OrderDto> Orders { get; set; }
+        public int Count { get; set; }
+    }
+    public class ListOrderAdminDto
+    {
+        public List<OrderAdminDto> Orders { get; set; }
         public int Count { get; set; }
     }
     public class OrderItemDto
