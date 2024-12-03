@@ -29,7 +29,7 @@ namespace SportApp_Domain.Entities
         [NotMapped]
         public decimal Stars
         {
-            get => Ratings != null && Ratings.Any() ? (decimal)Ratings.Average(r => r.NumberOfStar) : 0;
+            get => Ratings != null && Ratings.Any() ? Math.Round((decimal)Ratings.Average(r => r.NumberOfStar),2) : 0;
             set { }
         }
         public double? Latitude { get; set; }
@@ -48,6 +48,7 @@ namespace SportApp_Domain.Entities
            : null;
             set { }
         }
+        public List<SportFieldVoucher> Vouchers { get; set; }
     }
 
 }

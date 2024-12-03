@@ -75,7 +75,7 @@ builder.Services.AddScoped(x =>
     return null;
 });
 var app = builder.Build();
-app.UseMiddleware<ErrorHandlerMiddleware>();
+//app.UseMiddleware<ErrorHandlerMiddleware>();
 app.UseSwagger();
 app.UseSwaggerUI();
 

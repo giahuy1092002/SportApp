@@ -25,6 +25,7 @@ namespace SportApp_Domain.Entities
         public SportField SportField { get; set; }
         public bool IsRemind { get; set; }
         public string TimeFrameBooked { get; set; }
+        public Guid? VoucherId { get; set; }
     }
     public enum BookingStatus
     {

@@ -6,6 +6,7 @@ using SportApp_Business.Common;
 using SportApp_Business.Hubs;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
+using SportApp_Infrastructure.Helper;
 using SportApp_Infrastructure.Model.BookingModel;
 using SportApp_Infrastructure.Model.PaymentModel;
 using SportApp_Infrastructure.Repositories.Interfaces;
@@ -29,6 +30,7 @@ namespace SportApp_Business.Commands.BookingCommand
         public string? Note { get; set; }
         public List<Guid> TimeBookedIds { get; set; }
         public DateTime BookingDate { get; set; }
+        public Guid? VoucherId { get; set; }
         public class CreateBookingHandler : ICommandHandler<CreateBookingCommand, Guid>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -70,7 +72,16 @@ namespace SportApp_Business.Commands.BookingCommand
                         Note = request.Note,
                         BookingDate = request.BookingDate,
                     };
-
+                    if(request.VoucherId!=Guid.Empty)
+                    {
+                        var voucher = await _context.Vouchers.FirstOrDefaultAsync(v=>v.Id==request.VoucherId);
+                        if (request.TotalPrice < voucher.MinPrice) throw new AppException("Bạn không thể sử dụng voucher này vì số tiền chưa đủ");
+                        var sale = request.TotalPrice * voucher.PercentSale / 100 > voucher.MaxSale ? voucher.MaxSale : request.TotalPrice * voucher.PercentSale / 100;
+                        request.TotalPrice = request.TotalPrice - sale;
+                        voucher.Quantity -= 1;
+                        _context.Vouchers.Update(voucher);
+                        _context.SaveChanges();
+                    }    
                     var booking = await _unitOfWork.Bookings.Create(createBooking);
                     for (int i=0;i<request.TimeBookedIds.Count();i++)
                     {
@@ -90,15 +101,27 @@ namespace SportApp_Business.Commands.BookingCommand
                     {
                         await _hubContext.Clients.All.SendAsync("GetScheduler", request.SportFieldId, timeSlotId);
                     }
-                    var model = new PaymentInformationModel
+                    var notification = new Notification
                     {
-                        BookingType = "Thanh toán đặt sân",
-                        BookingDescription = $"Thanh toán đặt sân {sportField.Name}",
-                        Amount = request.TotalPrice,
-                        BookingId = booking.Id.ToString(),
-                        Name = $"Thanh toán đặt sân {sportField.Name}"
+                        Title = $"Đặt sân thành công: {sportField.Name}",
+                        Content = "Bạn đã đặt sân thành công, vui lòng thanh toán để hoàn thành thủ tục",
+                        CreateAt = DateTime.Now,
+                        RelatedId = request.SportFieldId,
+                        RelatedType = NotifyType.SportField.ToString(),
+                        EndPoint = sportField.EndPoint
                     };
-                    var url = _vnPayService.CreatePaymentUrl(model, _httpContextAccessor.HttpContext);
+                    _context.Notifications.Add(notification);
+                    await _unitOfWork.SaveChangesAsync();
+                    var customer = await _context.Customer
+                        .Include(c=>c.User)
+                        .FirstOrDefaultAsync(c=>c.Id == request.CustomerId);
+                    var userNotify = new UserNotification
+                    {
+                        NotificationId = notification.Id,
+                        UserId = customer.User.Id
+                    };
+                    _context.UserNotifications.Add(userNotify);
+                    await _unitOfWork.SaveChangesAsync();
                     return booking.Id;
                 }
                 catch (Exception)

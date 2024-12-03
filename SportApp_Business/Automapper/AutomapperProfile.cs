@@ -89,6 +89,14 @@ namespace SportApp_Business.Automapper
             CreateMap<CreateVoucherCommand, CreateVoucherModel>();
             CreateMap<Voucher,VoucherDto>();
             CreateMap<UpdateVoucherCommand, UpdateVoucherModel>();
+            CreateMap<SportFieldVoucher, VoucherDto>()
+                .ForMember(dst => dst.VoucherId, src => src.MapFrom(src => src.Voucher.Id))
+                .ForMember(dst => dst.Name, src => src.MapFrom(src => src.Voucher.Name))
+                .ForMember(dst => dst.StartTime, src => src.MapFrom(src => src.Voucher.StartTime))
+                .ForMember(dst => dst.EndTime, src => src.MapFrom(src => src.Voucher.EndTime))
+                .ForMember(dst => dst.MinPrice, src => src.MapFrom(src => src.Voucher.MinPrice))
+                .ForMember(dst => dst.PercentSale, src => src.MapFrom(src => src.Voucher.PercentSale))
+                .ForMember(dst => dst.MaxSale, src => src.MapFrom(src => src.Voucher.MaxSale));
             #endregion
 
             #region Notification

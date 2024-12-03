@@ -2,6 +2,7 @@
 using SportApp_Business.Dtos.RatingDtos;
 using SportApp_Business.Dtos.SportEquipmentDtos;
 using SportApp_Business.Dtos.TimeSlotDtos;
+using SportApp_Business.Dtos.VoucherDtos;
 using SportApp_Domain.Entities;
 using System;
 using System.Collections.Generic;
@@ -27,7 +28,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public int NumberOfBooking { get; set; }
         public List<Image> Images { get; set; }
         public List<RatingDto> Ratings { get; set; }
-        public List<SportEquipmentDto> SportEquipments { get; set; }
+        public List<VoucherDto> Vouchers { get; set; }
         public int NumberOfReviews {  get; set; }
     }
 }

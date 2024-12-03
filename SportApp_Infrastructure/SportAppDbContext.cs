@@ -38,6 +38,7 @@ namespace SportApp_Infrastructure
         public DbSet<UserSportTeam> UserSportTeam { get;set; }
         public DbSet<Color> Color { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<SportFieldVoucher> SportFieldVouchers { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);
@@ -108,8 +109,18 @@ namespace SportApp_Infrastructure
                 .WithMany(c=>c.Teams)
                 .HasForeignKey(b => b.CustomerId);
             #endregion
-            #region ImageProduct
-            
+            #region SportFieldVoucher
+            modelBuilder.Entity<SportFieldVoucher>()
+                .HasKey(s => new { s.SportFieldId, s.VoucherId });
+            modelBuilder.Entity<SportFieldVoucher>()
+               .HasOne(s => s.SportField)
+               .WithMany(s=>s.Vouchers)
+               .HasForeignKey(b => b.SportFieldId);
+
+            modelBuilder.Entity<SportFieldVoucher>()
+                .HasOne(s => s.Voucher)
+                .WithMany()
+                .HasForeignKey(s=>s.VoucherId);
             #endregion
         }
     }

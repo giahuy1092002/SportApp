@@ -50,7 +50,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     ;
                 if(!string.IsNullOrEmpty(request.Search))
                 {
-                    query = query.Where(s=>s.Name.Contains(request.Search));
+                    query = query.Where(s=>s.Name.ToLower().Contains(request.Search.ToLower()));
                 }    
                 if(!string.IsNullOrEmpty(request.Sort))
                 {

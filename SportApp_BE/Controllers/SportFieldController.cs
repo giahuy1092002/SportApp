@@ -70,5 +70,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(query, cancellationToken));
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddVoucher([FromBody]AddVoucher command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }
