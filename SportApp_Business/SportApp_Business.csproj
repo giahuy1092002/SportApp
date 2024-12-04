@@ -19,8 +19,4 @@
     <ProjectReference Include="..\SportApp_Infrastructure\SportApp_Infrastructure.csproj" />
   </ItemGroup>
 
-  <ItemGroup>
-    <Folder Include="Commands\SportProductVariantCommand\" />
-  </ItemGroup>
-
 </Project>

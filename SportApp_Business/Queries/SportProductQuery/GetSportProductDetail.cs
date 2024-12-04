@@ -2,7 +2,9 @@
 using Microsoft.EntityFrameworkCore;
 using SportApp_Business.Common;
 using SportApp_Business.Dtos.BookingDtos;
+using SportApp_Business.Dtos.RatingDtos;
 using SportApp_Business.Dtos.SportProductDtos;
+using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
 using SportApp_Infrastructure.Helper;
 using System;
@@ -32,8 +34,20 @@ namespace SportApp_Business.Queries.SportProductQuery
                     .Include(sv => sv.SportProduct)
                         .ThenInclude(s=>s.ImageProducts)
                     .Include(sv => sv.Color)
-                    .Include(s=>s.Size)
+                    .Include(sv=>sv.Size)
+                    .Include(sv=>sv.Ratings)
                     .Where(sv => sv.EndPoint == request.EndPoint).ToListAsync();
+                var ratings = sportSproductVariant
+                    .SelectMany(sv => sv.Ratings)
+                    .Select(r => new SportProductRatingDto
+                    {
+                        SportProductVariantName = r.SportProductVariantName,
+                        SizeValue = r.SizeValue,
+                        ColorName = r.ColorName,
+                        StartRating = r.StartRating,
+                        Comment = r.Comment
+                    })
+                    .ToList();
                 var productId = sportSproductVariant.FirstOrDefault().SportProductId;
                 var product = await _context.SportProduct
                     .Include(s => s.Variants)
@@ -59,6 +73,7 @@ namespace SportApp_Business.Queries.SportProductQuery
                         QuantityInStock = s.QuantityInStock
                     }
                     ).ToList();
+
                 var result = new SportProductDetailDto
                 {
                     SportProductId = productId,
@@ -67,7 +82,8 @@ namespace SportApp_Business.Queries.SportProductQuery
                     Name = product.Name + " " + sportSproductVariant.FirstOrDefault().Color.Name,
                     Price = sportSproductVariant.FirstOrDefault().Price,
                     Sizes = sizes,
-                    ImageEndPoints = imageEndPoint
+                    ImageEndPoints = imageEndPoint,
+                    Ratings = ratings
                 };
                 return result;
             }

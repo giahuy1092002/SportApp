@@ -23,7 +23,7 @@ namespace SportApp_Domain.Entities
         [ForeignKey("SportFieldId")]
         public Guid SportFieldId { get; set; }
         public SportField SportField { get; set; }
-        public bool IsRemind { get; set; }
+        public bool IsRemind { get; set; } = false;
         public string TimeFrameBooked { get; set; }
         public Guid? VoucherId { get; set; }
     }
@@ -32,6 +32,7 @@ namespace SportApp_Domain.Entities
         Pending,
         PaymentReceived,
         PaymentFailed,
-        Reject
+        Reject,
+        Completed
     }
 }

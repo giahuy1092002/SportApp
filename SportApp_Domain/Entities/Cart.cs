@@ -40,11 +40,11 @@ namespace SportApp_Domain.Entities
         public long TotalPrice()
         {
             long totalPrice = 0;
-            foreach(var item in Items)
+            foreach (var item in Items)
             {
                 totalPrice += item.SportProductVariant.Price * item.Quantity;
-            } 
-            return totalPrice;        
+            }
+            return totalPrice;
         }
     }
 }

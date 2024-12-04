@@ -42,5 +42,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command,cancellationToken));
         }
+        [HttpPost("[action]")]
+        public async Task<IActionResult> AddRating([FromBody] AddRating command, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }

@@ -10,7 +10,7 @@ namespace SportApp_Domain.Entities
     public class SportTeam
     {
         public Guid Id { get; set; }
-        public string Sport {  get; set; }
+        public string Sport { get; set; }
         public string Name { get; set; }
         public string Description { get; set; }
         public string Endpoint { get; set; }

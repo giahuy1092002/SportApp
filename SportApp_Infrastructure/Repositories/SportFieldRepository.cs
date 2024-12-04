@@ -1,5 +1,4 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using SportApp_Domain.Entities;
 using SportApp_Infrastructure.Dto.TimeSlotDto;
 using SportApp_Infrastructure.Model.SportFieldModel;
 using SportApp_Infrastructure.Repositories.Interfaces;
@@ -9,6 +8,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using SportApp_Domain.Entities;
 
 namespace SportApp_Infrastructure.Repositories
 {

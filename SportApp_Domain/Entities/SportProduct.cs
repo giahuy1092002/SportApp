@@ -14,7 +14,7 @@ namespace SportApp_Domain.Entities
         public string Description { get; set; }
         [ForeignKey("CategoryId")]
         public Guid CategoryId { get; set; }
-        public Category Category { get; set; } 
+        public Category Category { get; set; }
         public List<SportProductVariant> Variants { get; set; }
         public List<ImageProduct> ImageProducts { get; set; }
     }

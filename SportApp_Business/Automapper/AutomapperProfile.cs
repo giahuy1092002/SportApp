@@ -222,6 +222,7 @@ namespace SportApp_Business.Automapper
                 .ForMember(dst => dst.PictureUrl, src => src.MapFrom(src => src.SportProductVariant.SportProduct.ImageProducts.FirstOrDefault(i=>i.Type=="List").PictureUrl))
                 ;
             #endregion
+            CreateMap<SportProductRating, SportProductRatingDto>();
 
         }
     }

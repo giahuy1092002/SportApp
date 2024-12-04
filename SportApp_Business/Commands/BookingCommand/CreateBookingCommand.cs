@@ -49,80 +49,76 @@ namespace SportApp_Business.Commands.BookingCommand
             }
             public async Task<Guid> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
             {
+               
                 try
                 {
-                    var sportField = await _context.SportField.FirstOrDefaultAsync(s => s.Id == request.SportFieldId);
-                    foreach (var id in request.TimeBookedIds)
+                    using (var transaction = await _context.Database.BeginTransactionAsync(System.Data.IsolationLevel.RepeatableRead))
                     {
-                        var existingBooking = await _context.BookingTimeSlots
-                            .Include(b=>b.Booking)
-                            .AnyAsync(bts => bts.TimeSlotId == id && bts.Booking.SportFieldId == request.SportFieldId && bts.Booking.BookingDate.Date==request.BookingDate.Date);
-
-                        if (existingBooking)
+                        var sportField = await _context.SportField.FirstOrDefaultAsync(s => s.Id == request.SportFieldId);
+                        foreach (var id in request.TimeBookedIds)
                         {
-                            throw new Exception($"Time slot {id} is already booked.");
+                            var existingBooking = await _context.BookingTimeSlots
+                                .Include(b => b.Booking)
+                                .AnyAsync(bts => bts.TimeSlotId == id && bts.Booking.SportFieldId == request.SportFieldId && bts.Booking.BookingDate.Date == request.BookingDate.Date);
+
+                            if (existingBooking)
+                            {
+                                var timeslot = await _context.TimeSlot.FirstOrDefaultAsync(t => t.Id == id);
+                                throw new AppException($"Khung giờ {timeslot.StartTime}-{timeslot.EndTime} đã được đặt, vui lòng chọn khung giờ khác.");
+                            }
                         }
-                    }
-                    var createBooking = new CreateBookingModel
-                    {
-                        Name = request.Name,
-                        TotalPrice = request.TotalPrice,
-                        SportFieldId = request.SportFieldId,
-                        CustomerId = request.CustomerId,
-                        Note = request.Note,
-                        BookingDate = request.BookingDate,
-                    };
-                    if(request.VoucherId!=Guid.Empty)
-                    {
-                        var voucher = await _context.Vouchers.FirstOrDefaultAsync(v=>v.Id==request.VoucherId);
-                        if (request.TotalPrice < voucher.MinPrice) throw new AppException("Bạn không thể sử dụng voucher này vì số tiền chưa đủ");
-                        var sale = request.TotalPrice * voucher.PercentSale / 100 > voucher.MaxSale ? voucher.MaxSale : request.TotalPrice * voucher.PercentSale / 100;
-                        request.TotalPrice = request.TotalPrice - sale;
-                        voucher.Quantity -= 1;
-                        _context.Vouchers.Update(voucher);
-                        _context.SaveChanges();
-                    }    
-                    var booking = await _unitOfWork.Bookings.Create(createBooking);
-                    for (int i=0;i<request.TimeBookedIds.Count();i++)
-                    {
-                        var timeslot = await _context.TimeSlot.FirstOrDefaultAsync(t=>t.Id== request.TimeBookedIds[i]);
-                        if (i != request.TimeBookedIds.Count() - 1) booking.TimeFrameBooked = booking.TimeFrameBooked + $"{timeslot.StartTime}-{timeslot.EndTime}" + ";";
-                        else booking.TimeFrameBooked = booking.TimeFrameBooked + $"{timeslot.StartTime}-{timeslot.EndTime}";
-                        var bookedTimeSlot = new BookingTimeSlot
+                        var createBooking = new CreateBookingModel
                         {
-                            BookingId = booking.Id,
-                            TimeSlotId = request.TimeBookedIds[i]
+                            Name = "Đặt sân: " + sportField.Name,
+                            TotalPrice = request.TotalPrice,
+                            SportFieldId = request.SportFieldId,
+                            CustomerId = request.CustomerId,
+                            Note = request.Note,
+                            BookingDate = request.BookingDate,
                         };
-                        await _unitOfWork.BookingTimeSlots.Add(bookedTimeSlot);
-                    }
+                        var booking = await _unitOfWork.Bookings.Create(createBooking);
+                        for (int i = 0; i < request.TimeBookedIds.Count(); i++)
+                        {
+                            var timeslot = await _context.TimeSlot.FirstOrDefaultAsync(t => t.Id == request.TimeBookedIds[i]);
+                            if (i != request.TimeBookedIds.Count() - 1) booking.TimeFrameBooked = booking.TimeFrameBooked + $"{timeslot.StartTime}-{timeslot.EndTime}" + ";";
+                            else booking.TimeFrameBooked = booking.TimeFrameBooked + $"{timeslot.StartTime}-{timeslot.EndTime}";
+                            var bookedTimeSlot = new BookingTimeSlot
+                            {
+                                BookingId = booking.Id,
+                                TimeSlotId = request.TimeBookedIds[i]
+                            };
+                            await _unitOfWork.BookingTimeSlots.Add(bookedTimeSlot);
+                        }
 
-                    await _unitOfWork.SaveChangesAsync();
-                    foreach (var timeSlotId in request.TimeBookedIds)
-                    {
-                        await _hubContext.Clients.All.SendAsync("GetScheduler", request.SportFieldId, timeSlotId);
+                        await _unitOfWork.SaveChangesAsync();
+                        foreach (var timeSlotId in request.TimeBookedIds)
+                        {
+                            await _hubContext.Clients.All.SendAsync("GetScheduler", request.SportFieldId, timeSlotId);
+                        }
+                        var notification = new Notification
+                        {
+                            Title = $"Đặt sân thành công: {sportField.Name}",
+                            Content = "Bạn đã đặt sân thành công, vui lòng thanh toán để hoàn thành thủ tục",
+                            CreateAt = DateTime.Now,
+                            RelatedId = request.SportFieldId,
+                            RelatedType = NotifyType.SportField.ToString(),
+                            EndPoint = sportField.EndPoint
+                        };
+                        _context.Notifications.Add(notification);
+                        await _unitOfWork.SaveChangesAsync();
+                        var customer = await _context.Customer
+                            .Include(c => c.User)
+                            .FirstOrDefaultAsync(c => c.Id == request.CustomerId);
+                        var userNotify = new UserNotification
+                        {
+                            NotificationId = notification.Id,
+                            UserId = customer.User.Id
+                        };
+                        _context.UserNotifications.Add(userNotify);
+                        await _unitOfWork.SaveChangesAsync();
+                        await transaction.CommitAsync();
+                        return booking.Id;
                     }
-                    var notification = new Notification
-                    {
-                        Title = $"Đặt sân thành công: {sportField.Name}",
-                        Content = "Bạn đã đặt sân thành công, vui lòng thanh toán để hoàn thành thủ tục",
-                        CreateAt = DateTime.Now,
-                        RelatedId = request.SportFieldId,
-                        RelatedType = NotifyType.SportField.ToString(),
-                        EndPoint = sportField.EndPoint
-                    };
-                    _context.Notifications.Add(notification);
-                    await _unitOfWork.SaveChangesAsync();
-                    var customer = await _context.Customer
-                        .Include(c=>c.User)
-                        .FirstOrDefaultAsync(c=>c.Id == request.CustomerId);
-                    var userNotify = new UserNotification
-                    {
-                        NotificationId = notification.Id,
-                        UserId = customer.User.Id
-                    };
-                    _context.UserNotifications.Add(userNotify);
-                    await _unitOfWork.SaveChangesAsync();
-                    return booking.Id;
                 }
                 catch (Exception)
                 {

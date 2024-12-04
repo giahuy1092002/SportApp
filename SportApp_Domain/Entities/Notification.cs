@@ -15,9 +15,9 @@ namespace SportApp_Domain.Entities
         public DateTime CreateAt { get; set; }
         public Guid? RelatedId { get; set; } //Event, SportFied, System, SportTeam
         public string RelatedType { get; set; }
-        public string? EndPoint {  get; set; }
-        
-    }   
+        public string? EndPoint { get; set; }
+
+    }
     public enum NotifyType
     {
         Event,

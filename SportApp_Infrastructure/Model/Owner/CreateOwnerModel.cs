@@ -1,6 +1,4 @@
-﻿
-
-using SportApp_Domain.Entities;
+﻿using SportApp_Domain.Entities;
 
 namespace SportApp_Infrastructure.Model.Owner
 {

@@ -9,9 +9,9 @@ namespace SportApp_Domain.Entities
 {
     public class Rating
     {
-        public Guid Id  { get; set; }
+        public Guid Id { get; set; }
         public string? Comment { get; set; }
-        public int NumberOfStar {  get; set; }
+        public int NumberOfStar { get; set; }
         public Guid SportFieldId { get; set; }
         public SportField SportField { get; set; }
         public Guid CustomerId { get; set; }

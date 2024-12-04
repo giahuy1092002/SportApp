@@ -53,18 +53,18 @@ namespace SportApp_Infrastructure.Services
                         {
                             { "UserName", booking.Customer.User.Email},
                             { "FieldName", booking.SportField.Name },
-                            { "BookingDate", booking.BookingDate.ToString("HH:mm dd/MM/yyyy") },
+                            { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
                             { "Address", booking.SportField.Address }
                         };
                         var request = new MailRequest
                         {
                             ToEmail = "huy.nguyen1092002@hcmut.edu.vn",
                             Subject = "Nhắc nhở đặt sân thể thao",
-                            Body = $"Sân thể thao mà bạn đặt sẽ bắt đầu lúc {booking.BookingDate:HH:mm}.",
+                            Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
                         };
-
                         await _mailService.SendEmailWithHtmlTemplate(request, templatePath, placeholders);
                         booking.IsRemind = true;
+                        context.Booking.Update(booking);
                         await unitOfWork.SaveChangesAsync();
                     }
                 }

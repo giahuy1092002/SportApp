@@ -21,6 +21,7 @@ namespace SportApp_Domain.Entities
         public Color Color { get; set; }
         public Guid SizeId { get; set; }
         public Size Size { get; set; }
-        
+        public List<SportProductRating> Ratings { get; set; }
+
     }
 }

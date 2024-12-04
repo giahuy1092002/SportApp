@@ -38,7 +38,9 @@ namespace SportApp_Infrastructure
         public DbSet<UserSportTeam> UserSportTeam { get;set; }
         public DbSet<Color> Color { get; set; }
         public DbSet<Order> Order { get; set; }
+        public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<SportFieldVoucher> SportFieldVouchers { get; set; }
+        public DbSet<SportProductRating> SportProductRatings { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

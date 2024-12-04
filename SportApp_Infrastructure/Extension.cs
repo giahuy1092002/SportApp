@@ -54,8 +54,8 @@ namespace SportApp_Infrastructure
             services.AddTransient<ICartRepository, CartRepository>();
             services.AddTransient<MailService>();
             services.AddTransient<IVnPayService,VnPayService>();
-            //services.AddHostedService<NotifyRatingService>();
-            //services.AddHostedService<NotifyReminderService>();
+            services.AddHostedService<NotifyReminderService>();
+            services.AddHostedService<UpdateBookingStatusService>();
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)

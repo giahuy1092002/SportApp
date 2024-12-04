@@ -11,7 +11,7 @@ namespace SportApp_Domain.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        public string Sport {  get; set; }
+        public string Sport { get; set; }
         public string Address { get; set; }
         public string Description { get; set; }
         public string EndPoint { get; set; }
@@ -20,7 +20,7 @@ namespace SportApp_Domain.Entities
         public FieldType FieldType { get; set; }
         public List<TimeSlot> TimeSlots { get; set; }
         public List<Image> Images { get; set; }
-        public bool IsDeleted {  get; set; } = false;
+        public bool IsDeleted { get; set; } = false;
         [ForeignKey("OwnerId")]
         public Guid OwnerId { get; set; }
         public Owner Owner { get; set; }
@@ -29,7 +29,7 @@ namespace SportApp_Domain.Entities
         [NotMapped]
         public decimal Stars
         {
-            get => Ratings != null && Ratings.Any() ? Math.Round((decimal)Ratings.Average(r => r.NumberOfStar),2) : 0;
+            get => Ratings != null && Ratings.Any() ? Math.Round((decimal)Ratings.Average(r => r.NumberOfStar), 2) : 0;
             set { }
         }
         public double? Latitude { get; set; }

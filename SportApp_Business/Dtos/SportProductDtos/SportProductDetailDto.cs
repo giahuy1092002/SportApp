@@ -16,6 +16,7 @@ namespace SportApp_Business.Dtos.SportProductDtos
         public long Price { get; set; }
         public List<ImageEndPoint> ImageEndPoints { get; set; }
         public List<SizeDto> Sizes { get; set; }
+        public List<SportProductRatingDto> Ratings { get; set; }
     }
     public class ImageEndPoint
     {
@@ -28,5 +29,13 @@ namespace SportApp_Business.Dtos.SportProductDtos
         public Guid Id { get; set; }
         public string Value { get; set; }
         public int QuantityInStock { get; set; }
+    }
+    public class SportProductRatingDto
+    {
+        public string SportProductVariantName { get; set; }
+        public string SizeValue { get; set; }
+        public string ColorName { get; set; }
+        public int StartRating { get; set; }
+        public string Comment { get; set; }
     }
 }
