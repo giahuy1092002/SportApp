@@ -27,6 +27,7 @@ namespace SportApp_Business.Commands.OwnerCommand
                 if(booking.Status == BookingStatus.Pending || booking.Status == BookingStatus.PaymentReceived)
                 {
                     booking.Status = BookingStatus.Rejected;
+                    booking.IsRejectByOwner = true;
                     _context.Booking.Update(booking);
                     _context.SaveChanges();
                 }

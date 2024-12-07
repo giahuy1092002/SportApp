@@ -51,6 +51,7 @@ namespace SportApp_Business.Queries.SportProductQuery
                         Avatar = r.Avatar
                     })
                     .ToList();
+                var average = ratings != null && ratings.Any() ? Math.Round((double)ratings.Average(r => r.StartRating), 2) : 0;
                 var productId = sportSproductVariant.FirstOrDefault().SportProductId;
                 var product = await _context.SportProduct
                     .Include(s => s.Variants)
@@ -86,7 +87,8 @@ namespace SportApp_Business.Queries.SportProductQuery
                     Price = sportSproductVariant.FirstOrDefault().Price,
                     Sizes = sizes,
                     ImageEndPoints = imageEndPoint,
-                    Ratings = ratings
+                    Ratings = ratings,
+                    StarAverage = average
                 };
                 return result;
             }

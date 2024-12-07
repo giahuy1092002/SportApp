@@ -17,6 +17,7 @@ namespace SportApp_Business.Dtos.SportProductDtos
         public List<ImageEndPoint> ImageEndPoints { get; set; }
         public List<SizeDto> Sizes { get; set; }
         public List<SportProductRatingDto> Ratings { get; set; }
+        public double StarAverage { get; set; }
     }
     public class ImageEndPoint
     {

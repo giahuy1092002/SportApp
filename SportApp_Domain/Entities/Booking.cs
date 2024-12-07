@@ -32,6 +32,7 @@ namespace SportApp_Domain.Entities
         public bool IsRating { get; set; } = false;
         public bool IsRight { get; set; } = false;
         public string? Reason { get; set; }
+        public bool IsRejectByOwner { get; set; } = false;
     }
     public enum BookingStatus
     {

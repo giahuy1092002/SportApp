@@ -52,6 +52,9 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     sportFieldDto.NumberOfReviews = sportField.Ratings.Count;
                     var bookings = await _context.Booking.Where(b=>b.SportFieldId==sportField.Id && b.Status == BookingStatus.Completed).ToListAsync();
                     sportFieldDto.NumberOfBooking = bookings.Count;
+                    var reject = _context.Booking.Where(b=>b.Status==BookingStatus.Rejected&&b.IsRejectByOwner==true).ToList();
+                    var all = _context.Booking.ToList();
+                    sportFieldDto.RatioAccept = 100-reject.Count/all.Count*100;
                     return sportFieldDto;
                 }
                 catch (Exception ex)
