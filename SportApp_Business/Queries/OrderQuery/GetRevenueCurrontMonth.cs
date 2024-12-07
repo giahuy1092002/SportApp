@@ -26,9 +26,9 @@ namespace SportApp_Business.Queries.OrderQuery
 
                 var totalRevenue = await _context.Order
                     .Where(o => o.OrderDate.Year == currentYear && o.OrderDate.Month == currentMonth && (o.OrderStatus == OrderStatus.PaymentReceived||o.OrderStatus==OrderStatus.Complete))
-                    .SumAsync(o=>o.GetTotal());
+                    .ToListAsync();
 
-                return totalRevenue;
+                return totalRevenue.Sum(o => o.GetTotal());
             }
         }
     }

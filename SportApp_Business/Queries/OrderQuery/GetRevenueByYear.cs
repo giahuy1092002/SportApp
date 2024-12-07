@@ -24,10 +24,16 @@ namespace SportApp_Business.Queries.OrderQuery
             public async Task<List<MonthlyRevenueDto>> Handle(GetRevenueByYear request,CancellationToken cancellationToken)
             {
                 var revenue = await _context.Order
-                            .Where(b => b.OrderDate.Year == request.Year && (b.OrderStatus == OrderStatus.PaymentReceived ||b.OrderStatus == OrderStatus.Complete))
-                            .GroupBy(b => b.OrderDate.Month)
-                            .Select(g => new { Month = g.Key, TotalRevenue = g.Sum(b => b.GetTotal())})
-                            .ToListAsync();
+                    .Where(b => b.OrderDate.Year == request.Year &&
+                     (b.OrderStatus == OrderStatus.PaymentReceived || b.OrderStatus == OrderStatus.Complete))
+                    .GroupBy(b => b.OrderDate.Month)
+                    .Select(g => new
+                    {
+                        Month = g.Key,
+                        TotalRevenue = g.Sum(b => b.SubTotal + b.DeliveryFee) // Tính toán trực tiếp
+                    })
+                    .ToListAsync();
+
                 var monthlyRevenue = Enumerable.Range(1, 12)
                     .Select(month => new MonthlyRevenueDto
                     {

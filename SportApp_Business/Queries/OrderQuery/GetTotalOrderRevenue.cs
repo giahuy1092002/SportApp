@@ -23,8 +23,8 @@ namespace SportApp_Business.Queries.OrderQuery
             {
                 var revenue = await _context.Order
                     .Where(o=>o.OrderStatus==OrderStatus.PaymentReceived || o.OrderStatus == OrderStatus.Complete)
-                    .SumAsync(o => o.GetTotal());
-                return revenue;
+                    .ToListAsync();
+                return revenue.Sum(o=>o.GetTotal());
             }
         }
     }
