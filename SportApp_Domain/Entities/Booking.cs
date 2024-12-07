@@ -30,6 +30,8 @@ namespace SportApp_Domain.Entities
         public string Email {  get; set; }
         public string PhoneNumber { get; set; }
         public bool IsRating { get; set; } = false;
+        public bool IsRight { get; set; } = false;
+        public string? Reason { get; set; }
     }
     public enum BookingStatus
     {

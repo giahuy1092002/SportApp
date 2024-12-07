@@ -2,7 +2,6 @@
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
-using Microsoft.AspNetCore.Hosting;
 using SportApp_Infrastructure.Model.Mail;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Services.Interfaces;

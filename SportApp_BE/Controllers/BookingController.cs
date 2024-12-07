@@ -60,5 +60,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> RejectBookingByCustomer(RejectBookingByCustomer command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }
