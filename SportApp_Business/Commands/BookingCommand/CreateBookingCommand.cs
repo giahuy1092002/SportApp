@@ -141,7 +141,7 @@ namespace SportApp_Business.Commands.BookingCommand
                         };
                         var mailRequest = new MailRequest
                         {
-                            ToEmail = "huy.nguyen1092002@hcmut.edu.vn",
+                            ToEmail = request.Email,
                             Subject = "Thông báo đặt sân thể thao",
                             Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
                         };

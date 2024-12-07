@@ -66,7 +66,7 @@ namespace SportApp_Infrastructure.Services
 
                         var placeholders = new Dictionary<string, string>
                     {
-                        { "UserName", booking.Customer.User.Email },
+                        { "UserName", booking.Email },
                         { "FieldName", booking.SportField.Name },
                         { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
                         { "Address", booking.SportField.Address }
@@ -74,7 +74,7 @@ namespace SportApp_Infrastructure.Services
 
                         var request = new MailRequest
                         {
-                            ToEmail = "huy.nguyen1092002@hcmut.edu.vn",
+                            ToEmail = booking.Email,
                             Subject = "Nhắc nhở đặt sân thể thao",
                             Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
                         };
