@@ -1,27 +1,17 @@
 ﻿using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.Http;
-using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
 using SportApp_Business.Common;
 using SportApp_Business.Hubs;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
-using SportApp_Infrastructure.Helper;
 using SportApp_Infrastructure.Model.BookingModel;
 using SportApp_Infrastructure.Model.Mail;
-using SportApp_Infrastructure.Model.PaymentModel;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Services;
 using SportApp_Infrastructure.Services.Interfaces;
-using System;
-using System.Collections.Generic;
-using System.Linq;
 using System.Net.Sockets;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Input;
-using static System.Formats.Asn1.AsnWriter;
 
 namespace SportApp_Business.Commands.BookingCommand
 {

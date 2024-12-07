@@ -29,7 +29,6 @@ namespace SportApp_Infrastructure.Services
                 var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
                 var vietnamTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, vietnamTimeZone);
                 var nextRunTime = vietnamTime.Date.AddHours(23).AddMinutes(0);
-                Console.WriteLine(nextRunTime.ToString());
                 if (vietnamTime > nextRunTime)
                 {
                     nextRunTime = vietnamTime.Date.AddDays(1).AddHours(23).AddMinutes(0);
@@ -64,23 +63,26 @@ namespace SportApp_Infrastructure.Services
                         string wwwrootPath = env.WebRootPath;
                         string bodyContentPath = Path.Combine(wwwrootPath, "BodyContent");
                         string filePath = Path.Combine(bodyContentPath, "EmailReminder.html");
+
                         var placeholders = new Dictionary<string, string>
-                        {
-                            { "UserName", booking.Customer.User.Email},
-                            { "FieldName", booking.SportField.Name },
-                            { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
-                            { "Address", booking.SportField.Address }
-                        };
+                    {
+                        { "UserName", booking.Customer.User.Email },
+                        { "FieldName", booking.SportField.Name },
+                        { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
+                        { "Address", booking.SportField.Address }
+                    };
+
                         var request = new MailRequest
                         {
                             ToEmail = "huy.nguyen1092002@hcmut.edu.vn",
                             Subject = "Nhắc nhở đặt sân thể thao",
                             Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
                         };
+
                         await _mailService.SendEmailWithHtmlTemplate(request, filePath, placeholders);
+
                         booking.IsRemind = true;
                         context.Booking.Update(booking);
-                        await unitOfWork.SaveChangesAsync();
                 }
             }
         }

@@ -16,5 +16,6 @@ namespace SportApp_Business.Dtos.BookingDtos
         public DateTime BookingDate { get; set; }
         public long TotalPrice { get; set; }
         public string Status { get; set; }
+        public bool IsRating { get; set; }
     }
 }
