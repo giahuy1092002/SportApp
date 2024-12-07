@@ -29,7 +29,10 @@ namespace SportApp_Infrastructure.Repositories
                     SportFieldId = request.SportFieldId,
                     Note = request.Note,
                     BookingDate = request.BookingDate,
-                    TimeFrameBooked =""
+                    TimeFrameBooked ="",
+                    FullName = request.FullName,
+                    Email = request.Email,
+                    PhoneNumber = request.PhoneNumber
                 };
                 Entities.Add(booking);
                 await _unitOfWork.SaveChangesAsync();

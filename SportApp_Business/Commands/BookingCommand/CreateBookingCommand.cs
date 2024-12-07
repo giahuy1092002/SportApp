@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Http;
+﻿using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.AspNetCore.SignalR;
 using Microsoft.EntityFrameworkCore;
@@ -8,8 +9,10 @@ using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
 using SportApp_Infrastructure.Helper;
 using SportApp_Infrastructure.Model.BookingModel;
+using SportApp_Infrastructure.Model.Mail;
 using SportApp_Infrastructure.Model.PaymentModel;
 using SportApp_Infrastructure.Repositories.Interfaces;
+using SportApp_Infrastructure.Services;
 using SportApp_Infrastructure.Services.Interfaces;
 using System;
 using System.Collections.Generic;
@@ -18,6 +21,7 @@ using System.Net.Sockets;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows.Input;
+using static System.Formats.Asn1.AsnWriter;
 
 namespace SportApp_Business.Commands.BookingCommand
 {
@@ -31,6 +35,10 @@ namespace SportApp_Business.Commands.BookingCommand
         public List<Guid> TimeBookedIds { get; set; }
         public DateTime BookingDate { get; set; }
         public Guid? VoucherId { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
+        public bool IsPaymentOnline { get; set; }
         public class CreateBookingHandler : ICommandHandler<CreateBookingCommand, Guid>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -38,14 +46,18 @@ namespace SportApp_Business.Commands.BookingCommand
             private readonly SportAppDbContext _context;
             private readonly IVnPayService _vnPayService;
             private readonly IHttpContextAccessor _httpContextAccessor;
+            private readonly MailService _mailService;
+            private readonly IWebHostEnvironment _webHostEnvironment;
             public CreateBookingHandler(IUnitOfWork unitOfWork, IHubContext<GetSchedulerHub> hubContext, SportAppDbContext context
-                ,IVnPayService vnPayService,IHttpContextAccessor httpContextAccessor)
+                ,IVnPayService vnPayService,IHttpContextAccessor httpContextAccessor,MailService mailService,IWebHostEnvironment webHostEnvironment)
             {
                 _unitOfWork = unitOfWork;
                 _hubContext = hubContext;
                 _context = context;
                 _vnPayService = vnPayService;
                 _httpContextAccessor = httpContextAccessor;
+                _mailService = mailService;
+                _webHostEnvironment = webHostEnvironment;
             }
             public async Task<Guid> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
             {
@@ -75,6 +87,9 @@ namespace SportApp_Business.Commands.BookingCommand
                             CustomerId = request.CustomerId,
                             Note = request.Note,
                             BookingDate = request.BookingDate,
+                            FullName = request.FullName,
+                            Email = request.Email,
+                            PhoneNumber = request.PhoneNumber
                         };
                         var booking = await _unitOfWork.Bookings.Create(createBooking);
                         for (int i = 0; i < request.TimeBookedIds.Count(); i++)
@@ -95,6 +110,13 @@ namespace SportApp_Business.Commands.BookingCommand
                         {
                             await _hubContext.Clients.All.SendAsync("GetScheduler", request.SportFieldId, timeSlotId);
                         }
+                        // Voucher 
+                        //if(request.SportFieldId !=Guid.Empty)
+                        //{
+                        //    var voucher = await _context.SportFieldVouchers.FirstOrDefaultAsync(v=>v.VoucherId==request.VoucherId&&v.SportFieldId==request.SportFieldId);
+                            
+                        //}    
+                        // Send notify
                         var notification = new Notification
                         {
                             Title = $"Đặt sân thành công: {sportField.Name}",
@@ -115,6 +137,24 @@ namespace SportApp_Business.Commands.BookingCommand
                             UserId = customer.User.Id
                         };
                         _context.UserNotifications.Add(userNotify);
+                        // Send email
+                        string wwwrootPath = _webHostEnvironment.WebRootPath;
+                        string bodyContentPath = Path.Combine(wwwrootPath, "BodyContent");
+                        string filePath = Path.Combine(bodyContentPath, "EmailBooking.html");
+                        var placeholders = new Dictionary<string, string>
+                        {
+                            { "UserName", request.Email},
+                            { "FieldName", booking.SportField.Name },
+                            { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
+                            { "Address", booking.SportField.Address }
+                        };
+                        var mailRequest = new MailRequest
+                        {
+                            ToEmail = "huy.nguyen1092002@hcmut.edu.vn",
+                            Subject = "Thông báo đặt sân thể thao",
+                            Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
+                        };
+                        await _mailService.SendEmailWithHtmlTemplate(mailRequest, filePath, placeholders);
                         await _unitOfWork.SaveChangesAsync();
                         await transaction.CommitAsync();
                         return booking.Id;

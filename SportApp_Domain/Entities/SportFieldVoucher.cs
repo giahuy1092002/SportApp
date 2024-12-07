@@ -12,5 +12,6 @@ namespace SportApp_Domain.Entities
         public SportField SportField { get; set; }
         public Guid VoucherId { get; set; }
         public Voucher Voucher { get; set; }
+        public int Quantity { get; set; }
     }
 }

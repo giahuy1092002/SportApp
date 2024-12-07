@@ -13,7 +13,6 @@ namespace SportApp_Domain.Entities
         public string Name { get; set; }
         public DateTime StartTime { get; set; }
         public DateTime EndTime { get; set; }
-        public int Quantity { get; set; }
         public long MinPrice { get; set; }
         public int PercentSale {  get; set; }
         public long MaxSale { get; set; }

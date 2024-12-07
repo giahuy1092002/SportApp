@@ -28,18 +28,21 @@ namespace SportApp_BE.Controllers
             var result = await  _mediator.Send(request,cancellationToken);
             if(result!=null)
             {
-                var model = new PaymentInformationModel
+                if(request.IsPaymentOnline)
                 {
-                    BookingType = "Thanh toán online qua VNPay",
-                    BookingDescription = "Thanh toán đặt sân",
-                    Amount = request.TotalPrice,
-                    BookingId = result.ToString(),
-                    Name = "Thanh toán đặt sân"
-                };
-                var url = _vnPayService.CreatePaymentUrl(model,HttpContext);
-                return Ok(url);
+                    var model = new PaymentInformationModel
+                    {
+                        BookingType = "Thanh toán online qua VNPay",
+                        BookingDescription = "Thanh toán đặt sân",
+                        Amount = request.TotalPrice,
+                        BookingId = result.ToString(),
+                        Name = "Thanh toán đặt sân"
+                    };
+                    var url = _vnPayService.CreatePaymentUrl(model, HttpContext);
+                    return Ok(url);
+                }    
             }
-            return BadRequest();
+            return Ok("Tạo đơn đặt sân thành công");
         }
         [HttpGet("[action]")]
         public async Task<IActionResult> GetBookingByCustomer([FromQuery]GetBookingByCustomer query, CancellationToken cancellationToken)

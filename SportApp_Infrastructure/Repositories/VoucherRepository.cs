@@ -29,8 +29,7 @@ namespace SportApp_Infrastructure.Repositories
                     EndTime = request.EndTime,
                     PercentSale = request.PercentSale,
                     MaxSale = request.MaxSale,
-                    MinPrice = request.MinPrice,
-                    Quantity = request.Quantity
+                    MinPrice = request.MinPrice
                 };
                 Entities.Add(obj);
                 await _unitOfWork.SaveChangesAsync();
@@ -48,7 +47,6 @@ namespace SportApp_Infrastructure.Repositories
             {
                 var voucher = await Entities.FirstOrDefaultAsync(v => v.Id == request.VoucherId);
                 if (voucher == null) throw new Exception("Voucher is not exist");
-                voucher.Quantity = request.Quantity;
                 voucher.Name = request.Name;
                 voucher.StartTime = request.StartTime;
                 voucher.EndTime = request.EndTime;

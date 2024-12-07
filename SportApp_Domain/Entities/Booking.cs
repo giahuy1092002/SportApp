@@ -26,6 +26,9 @@ namespace SportApp_Domain.Entities
         public bool IsRemind { get; set; } = false;
         public string TimeFrameBooked { get; set; }
         public Guid? VoucherId { get; set; }
+        public string FullName { get; set; }
+        public string Email {  get; set; }
+        public string PhoneNumber { get; set; }
     }
     public enum BookingStatus
     {

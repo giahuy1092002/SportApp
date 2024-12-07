@@ -11,5 +11,8 @@ namespace SportApp_Infrastructure.Model.BookingModel
         public long TotalPrice { get; set; }
         public string? Note { get; set; }
         public DateTime BookingDate { get; set; }
+        public string FullName { get; set; }
+        public string Email { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }
