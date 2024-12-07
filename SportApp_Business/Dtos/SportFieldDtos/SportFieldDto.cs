@@ -30,5 +30,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public List<RatingDto> Ratings { get; set; }
         public List<VoucherDto> Vouchers { get; set; }
         public int NumberOfReviews {  get; set; }
+        public string OwnerFullName { get; set; }
+        public string PhoneNumber { get; set; }
     }
 }

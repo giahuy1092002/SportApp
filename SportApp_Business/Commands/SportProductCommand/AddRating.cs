@@ -45,7 +45,8 @@ namespace SportApp_Business.Commands.SportProductCommand
                     Comment = request.Comment,
                     SportProductVariantId = orderItem.SportProductVariantId,
                     FirstName = customer.User.FirstName,
-                    LastName = customer.User.LastName
+                    LastName = customer.User.LastName,
+                    Avatar = customer.User.Avatar
                 };
                 _context.SportProductRatings.Add(rating);
                 orderItem.IsRating = true;

@@ -40,6 +40,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                         .Include(s => s.Ratings)
                             .ThenInclude(r=>r.Customer.User)
                         .Include(s => s.Owner)
+                            .ThenInclude(o=>o.User)
                         .Include(s=>s.Vouchers)
                             .ThenInclude(v=>v.Voucher)
                         .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
@@ -49,6 +50,8 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     var maxPrice = sportField.TimeSlots.Max(t => t.Price);
                     var sportFieldDto = _mapper.Map<SportFieldDto>(sportField);
                     sportFieldDto.NumberOfReviews = sportField.Ratings.Count;
+                    var bookings = await _context.Booking.Where(b=>b.SportFieldId==sportField.Id && b.Status == BookingStatus.Completed).ToListAsync();
+                    sportFieldDto.NumberOfBooking = bookings.Count;
                     return sportFieldDto;
                 }
                 catch (Exception ex)

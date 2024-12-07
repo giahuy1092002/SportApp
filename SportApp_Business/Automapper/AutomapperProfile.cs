@@ -61,6 +61,8 @@ namespace SportApp_Business.Automapper
                 .ForMember(dst => dst.PriceRange, src => src.MapFrom(src =>
                 src.TimeSlots.Min(t => t.Price).ToString() + "đ" + "-" +
                 src.TimeSlots.Max(t => t.Price).ToString() + "đ"))
+                .ForMember(dst => dst.OwnerFullName, src => src.MapFrom(src => src.Owner.User.FirstName+" "+ src.Owner.User.LastName))
+                .ForMember(dst => dst.PhoneNumber, src => src.MapFrom(src => src.Owner.User.PhoneNumber))
                 ;
             CreateMap<SportField, SportFieldListDto>()
                 .ForMember(dst => dst.NumberOfReviews, src => src.MapFrom(src => src.Ratings.Count))
