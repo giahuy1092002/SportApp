@@ -111,11 +111,13 @@ namespace SportApp_Business.Commands.BookingCommand
                             await _hubContext.Clients.All.SendAsync("GetScheduler", request.SportFieldId, timeSlotId);
                         }
                         // Voucher 
-                        //if(request.SportFieldId !=Guid.Empty)
-                        //{
-                        //    var voucher = await _context.SportFieldVouchers.FirstOrDefaultAsync(v=>v.VoucherId==request.VoucherId&&v.SportFieldId==request.SportFieldId);
-                            
-                        //}    
+                        if (request.VoucherId != null)
+                        {
+                            var voucher = await _context.SportFieldVouchers.FirstOrDefaultAsync(v => v.VoucherId == request.VoucherId && v.SportFieldId == request.SportFieldId);
+                            if (voucher == null) throw new AppException("Voucher không tồn tại");
+                            voucher.Quantity -= 1;
+                            _context.SportFieldVouchers.Update(voucher);
+                        }
                         // Send notify
                         var notification = new Notification
                         {

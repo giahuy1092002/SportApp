@@ -44,6 +44,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                             .ThenInclude(v=>v.Voucher)
                         .FirstOrDefaultAsync(s => s.EndPoint == request.EndPoint);
                     if (sportField == null) throw new Exception("Sport field isn't exist");
+                    sportField.Vouchers = sportField.Vouchers.Where(v => v.Quantity > 0 && v.Voucher.EndTime >= DateTime.Now).ToList();
                     var minPrice = sportField.TimeSlots.Min(t=>t.Price);
                     var maxPrice = sportField.TimeSlots.Max(t => t.Price);
                     var sportFieldDto = _mapper.Map<SportFieldDto>(sportField);
