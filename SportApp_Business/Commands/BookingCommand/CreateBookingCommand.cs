@@ -27,7 +27,6 @@ namespace SportApp_Business.Commands.BookingCommand
 {
     public class CreateBookingCommand : ICommand<Guid>
     {
-        public string Name { get; set; }
         public long TotalPrice { get; set; }
         public Guid SportFieldId { get; set; }
         public Guid CustomerId { get; set; }
