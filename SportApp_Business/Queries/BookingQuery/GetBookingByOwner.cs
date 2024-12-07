@@ -16,6 +16,7 @@ namespace SportApp_Business.Queries.BookingQuery
         public Guid OwnerId { get; set; }
         public int PageSize { get; set; }
         public int PageNumber { get; set; }
+        public string? Status { get; set; }
         public class GetBookingByOwnerHandler : IQueryHandler<GetBookingByOwner,BookingListDto>
         {
             private readonly SportAppDbContext _context;
@@ -31,6 +32,10 @@ namespace SportApp_Business.Queries.BookingQuery
                 var bookings = await _context.Booking
                     .Include(b=>b.SportField)
                     .Where(b => b.SportField.OwnerId == request.OwnerId).ToListAsync();
+                if(!String.IsNullOrEmpty(request.Status))
+                {
+                    bookings = bookings.Where(b=>b.Status.ToString()== request.Status).ToList();
+                }    
                 var count = bookings.Count;
                 bookings = bookings.Skip((request.PageNumber-1)*request.PageSize).Take(request.PageSize).ToList(); 
                 var list = _mapper.Map<List<BookingDto>>(bookings);
