@@ -14,12 +14,14 @@ using Microsoft.OpenApi.Models;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
 using System.Text;
+using SportApp_Business.Automapper;
 var builder = WebApplication.CreateBuilder(args);
 
 builder.Services.AddBusinessService(builder.Configuration);
 builder.Services.AddMediatR(typeof(Program).Assembly);
 builder.Services.AddSignalR();
 builder.Services.AddControllers();
+//var config = new AutoMapper.MapperConfiguration(cfg => cfg.AddProfile(new AutomapperProfile(builder.Environment)));
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen(c =>

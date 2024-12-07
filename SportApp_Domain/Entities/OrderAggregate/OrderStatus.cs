@@ -11,6 +11,8 @@ namespace SportApp_Domain.Entities.OrderAggregate
         Pending,
         PaymentReceived,
         PaymentFailed,
-        Complete
+        Transporting,
+        Complete,
+        Rejected
     }
 }

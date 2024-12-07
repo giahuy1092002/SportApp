@@ -37,5 +37,7 @@ namespace SportApp_Business.Dtos.SportProductDtos
         public string ColorName { get; set; }
         public int StartRating { get; set; }
         public string Comment { get; set; }
+        public string FirstName { get; set; }
+        public string LastName { get; set; }
     }
 }

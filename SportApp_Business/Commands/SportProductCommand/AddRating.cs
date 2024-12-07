@@ -15,6 +15,7 @@ namespace SportApp_Business.Commands.SportProductCommand
         public Guid OrderItemId { get; set; }
         public int StartRating { get; set; }
         public string Comment { get; set; }
+        public Guid CustomerId { get; set; }
         public class AddRatingHandler : ICommandHandler<AddRating, bool>
         {
             private readonly SportAppDbContext _context;
@@ -32,6 +33,9 @@ namespace SportApp_Business.Commands.SportProductCommand
                     .Include(o => o.SportProductVariant)
                         .ThenInclude(sv => sv.Color)
                     .FirstOrDefaultAsync(o => o.Id == request.OrderItemId);
+                var customer = await _context.Customer
+                    .Include(c=>c.User)
+                    .FirstOrDefaultAsync(c=>c.Id== request.CustomerId);
                 var rating = new SportProductRating
                 {
                     SportProductVariantName = orderItem.SportProductVariant.SportProduct.Name+" " + orderItem.SportProductVariant.Color.Name,
@@ -39,9 +43,13 @@ namespace SportApp_Business.Commands.SportProductCommand
                     ColorName = orderItem.SportProductVariant.Color.Name,
                     StartRating = request.StartRating,
                     Comment = request.Comment,
-                    SportProductVariantId = orderItem.SportProductVariantId
+                    SportProductVariantId = orderItem.SportProductVariantId,
+                    FirstName = customer.User.FirstName,
+                    LastName = customer.User.LastName
                 };
                 _context.SportProductRatings.Add(rating);
+                orderItem.IsRating = true;
+                _context.OrderItem.Update(orderItem);
                 _context.SaveChanges();
                 return await Task.FromResult(true);
             }

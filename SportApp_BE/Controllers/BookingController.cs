@@ -1,7 +1,9 @@
 ﻿using MediatR;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using SportApp_Business.Commands.BookingCommand;
+using SportApp_Business.Commands.OwnerCommand;
 using SportApp_Business.Queries.BookingQuery;
 using SportApp_Domain.Entities;
 using SportApp_Infrastructure.Model.PaymentModel;
@@ -44,6 +46,16 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(query,cancellationToken));
         }
-
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateBookingStatus(UpdateBookingStatus command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command,cancellationToken));
+        }
+        [Authorize(Roles="Owner")]
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> RejectBooking(RejectBooking command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }

@@ -7,6 +7,7 @@ using SportApp_Business.Commands.SportTeamCommand;
 using SportApp_Business.Commands.TimeSlotCommand;
 using SportApp_Business.Commands.UserCommand;
 using SportApp_Business.Commands.VoucherCommand;
+using SportApp_Business.Dtos.BanListDtos;
 using SportApp_Business.Dtos.BookingDtos;
 using SportApp_Business.Dtos.CartDtos;
 using SportApp_Business.Dtos.CategoryDtos;
@@ -15,6 +16,7 @@ using SportApp_Business.Dtos.NotificationDtos;
 using SportApp_Business.Dtos.OrderDtos;
 using SportApp_Business.Dtos.OwnerDtos;
 using SportApp_Business.Dtos.RatingDtos;
+using SportApp_Business.Dtos.ReportRequestDtos;
 using SportApp_Business.Dtos.SpecDtos;
 using SportApp_Business.Dtos.SportDtos;
 using SportApp_Business.Dtos.SportEquipmentDtos;
@@ -223,7 +225,18 @@ namespace SportApp_Business.Automapper
                 ;
             #endregion
             CreateMap<SportProductRating, SportProductRatingDto>();
-
+            #region Banlist
+            CreateMap<BanList, BanListDto>()
+                .ForMember(dst => dst.Email, src => src.MapFrom(src => src.User.Email))
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.User.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.User.LastName));
+            #endregion
+            #region ReportRequest
+            CreateMap<ReportRequest, ReportRequestDto>()
+                .ForMember(dst => dst.Email, src => src.MapFrom(src => src.Customer.User.Email))
+                .ForMember(dst => dst.FirstName, src => src.MapFrom(src => src.Customer.User.FirstName))
+                .ForMember(dst => dst.LastName, src => src.MapFrom(src => src.Customer.User.LastName));
+            #endregion
         }
     }
 }

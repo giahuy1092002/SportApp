@@ -45,7 +45,9 @@ namespace SportApp_Business.Queries.SportProductQuery
                         SizeValue = r.SizeValue,
                         ColorName = r.ColorName,
                         StartRating = r.StartRating,
-                        Comment = r.Comment
+                        Comment = r.Comment,
+                        FirstName = r.FirstName,
+                        LastName = r.LastName
                     })
                     .ToList();
                 var productId = sportSproductVariant.FirstOrDefault().SportProductId;

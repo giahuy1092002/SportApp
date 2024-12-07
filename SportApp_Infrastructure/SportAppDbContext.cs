@@ -41,6 +41,8 @@ namespace SportApp_Infrastructure
         public DbSet<OrderItem> OrderItem { get; set; }
         public DbSet<SportFieldVoucher> SportFieldVouchers { get; set; }
         public DbSet<SportProductRating> SportProductRatings { get; set; }
+        public DbSet<BanList> BanList { get; set; } 
+        public DbSet<ReportRequest> ReportRequest { get; set; }
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
             base.OnModelCreating(modelBuilder);

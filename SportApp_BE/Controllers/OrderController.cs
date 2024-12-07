@@ -28,5 +28,15 @@ namespace SportApp_BE.Controllers
             var orders = await _mediator.Send(query, cancellationToken);
             return Ok(orders);
         }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> UpdateOrderStatus(UpdateOrderStatus command,CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
+        [HttpPatch("[action]")]
+        public async Task<IActionResult> RejectOrder(RejectOrder command, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(command, cancellationToken));
+        }
     }
 }

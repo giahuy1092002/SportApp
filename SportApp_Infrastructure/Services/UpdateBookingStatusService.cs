@@ -1,4 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿    using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using SportApp_Domain.Entities;
@@ -30,7 +30,7 @@ namespace SportApp_Infrastructure.Services
                         .Include(b=>b.Customer)
                             .ThenInclude(c=>c.User)
                         .Include(b=>b.SportField)
-                        .Where(b => b.BookingDate <= DateTime.Now.AddDays(1) && (b.Status == BookingStatus.PaymentReceived|| b.Status==BookingStatus.Pending))
+                        .Where(b => b.BookingDate.AddDays(1) <= DateTime.Now && b.Status == BookingStatus.PaymentReceived)
                         .ToListAsync();
 
                     foreach (var booking in expiredBookings)
@@ -39,6 +39,7 @@ namespace SportApp_Infrastructure.Services
                         var vietnamTimeZone = TimeZoneInfo.FindSystemTimeZoneById("SE Asia Standard Time");
                         var vietnamTime = TimeZoneInfo.ConvertTimeFromUtc(utcNow, vietnamTimeZone);
                         booking.Status = BookingStatus.Completed;
+                        dbContext.Booking.Update(booking);
                         var notification = new Notification
                         {
                             Title = "Đánh giá " + booking.SportField.Name,
@@ -64,7 +65,7 @@ namespace SportApp_Infrastructure.Services
                         await dbContext.SaveChangesAsync();
                     }
                 }
-                await Task.Delay(TimeSpan.FromMinutes(5), stoppingToken);
+                await Task.Delay(TimeSpan.FromMinutes(1), stoppingToken);
             }
         }
     }

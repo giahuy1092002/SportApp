@@ -43,5 +43,6 @@ namespace SportApp_Business.Dtos.OrderDtos
         public int Quantity { get; set; }
         public string EndPoint { get; set; }
         public long Price { get; set; }
+        public bool IsRating {  get; set; }
     }
 }

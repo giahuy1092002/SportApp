@@ -32,7 +32,7 @@ namespace SportApp_Domain.Entities
         Pending,
         PaymentReceived,
         PaymentFailed,
-        Reject,
+        Rejected,
         Completed
     }
 }

@@ -15,5 +15,6 @@ namespace SportApp_Domain.Entities.OrderAggregate
         public int Quantity { get; set; }
         public Guid OrderId { get; set; }
         public Order Order { get; set; }
+        public bool IsRating { get; set; } = false;
     }
 }
