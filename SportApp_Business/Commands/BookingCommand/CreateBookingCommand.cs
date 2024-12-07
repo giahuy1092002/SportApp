@@ -146,7 +146,7 @@ namespace SportApp_Business.Commands.BookingCommand
                         {
                             { "UserName", request.Email},
                             { "FieldName", booking.SportField.Name },
-                            { "BookingDate", "Khung giờ: " + booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
+                            { "BookingDate", booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
                             { "Address", booking.SportField.Address }
                         };
                         var mailRequest = new MailRequest

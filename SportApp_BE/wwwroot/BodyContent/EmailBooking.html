@@ -3,113 +3,69 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Thanh Toán Thành Công</title>
+    <title>Thông báo đặt sân thành công</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            background-color: #f4f7f9;
-            margin: 0;
-            padding: 0;
-            text-align: center;
-        }
-
-        .container {
-            background: #ffffff;
-            width: 600px;
-            margin: 30px auto;
-            border-radius: 8px;
-            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
-            overflow: hidden;
+            line-height: 1.6;
         }
 
         .header {
-            background-color: #f4f4f4;
-            padding: 20px;
+            background: #f4f4f4;
+            padding: 10px;
+            text-align: center;
         }
-
-            .header img {
-                width: 150px;
-            }
 
         .content {
-            padding: 20px;
+            margin: 20px;
         }
-
-            .content h1 {
-                color: #1b9101;
-                margin: 0;
-                font-size: 24px;
-            }
-
-            .content p {
-                margin: 10px 0;
-                color: #333;
-            }
-
-            .content .highlight {
-                font-weight: bold;
-                color: #1b9101;
-            }
-
-        .ticket-info {
-            margin: 20px 0;
-            text-align: left;
-            border-top: 1px solid #ddd;
-            padding-top: 20px;
-        }
-
-            .ticket-info h2 {
-                color: #333;
-                font-size: 16px;
-                margin: 0 0 10px;
-                text-align: center;
-            }
-
-            .ticket-info p {
-                margin: 5px 0;
-                font-size: 14px;
-            }
 
         .footer {
-            background-color: #f4f4f4;
+            background: #f4f4f4;
             padding: 10px;
-            font-size: 12px;
-            color: #666;
+            text-align: center;
+            font-size: 0.8em;
         }
 
-        .success-icon {
-            margin: 20px 0;
+        .button {
+            display: inline-block;
+            background: #4caf50;
+            color: white;
+            padding: 10px 20px;
+            text-decoration: none;
+            border-radius: 5px;
+            margin-top: 20px;
         }
 
-            .success-icon img {
-                width: 50px;
+            .button:hover {
+                background: #45a049;
             }
     </style>
 </head>
 <body>
-    <div class="container">
-        <div class="header">
-            <img src="https://upload.wikimedia.org/wikipedia/commons/thumb/2/21/VNPAY_Logo.svg/1200px-VNPAY_Logo.svg.png" alt="VNPay Logo">
-        </div>
-        <div class="content">
-            <div class="success-icon">
-                <img src="https://cdn-icons-png.flaticon.com/512/845/845646.png" alt="Success">
-            </div>
-            <h1>Thanh toán thành công!</h1>
-            <p><strong>Mã thanh toán:</strong> <span class="highlight">VXN77457747919FE3DB</span></p>
-            <p>Xin chào <span class="highlight">GIA HUY</span>!</p>
-            <p>Quý khách đã đặt vé xe thành công qua ứng dụng <span class="highlight">Ví VNPAY</span>.</p>
-            <div class="ticket-info">
-                <h2>Thông tin vé:{{UserName}}</h2>
-                <p><strong>Mã vé:</strong> MNEGKI</p>
-                <p><strong>Hãng xe:</strong> Nhà xe Phương Trang</p>
-            </div>
-        </div>
-        <div class="footer">
-            &copy; 2024 VNPay. All rights reserved.
-        </div>
+    <div class="header">
+        <h1>Thông báo từ SportApp</h1>
+    </div>
+    <div class="content">
+        <p>Chúc mừng bạn!</p>
+        <p>Xin chào, {{UserName}}</p>
+        <p>
+            Bạn đã đặt sân thành công trên hệ thống SportApp. Dưới đây là thông tin chi tiết về đặt sân của bạn:
+        </p>
+        <ul>
+            <li><strong>Sân:</strong> {{FieldName}}</li>
+            <li><strong>Địa chỉ:</strong> {{Address}}</li>
+            <li><strong>Ngày giờ:</strong> {{BookingDate}}</li>
+        </ul>
+        <p>
+            Vui lòng lưu email để sử dụng khi đến sân. Nếu bạn cần hỗ trợ, hãy liên hệ với chúng tôi qua số 0828479273.
+        </p>
+        <p>
+            Chúng tôi rất hân hạnh được phục vụ bạn. Chúc bạn có một khoảng thời gian vui vẻ!
+        </p>
+    </div>
+    <div class="footer">
+        <p>&copy; 2024 SportApp. All Rights Reserved.</p>
     </div>
 </body>
 </html>
-
-
