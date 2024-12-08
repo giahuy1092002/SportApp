@@ -27,7 +27,6 @@ namespace SportApp_Business.Commands.BookingCommand
         public string FullName { get; set; }
         public string Email { get; set; }
         public string PhoneNumber { get; set; }
-        public bool IsPaymentOnline { get; set; }
         public class CreateBookingHandler : ICommandHandler<CreateBookingCommand, Guid>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -35,18 +34,14 @@ namespace SportApp_Business.Commands.BookingCommand
             private readonly SportAppDbContext _context;
             private readonly IVnPayService _vnPayService;
             private readonly IHttpContextAccessor _httpContextAccessor;
-            private readonly MailService _mailService;
-            private readonly IWebHostEnvironment _webHostEnvironment;
             public CreateBookingHandler(IUnitOfWork unitOfWork, IHubContext<GetSchedulerHub> hubContext, SportAppDbContext context
-                ,IVnPayService vnPayService,IHttpContextAccessor httpContextAccessor,MailService mailService,IWebHostEnvironment webHostEnvironment)
+                ,IVnPayService vnPayService,IHttpContextAccessor httpContextAccessor)
             {
                 _unitOfWork = unitOfWork;
                 _hubContext = hubContext;
                 _context = context;
                 _vnPayService = vnPayService;
                 _httpContextAccessor = httpContextAccessor;
-                _mailService = mailService;
-                _webHostEnvironment = webHostEnvironment;
             }
             public async Task<Guid> Handle(CreateBookingCommand request, CancellationToken cancellationToken)
             {
@@ -128,24 +123,6 @@ namespace SportApp_Business.Commands.BookingCommand
                             UserId = customer.User.Id
                         };
                         _context.UserNotifications.Add(userNotify);
-                        // Send email
-                        string wwwrootPath = _webHostEnvironment.WebRootPath;
-                        string bodyContentPath = Path.Combine(wwwrootPath, "BodyContent");
-                        string filePath = Path.Combine(bodyContentPath, "EmailBooking.html");
-                        var placeholders = new Dictionary<string, string>
-                        {
-                            { "UserName", request.Email},
-                            { "FieldName", booking.SportField.Name },
-                            { "BookingDate", booking.TimeFrameBooked + " ngày " + booking.BookingDate.ToString("dd/MM/yyyy") },
-                            { "Address", booking.SportField.Address }
-                        };
-                        var mailRequest = new MailRequest
-                        {
-                            ToEmail = request.Email,
-                            Subject = "Thông báo đặt sân thể thao",
-                            Body = $"Sân thể thao mà bạn đặt sẽ diễn ra vào các khung giờ {booking.TimeFrameBooked}. ngày {booking.BookingDate:HH:mm}",
-                        };
-                        await _mailService.SendEmailWithHtmlTemplate(mailRequest, filePath, placeholders);
                         await _unitOfWork.SaveChangesAsync();
                         await transaction.CommitAsync();
                         return booking.Id;

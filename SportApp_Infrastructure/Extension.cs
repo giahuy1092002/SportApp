@@ -56,6 +56,7 @@ namespace SportApp_Infrastructure
             services.AddTransient<IVnPayService,VnPayService>();
             services.AddHostedService<NotifyReminderService>();
             services.AddHostedService<UpdateBookingStatusService>();
+            services.AddHostedService<BookingStatusService>();
             return services;
         }
         public static IServiceCollection AddIdentity(this IServiceCollection services)
