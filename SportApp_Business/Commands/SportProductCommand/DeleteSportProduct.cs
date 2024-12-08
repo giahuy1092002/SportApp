@@ -13,7 +13,7 @@ namespace SportApp_Business.Commands.SportProductCommand
 {
     public class DeleteSportProduct : ICommand<bool>
     {
-        public Guid SportProductId { get; set; }
+        public string Endpoint { get; set; }
         public class DeleteSportProductHandler : ICommandHandler<DeleteSportProduct,bool>
         {
             private readonly IUnitOfWork _unitOfWork;
@@ -27,17 +27,27 @@ namespace SportApp_Business.Commands.SportProductCommand
             }
             public async Task<bool> Handle(DeleteSportProduct request, CancellationToken cancellationToken)
             {
+                var listVariant = await _context.SportProductVariant
+                    .Include(sv=>sv.Color)
+                    .Include(sv=>sv.SportProduct)
+                        .ThenInclude(s=>s.ImageProducts)
+                    .Where(sv=>sv.EndPoint == request.Endpoint).ToListAsync();
                 var sportProduct = await _context.SportProduct
                     .Include(s=>s.ImageProducts)
-                    .FirstOrDefaultAsync(s=>s.Id == request.SportProductId);
-                foreach(var item in sportProduct.ImageProducts)
+                    .FirstOrDefaultAsync(s => s.Id == listVariant.First().SportProductId);
+                var images = sportProduct.ImageProducts.Where(i => i.ColorId == listVariant.First().ColorId);
+                foreach (var item in images)
                 {
                     var result = await _imageService.DeleteImageAsync(item.PublicId);
                     if (result.Result != "ok") throw new Exception("Delete image failed");
                     _context.ImageProduct.Remove(item);
                     await _unitOfWork.SaveChangesAsync();
                 }
-                _context.SportProduct.Remove(sportProduct);
+                foreach (var variant in listVariant)
+                {
+                    _context.SportProductVariant.Remove(variant);
+                    _context.SaveChanges();
+                }     
                 return await Task.FromResult(true);
             }
         }
