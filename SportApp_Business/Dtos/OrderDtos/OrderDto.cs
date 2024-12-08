@@ -9,6 +9,7 @@ namespace SportApp_Business.Dtos.OrderDtos
 {
     public class OrderDto
     {
+        public Guid Id { get; set; }
         public string OrderStatus { get; set; }
         public long SubTotal { get; set; }
         public long DeliveryFee { get; set; }
