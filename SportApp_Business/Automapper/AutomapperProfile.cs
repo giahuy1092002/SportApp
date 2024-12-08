@@ -91,7 +91,8 @@ namespace SportApp_Business.Automapper
             ;
             #region Voucher
             CreateMap<CreateVoucherCommand, CreateVoucherModel>();
-            CreateMap<Voucher,VoucherDto>();
+            CreateMap<Voucher,VoucherDto>()
+                .ForMember(dst => dst.VoucherId, src => src.MapFrom(src => src.Id));
             CreateMap<UpdateVoucherCommand, UpdateVoucherModel>();
             CreateMap<SportFieldVoucher, VoucherDto>()
                 .ForMember(dst => dst.VoucherId, src => src.MapFrom(src => src.Voucher.Id))

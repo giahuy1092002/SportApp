@@ -26,7 +26,8 @@ namespace SportApp_Business.Queries.VoucherQuery
             }
             public async Task<VoucherListDto> Handle(GetVouchers request,CancellationToken cancellationToken)
             {
-                var list = await _context.Vouchers.ToListAsync();
+                var list = await _context.Vouchers
+                    .ToListAsync();
                 int count = list.Count;
                 list = list.Skip((request.PageNumber-1)*request.PageSize).Take(request.PageSize).ToList();
                 var listDto = _mapper.Map<List<VoucherDto>>(list);
