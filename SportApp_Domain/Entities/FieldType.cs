@@ -11,8 +11,8 @@ namespace SportApp_Domain.Entities
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-        [ForeignKey("SportId")]
-        public Guid SportId { get; set; }
-        public Sport Sport { get; set; }
+        //[ForeignKey("SportId")]
+        //public Guid SportId { get; set; }
+        //public Sport Sport { get; set; }
     }
 }
