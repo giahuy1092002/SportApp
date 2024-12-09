@@ -191,6 +191,8 @@ namespace SportApp_Business.Automapper
                 .ForMember(dst => dst.Address, src => src.MapFrom(src => src.SportField.Address))
                 .ForMember(dst => dst.BookingDate, src => src.MapFrom(src => src.BookingDate))
                 .ForMember(dst => dst.TotalPrice, src => src.MapFrom(src => src.TotalPrice))
+                .ForMember(dst => dst.SportFieldId, src => src.MapFrom(src => src.SportFieldId))
+                .ForMember(dst => dst.EndPoint, src => src.MapFrom(src => src.SportField.EndPoint))
                 .ForMember(dst => dst.Status, src => src.MapFrom(src => src.Status.ToString()))
                 .ForMember(dst => dst.TimeSlotBooked, opt => opt.Ignore()) 
                 .AfterMap((src, dst) =>

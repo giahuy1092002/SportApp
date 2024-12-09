@@ -17,5 +17,7 @@ namespace SportApp_Business.Dtos.BookingDtos
         public long TotalPrice { get; set; }
         public string Status { get; set; }
         public bool IsRating { get; set; }
+        public Guid SportFieldId { get; set; }
+        public string EndPoint {  get; set; }
     }
 }
