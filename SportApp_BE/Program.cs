@@ -84,7 +84,7 @@ app.UseSwaggerUI();
 app.UseRouting();
 app.UseCors(opt =>
 {
-    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "http://localhost:5173", "https://spotta-admin.vercel.app");
+    opt.AllowAnyHeader().AllowAnyMethod().AllowCredentials().WithOrigins("http://localhost:3000", "http://localhost:5173", "https://spotta-admin.vercel.app", "https://spotta-user.vercel.app");
 });
 app.UseEndpoints(endpoints =>
 {
