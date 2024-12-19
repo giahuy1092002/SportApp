@@ -34,13 +34,11 @@ namespace SportApp_Business.Commands.SportFieldCommand
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly ImageService _imageService;
-            private readonly GeoCodeService _geoCodeServie;
 
-            public CreateSportFieldHandler(IUnitOfWork unitOfWork,ImageService imageService, GeoCodeService geoCodeServie)
+            public CreateSportFieldHandler(IUnitOfWork unitOfWork,ImageService imageService)
             {
                 _unitOfWork = unitOfWork;
                 _imageService = imageService;
-                _geoCodeServie = geoCodeServie;
             }
             public async Task<bool> Handle(CreateSportFieldCommand request, CancellationToken cancellationToken)
             {
@@ -56,7 +54,6 @@ namespace SportApp_Business.Commands.SportFieldCommand
                     {
                         throw new AppException("Khung giờ bị trùng nhau");
                     }
-                    var geocode = await _geoCodeServie.ConvertAddress(request.Address);
                     var sportField = new CreateSportFieldModel
                     {
                         Name = request.Name,
@@ -64,9 +61,7 @@ namespace SportApp_Business.Commands.SportFieldCommand
                         Address = request.Address,
                         Description = request.Description,
                         FieldTypeId = request.FieldTypeId,
-                        OwnerId = request.OwnerId,
-                        Latitude = geocode.Latitude,
-                        Longitude = geocode.Longitude
+                        OwnerId = request.OwnerId
                     };
                     var result = await _unitOfWork.SportFields.Create(sportField);
 

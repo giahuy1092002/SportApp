@@ -11,22 +11,27 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using SportApp_Business.Dtos.SportFieldDtos;
 using SportApp_Business.Dtos.RatingDtos;
+using SportApp_Infrastructure.Services;
 
 namespace SportApp_Business.Queries.SportFieldQuery
 {
     public class GetSportFieldQuery : IQuery<SportFieldDto>
     {
         public string EndPoint { get; set; }
+        public double? UserLat { get; set; }
+        public double? UserLong { get; set; }
         public class GetSportFieldHanlder : IQueryHandler<GetSportFieldQuery, SportFieldDto>
         {
             private readonly IMapper _mapper;
             private readonly IUnitOfWork _unitOfWork;
             private readonly SportAppDbContext _context;
-            public GetSportFieldHanlder(IMapper mapper, IUnitOfWork unitOfWork, SportAppDbContext context)
+            private readonly DistanceService _distanceService;
+            public GetSportFieldHanlder(IMapper mapper, IUnitOfWork unitOfWork, SportAppDbContext context, DistanceService distanceService)
             {
                 _mapper = mapper;
                 _unitOfWork = unitOfWork;
                 _context = context;
+                _distanceService = distanceService;
             }
 
             public async Task<SportFieldDto> Handle(GetSportFieldQuery request, CancellationToken cancellationToken)
@@ -55,6 +60,12 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     var reject = _context.Booking.Where(b=>b.Status==BookingStatus.Rejected&&b.IsRejectByOwner==true).ToList();
                     var all = _context.Booking.ToList();
                     sportFieldDto.RatioAccept = 100-reject.Count/all.Count*100;
+                    if(request.UserLat!=null && request.UserLong!=null)
+                    {
+                        var result_distance = await _distanceService.GetDistance(request.UserLat, request.UserLong, sportField.Latitude, sportField.Longitude);
+                        sportFieldDto.Distance = result_distance.Distance;
+                        sportFieldDto.Duration = result_distance.Duration;
+                    }    
                     return sportFieldDto;
                 }
                 catch (Exception ex)

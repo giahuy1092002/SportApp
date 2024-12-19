@@ -32,5 +32,7 @@ namespace SportApp_Business.Dtos.SportFieldDtos
         public int NumberOfReviews {  get; set; }
         public string OwnerFullName { get; set; }
         public string PhoneNumber { get; set; }
+        public string Duration { get; set; } = "Chưa xác định";
+        public string Distance { get; set; } = "Chưa xác định";
     }
 }
