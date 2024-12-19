@@ -15,5 +15,6 @@ namespace SportApp_Infrastructure.Repositories.Interfaces
         Task<bool> Update(UpdateSportFieldModel request);
         Task<List<TimeSlot>> GetScheduler(Guid sportFieldId);
         Task<bool> Delete(Guid sportFieldId);
+        Task<SportField> GetSportField(Guid sportFieldId);
     }
 }

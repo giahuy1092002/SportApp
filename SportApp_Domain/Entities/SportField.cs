@@ -49,6 +49,7 @@ namespace SportApp_Domain.Entities
             set { }
         }
         public List<SportFieldVoucher> Vouchers { get; set; }
+        public bool IsAccept {  get; set; } = false;
     }
 
 }

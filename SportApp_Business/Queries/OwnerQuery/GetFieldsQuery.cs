@@ -14,6 +14,7 @@ namespace SportApp_Business.Queries.OwnerQuery
     public class GetFieldsQuery : IQuery<List<SportFieldsOwner>>
     {
         public Guid OwnerId { get; set; }
+        public bool IsAccept {  get; set; }
         public class GetFieldsHandler : IQueryHandler<GetFieldsQuery, List<SportFieldsOwner>>
         {
             private readonly SportAppDbContext _context;
@@ -31,7 +32,7 @@ namespace SportApp_Business.Queries.OwnerQuery
                          .Include(s => s.Ratings)
                          .Include(s => s.TimeSlots)
                          .Include(s => s.Images)
-                        .Where(s=>s.OwnerId==request.OwnerId)
+                        .Where(s=>s.OwnerId==request.OwnerId && s.IsAccept == request.IsAccept)
                         .ToListAsync();
                     return _mapper.Map<List<SportFieldsOwner>>(listFields);
                 }

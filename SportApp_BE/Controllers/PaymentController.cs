@@ -89,17 +89,5 @@ namespace SportApp_BE.Controllers
             }    
             return Redirect($"https://spotta-user.vercel.app/payment?status={paymentStatus}");
         }
-        //[HttpGet("[action]")]
-        //public async Task<IActionResult> GetStatusPayment(CancellationToken cancellationToken)
-        //{
-        //    var response = _vnPayService.PaymentExecute(Request.Query);
-        //    string bookingId = Request.Query["vnp_TxnRef"];
-        //    var command = new UpdateBookingCommnad
-        //    {
-        //        BookingId = Guid.Parse(bookingId)
-        //    };
-        //    await _mediator.Send(command, cancellationToken);
-        //    return Redirect($"http://localhost:3000/user/order?status={response.Success}");
-        //}
     }
 }

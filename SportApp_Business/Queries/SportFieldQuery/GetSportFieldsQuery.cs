@@ -46,7 +46,7 @@ namespace SportApp_Business.Queries.SportFieldQuery
                     .Include(s => s.Ratings)
                     .Include(s => s.TimeSlots)
                     .Include(s=>s.Images)
-                    .Where(s=>s.IsDeleted==false)
+                    .Where(s=>s.IsDeleted==false && s.IsAccept == true)
                     ;
                 if(!string.IsNullOrEmpty(request.Search))
                 {

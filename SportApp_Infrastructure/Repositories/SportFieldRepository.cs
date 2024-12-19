@@ -94,5 +94,19 @@ namespace SportApp_Infrastructure.Repositories
                 throw;
             }
         }
+
+        public async Task<SportField> GetSportField(Guid sportFieldId)
+        {
+            try
+            {
+                var sportField = await Entities.FirstOrDefaultAsync(s => s.Id == sportFieldId);
+                if (sportField == null) throw new AppException(ErrorMessage.SportFieldNotExist);
+                return sportField;
+            }
+            catch
+            {
+                throw;
+            }
+        }
     }
 }

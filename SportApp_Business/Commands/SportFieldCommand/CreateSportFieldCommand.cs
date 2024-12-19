@@ -51,6 +51,11 @@ namespace SportApp_Business.Commands.SportFieldCommand
                     if (owner == null) throw new AppException(ErrorMessage.OwnerNotExist);
                     var fieldType = await _unitOfWork.FieldTypes.GetById(request.FieldTypeId);
                     if (fieldType == null) throw new AppException("Loại sân không tồn tại");
+                    var prices = JsonConvert.DeserializeObject<List<TimeFramePrice>>(request.Prices);
+                    if (IsTimeSlotOverlap(prices))
+                    {
+                        throw new AppException("Khung giờ bị trùng nhau");
+                    }
                     var geocode = await _geoCodeServie.ConvertAddress(request.Address);
                     var sportField = new CreateSportFieldModel
                     {
@@ -66,9 +71,7 @@ namespace SportApp_Business.Commands.SportFieldCommand
                     var result = await _unitOfWork.SportFields.Create(sportField);
 
                     if(result!=null)
-                    {
-                        var prices = JsonConvert.DeserializeObject<List<TimeFramePrice>>(request.Prices);
-                      
+                    { 
                         foreach (var timePrice in prices)
                         {
                             var start = int.Parse(timePrice.StartTime.Split(':')[0]);
@@ -111,6 +114,25 @@ namespace SportApp_Business.Commands.SportFieldCommand
                     throw;
                 }
             }
+            private bool IsTimeSlotOverlap(List<TimeFramePrice> prices)
+            {
+                var sortedPrices = prices.OrderBy(p => DateTime.ParseExact(p.StartTime, "HH:mm", null)).ToList();
+
+                for (int i = 0; i < sortedPrices.Count - 1; i++)
+                {
+                    var currentStart = DateTime.ParseExact(sortedPrices[i].StartTime, "HH:mm", null);
+                    var currentEnd = DateTime.ParseExact(sortedPrices[i].EndTime, "HH:mm", null);
+
+                    var nextStart = DateTime.ParseExact(sortedPrices[i + 1].StartTime, "HH:mm", null);
+                    var nextEnd = DateTime.ParseExact(sortedPrices[i + 1].EndTime, "HH:mm", null);
+                    if (currentEnd > nextStart)
+                    {
+                        return true;
+                    }
+                }
+                return false;
+            }
+
         }
     }
 }
