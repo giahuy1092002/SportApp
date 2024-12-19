@@ -86,5 +86,10 @@ namespace SportApp_BE.Controllers
         {
             return Ok(await _mediator.Send(command, cancellationToken));
         }
+        [HttpGet("[action]")]
+        public async Task<IActionResult> GetRequestCreateSportField([FromQuery] GetRequestCreateSportField query, CancellationToken cancellationToken)
+        {
+            return Ok(await _mediator.Send(query, cancellationToken));
+        }
     }
 }

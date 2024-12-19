@@ -1,4 +1,5 @@
 ﻿using SportApp_Business.Common;
+using SportApp_Domain.Entities;
 using SportApp_Infrastructure;
 using SportApp_Infrastructure.Repositories.Interfaces;
 using SportApp_Infrastructure.Services;
@@ -26,10 +27,17 @@ namespace SportApp_Business.Commands.SportFieldCommand
             public async Task<bool> Handle(HandleCreateSportField request, CancellationToken cancellationToken)
             {
                 var sportfield = await _unitOfWork.SportFields.GetSportField(request.SportFieldId);
-                var geocode = await _geoCodeServie.ConvertAddress(sportfield.Address);
-                sportfield.Latitude = geocode.Latitude;
-                sportfield.Longitude = geocode.Longitude;   
-                if (request.IsAccept) sportfield.IsAccept = true;
+                if (request.IsAccept)
+                {
+                    sportfield.IsAccept = true;
+                    var geocode = await _geoCodeServie.ConvertAddress(sportfield.Address);
+                    sportfield.Latitude = geocode.Latitude;
+                    sportfield.Longitude = geocode.Longitude;
+                }
+                else
+                {
+                    return await _unitOfWork.SportFields.Delete(request.SportFieldId);
+                }
                 await _unitOfWork.SaveChangesAsync();
                 return true;
 
