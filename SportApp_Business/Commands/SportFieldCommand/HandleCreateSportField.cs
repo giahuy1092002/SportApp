@@ -19,10 +19,12 @@ namespace SportApp_Business.Commands.SportFieldCommand
         {
             private readonly IUnitOfWork _unitOfWork;
             private readonly GeoCodeService _geoCodeServie;
-            public HandleCreateSportFieldHandler(IUnitOfWork unitOfWork, GeoCodeService geoCodeServie)
+            private readonly SportAppDbContext _context;
+            public HandleCreateSportFieldHandler(IUnitOfWork unitOfWork, GeoCodeService geoCodeServie,SportAppDbContext context)
             {
                 _unitOfWork = unitOfWork;
                 _geoCodeServie = geoCodeServie;
+                _context = context;
             }
             public async Task<bool> Handle(HandleCreateSportField request, CancellationToken cancellationToken)
             {
@@ -36,7 +38,7 @@ namespace SportApp_Business.Commands.SportFieldCommand
                 }
                 else
                 {
-                    return await _unitOfWork.SportFields.Delete(request.SportFieldId);
+                    _context.SportField.Remove(sportfield);
                 }
                 await _unitOfWork.SaveChangesAsync();
                 return true;
